@@ -1,89 +1,116 @@
 import Layout from "@/components/Layout";
 import { useReleaseBySlug } from "@/hooks/use-data";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { formatDate, platformLabels, platformColors } from "@/lib/format";
-import { Music, Play, Pause } from "lucide-react";
-import { useRef, useState } from "react";
+import { getPublicStorageUrl } from "@/lib/storage";
+import { Music, Play, Pause, ArrowLeft, ExternalLink } from "lucide-react";
+import { useRef, useState, useEffect } from "react";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 const ReleaseDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: release, isLoading } = useReleaseBySlug(slug || "");
   const [playing, setPlaying] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const intervalRef = useRef<number>(0);
+
+  useEffect(() => {
+    return () => {
+      audioRef.current?.pause();
+      clearInterval(intervalRef.current);
+    };
+  }, []);
 
   const togglePlay = (trackId: string, url: string) => {
     if (playing === trackId) {
       audioRef.current?.pause();
       setPlaying(null);
-    } else {
-      if (audioRef.current) audioRef.current.pause();
-      const audio = new Audio(url);
-      audio.play();
-      audio.onended = () => setPlaying(null);
-      audioRef.current = audio;
-      setPlaying(trackId);
+      clearInterval(intervalRef.current);
+      return;
     }
+    audioRef.current?.pause();
+    clearInterval(intervalRef.current);
+    const audio = new Audio(url);
+    audio.play();
+    audio.onended = () => { setPlaying(null); setProgress(0); clearInterval(intervalRef.current); };
+    audioRef.current = audio;
+    setPlaying(trackId);
+    intervalRef.current = window.setInterval(() => {
+      if (audio.duration) setProgress((audio.currentTime / audio.duration) * 100);
+    }, 200);
   };
 
-  if (isLoading) return <Layout><div className="container py-16"><div className="animate-pulse h-64 bg-secondary rounded-lg" /></div></Layout>;
-  if (!release) return <Layout><div className="container py-16"><p className="text-muted-foreground">Релиз не найден.</p></div></Layout>;
+  if (isLoading) return <Layout><div className="container py-16"><LoadingSkeleton variant="hero" /></div></Layout>;
+  if (!release) return (
+    <Layout>
+      <div className="container py-16 text-center space-y-4">
+        <Music size={64} className="mx-auto text-muted-foreground/20" />
+        <p className="text-muted-foreground font-display text-xl">Релиз не найден</p>
+        <Link to="/music" className="text-sm text-primary hover:underline">← Все релизы</Link>
+      </div>
+    </Layout>
+  );
 
   const tracks = release.tracks?.sort((a, b) => a.order_index - b.order_index) || [];
   const links = release.platform_links || [];
+  const hasAudio = tracks.some((t) => t.audio_url);
+  const playingTrack = tracks.find((t) => t.id === playing);
 
   return (
     <Layout>
       <section className="container py-16">
-        <div className="grid gap-8 md:grid-cols-[300px_1fr] lg:grid-cols-[400px_1fr]">
-          <div className="aspect-square rounded-lg overflow-hidden bg-secondary">
+        <Link to="/music" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors mb-8">
+          <ArrowLeft size={14} /> Все релизы
+        </Link>
+        <div className="grid gap-10 md:grid-cols-[minmax(280px,400px)_1fr]">
+          <div className="aspect-square rounded-2xl overflow-hidden bg-secondary glow-fuchsia sticky top-24">
             {release.cover_url ? (
-              <img src={release.cover_url} alt={release.title} className="w-full h-full object-cover" />
+              <img src={getPublicStorageUrl(release.cover_url)} alt={release.title} className="w-full h-full object-cover" />
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground"><Music size={64} /></div>
+              <div className="w-full h-full flex items-center justify-center text-muted-foreground"><Music size={80} /></div>
             )}
           </div>
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
-              <p className="text-xs font-medium text-primary uppercase tracking-wider">{release.type}</p>
-              <h1 className="font-display text-3xl md:text-4xl font-bold mt-1">{release.title}</h1>
-              {release.release_date && <p className="text-sm text-muted-foreground mt-2">{formatDate(release.release_date)}</p>}
-              {release.description && <p className="text-sm text-secondary-foreground mt-4 leading-relaxed">{release.description}</p>}
+              <p className="text-xs font-bold text-primary uppercase tracking-widest">{release.type}</p>
+              <h1 className="font-display text-4xl md:text-5xl font-bold mt-2">{release.title}</h1>
+              {release.release_date && <p className="text-sm text-muted-foreground mt-3">{formatDate(release.release_date)}</p>}
+              {release.description && <p className="text-secondary-foreground mt-4 leading-relaxed">{release.description}</p>}
             </div>
 
             {/* Platform links */}
             {links.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {links.map((pl) => (
-                  <a
-                    key={pl.id}
-                    href={pl.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`inline-flex items-center gap-1 rounded-md px-4 py-2 text-xs font-semibold transition-opacity hover:opacity-80 ${platformColors[pl.platform] || "bg-secondary text-foreground"}`}
-                  >
-                    {platformLabels[pl.platform] || pl.platform}
-                  </a>
-                ))}
+              <div className="space-y-3">
+                <h3 className="font-display text-xs font-semibold text-muted-foreground uppercase tracking-widest">Слушать</h3>
+                <div className="flex flex-wrap gap-2">
+                  {links.map((pl) => (
+                    <a key={pl.id} href={pl.url} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold transition-opacity hover:opacity-80 ${platformColors[pl.platform] || "bg-secondary text-foreground"}`}>
+                      <ExternalLink size={12} />
+                      {platformLabels[pl.platform] || pl.platform}
+                    </a>
+                  ))}
+                </div>
               </div>
             )}
 
             {/* Tracklist */}
             {tracks.length > 0 && (
               <div className="space-y-1">
-                <h3 className="font-display text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-3">Треклист</h3>
+                <h3 className="font-display text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-4">Треклист</h3>
                 {tracks.map((t, i) => (
-                  <div key={t.id} className="flex items-center gap-3 rounded-md px-3 py-2 hover:bg-secondary transition-colors">
-                    <span className="text-xs text-muted-foreground w-5 text-right">{i + 1}</span>
+                  <div key={t.id} className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-colors ${playing === t.id ? "bg-primary/10 border border-primary/20" : "hover:bg-secondary"}`}>
+                    <span className="text-xs text-muted-foreground w-5 text-right font-mono">{String(i + 1).padStart(2, "0")}</span>
                     {t.audio_url ? (
-                      <button onClick={() => togglePlay(t.id, t.audio_url!)} className="text-primary hover:opacity-80">
-                        {playing === t.id ? <Pause size={16} /> : <Play size={16} />}
+                      <button onClick={() => togglePlay(t.id, t.audio_url!)} className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
+                        {playing === t.id ? <Pause size={14} /> : <Play size={14} className="ml-0.5" />}
                       </button>
                     ) : (
-                      <span className="w-4" />
+                      <span className="w-8" />
                     )}
-                    <span className="flex-1 text-sm">{t.title}</span>
+                    <span className="flex-1 text-sm font-medium">{t.title}</span>
                     {t.duration_sec && (
-                      <span className="text-xs text-muted-foreground">
+                      <span className="text-xs text-muted-foreground font-mono">
                         {Math.floor(t.duration_sec / 60)}:{String(t.duration_sec % 60).padStart(2, "0")}
                       </span>
                     )}
@@ -91,9 +118,36 @@ const ReleaseDetail = () => {
                 ))}
               </div>
             )}
+
+            {!hasAudio && links.length === 0 && (
+              <div className="rounded-xl border border-dashed border-border p-8 text-center">
+                <Music size={32} className="mx-auto text-muted-foreground/30 mb-2" />
+                <p className="text-sm text-muted-foreground">Скоро будет доступно для прослушивания</p>
+              </div>
+            )}
           </div>
         </div>
       </section>
+
+      {/* Sticky mini-player */}
+      {playingTrack && (
+        <div className="fixed bottom-0 inset-x-0 z-50 border-t border-border bg-card/95 backdrop-blur-xl">
+          <div className="h-0.5 bg-secondary">
+            <div className="h-full bg-primary transition-all duration-200" style={{ width: `${progress}%` }} />
+          </div>
+          <div className="container flex items-center justify-between py-3">
+            <div className="flex items-center gap-3">
+              <button onClick={() => togglePlay(playingTrack.id, playingTrack.audio_url!)} className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+                <Pause size={16} />
+              </button>
+              <div>
+                <p className="text-sm font-medium">{playingTrack.title}</p>
+                <p className="text-xs text-muted-foreground">{release.title}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 };
