@@ -22,7 +22,7 @@ const tabs = [
   { id: "gallery", label: "Галерея", icon: Image },
   { id: "merch", label: "Мерч", icon: ShoppingBag },
   { id: "team", label: "Команда", icon: UsersRound },
-  { id: "bars", label: "Бары", icon: Wine },
+  { id: "bars", label: "Бары (R&B)", icon: Wine },
   { id: "friends", label: "Друзья", icon: Users },
   { id: "sections", label: "Секции", icon: LayoutDashboard },
   { id: "members", label: "Участники", icon: UserCircle },
