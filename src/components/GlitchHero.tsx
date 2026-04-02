@@ -2,12 +2,11 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Music, Calendar, ShoppingBag } from "lucide-react";
 import hero2 from "@/assets/hero/hero-2.jpg";
-import hero3 from "@/assets/hero/hero-3.jpg";
 import hero4 from "@/assets/hero/hero-4.jpg";
 import hero5 from "@/assets/hero/hero-5.jpg";
 import { useSiteSection } from "@/hooks/use-data";
 
-const images = [hero2, hero3, hero4, hero5];
+const images = [hero2, hero4, hero5];
 
 const GlitchHero = () => {
   const [current, setCurrent] = useState(0);
@@ -73,7 +72,7 @@ const GlitchHero = () => {
         <img
           src={images[current]}
           alt=""
-          className="w-full h-full object-cover object-top"
+          className="w-full h-full object-cover object-[center_30%]"
         />
       </div>
 
@@ -86,7 +85,7 @@ const GlitchHero = () => {
             style={{
               backgroundImage: `url(${images[current]})`,
               backgroundSize: "cover",
-              backgroundPosition: "top center",
+              backgroundPosition: "center 30%",
               mixBlendMode: "screen",
               opacity: isGlitching ? 0.6 : 0.25,
               transform: `translateX(${isGlitching ? 6 : 2}px)`,
@@ -99,7 +98,7 @@ const GlitchHero = () => {
             style={{
               backgroundImage: `url(${images[current]})`,
               backgroundSize: "cover",
-              backgroundPosition: "top center",
+              backgroundPosition: "center 30%",
               mixBlendMode: "screen",
               opacity: isGlitching ? 0.5 : 0.2,
               transform: `translateX(${isGlitching ? -6 : -2}px)`,
@@ -125,7 +124,7 @@ const GlitchHero = () => {
               <img
                 src={images[phase === "glitch3" ? next : current]}
                 alt=""
-                className="w-full h-full object-cover object-top"
+                className="w-full h-full object-cover object-[center_30%]"
                 style={{
                   position: "absolute",
                   top: `-${top}%`,
