@@ -106,3 +106,71 @@
     overflow: hidden;
   }
 }
+
+/* === Glitch effect for hero title === */
+.hero-glitch-text {
+  position: relative;
+}
+
+.hero-glitch-text::before,
+.hero-glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.hero-glitch-text::before {
+  -webkit-text-fill-color: hsl(322 80% 55%);
+  text-shadow: none;
+}
+
+.hero-glitch-text::after {
+  -webkit-text-fill-color: hsl(180 80% 55%);
+  text-shadow: none;
+}
+
+.hero-glitch-active .hero-glitch-text::before {
+  opacity: 0.7;
+  animation: glitch-shift-1 0.25s steps(2) forwards;
+}
+
+.hero-glitch-active .hero-glitch-text::after {
+  opacity: 0.5;
+  animation: glitch-shift-2 0.25s steps(3) forwards;
+}
+
+.hero-glitch-active .hero-glitch-text {
+  animation: glitch-skew 0.25s steps(2) forwards;
+}
+
+@keyframes glitch-shift-1 {
+  0% { transform: translateX(3px) translateY(1px); clip-path: inset(20% 0 60% 0); }
+  25% { transform: translateX(-4px) translateY(-1px); clip-path: inset(50% 0 20% 0); }
+  50% { transform: translateX(2px) translateY(2px); clip-path: inset(10% 0 70% 0); }
+  75% { transform: translateX(-3px) translateY(0); clip-path: inset(60% 0 10% 0); }
+  100% { transform: translateX(0); clip-path: inset(0 0 0 0); opacity: 0; }
+}
+
+@keyframes glitch-shift-2 {
+  0% { transform: translateX(-3px) translateY(-2px); clip-path: inset(40% 0 30% 0); }
+  33% { transform: translateX(5px) translateY(1px); clip-path: inset(15% 0 60% 0); }
+  66% { transform: translateX(-2px) translateY(-1px); clip-path: inset(70% 0 5% 0); }
+  100% { transform: translateX(0); clip-path: inset(0 0 0 0); opacity: 0; }
+}
+
+@keyframes glitch-skew {
+  0% { transform: skewX(0deg); }
+  20% { transform: skewX(-2deg); }
+  40% { transform: skewX(1deg); }
+  60% { transform: skewX(-1deg); }
+  80% { transform: skewX(0.5deg); }
+  100% { transform: skewX(0deg); }
+}
