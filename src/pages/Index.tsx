@@ -3,11 +3,136 @@ import { Link } from "react-router-dom";
 import { usePublishedReleases, usePublishedEvents, usePublishedNews, useSiteSection, usePublishedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
 import { formatDate, formatDateShort } from "@/lib/format";
 import { getPublicStorageUrl } from "@/lib/storage";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import EmptyState from "@/components/EmptyState";
-import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket } from "lucide-react";
+import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket, ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import GlitchHero from "@/components/GlitchHero";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths, getDay } from "date-fns";
+import { ru } from "date-fns/locale";
+
+const BarsCalendarWidget = () => {
+  const [month, setMonth] = useState(new Date());
+  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+
+  const start = startOfMonth(month).toISOString();
+  const end = endOfMonth(month).toISOString();
+  const { data: barEvents } = useBarEvents(start, end);
+
+  const days = eachDayOfInterval({ start: startOfMonth(month), end: endOfMonth(month) });
+  const offset = ((getDay(startOfMonth(month)) || 7) - 1);
+  const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+
+  const eventsByDay = useMemo(() => {
+    const map = new Map<string, typeof barEvents>();
+    (barEvents || []).forEach((e: any) => {
+      const key = format(new Date(e.date_start), "yyyy-MM-dd");
+      const arr = map.get(key) || [];
+      arr.push(e);
+      map.set(key, arr);
+    });
+    return map;
+  }, [barEvents]);
+
+  const dayEvents = selectedDay
+    ? eventsByDay.get(format(selectedDay, "yyyy-MM-dd")) || []
+    : (barEvents || []).slice(0, 5);
+
+  return (
+    <section className="container py-16 space-y-8">
+      <div className="flex items-end justify-between">
+        <h2 className="font-display text-3xl md:text-4xl font-bold">
+          Rhythm & Blues <span className="text-primary">Cafe</span>
+        </h2>
+        <Link to="/bars" className="text-sm text-primary hover:underline flex items-center gap-1">
+          Всё расписание <ArrowRight size={14} />
+        </Link>
+      </div>
+
+      <div className="grid lg:grid-cols-[320px_1fr] gap-6">
+        {/* Mini Calendar */}
+        <div className="rounded-xl border border-border bg-card p-4">
+          <div className="flex items-center justify-between mb-3">
+            <button onClick={() => setMonth(subMonths(month, 1))} className="p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors">
+              <ChevronLeft size={16} />
+            </button>
+            <h3 className="font-display text-sm font-semibold capitalize">
+              {format(month, "LLLL yyyy", { locale: ru })}
+            </h3>
+            <button onClick={() => setMonth(addMonths(month, 1))} className="p-1 rounded-md hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors">
+              <ChevronRight size={16} />
+            </button>
+          </div>
+          <div className="grid grid-cols-7 gap-0.5 mb-1">
+            {weekDays.map((d) => (
+              <div key={d} className="text-center text-[10px] font-medium text-muted-foreground py-0.5">{d}</div>
+            ))}
+          </div>
+          <div className="grid grid-cols-7 gap-0.5">
+            {Array.from({ length: offset }).map((_, i) => <div key={`b-${i}`} />)}
+            {days.map((day) => {
+              const key = format(day, "yyyy-MM-dd");
+              const count = eventsByDay.get(key)?.length || 0;
+              const isSelected = selectedDay && isSameDay(day, selectedDay);
+              const isToday = isSameDay(day, new Date());
+              return (
+                <button
+                  key={key}
+                  onClick={() => setSelectedDay(isSelected ? null : day)}
+                  className={`aspect-square rounded-md flex flex-col items-center justify-center text-xs transition-all ${
+                    isSelected
+                      ? "bg-primary text-primary-foreground"
+                      : isToday
+                      ? "bg-secondary text-foreground ring-1 ring-primary/30"
+                      : count > 0
+                      ? "hover:bg-secondary text-foreground font-medium"
+                      : "text-muted-foreground/40 hover:bg-secondary/50"
+                  }`}
+                >
+                  {format(day, "d")}
+                  {count > 0 && !isSelected && (
+                    <span className="w-1 h-1 rounded-full bg-primary mt-0.5" />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Events for day */}
+        <div className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            {selectedDay
+              ? format(selectedDay, "d MMMM, EEEE", { locale: ru })
+              : "Ближайшие события"}
+          </p>
+          {(dayEvents as any[]).length > 0 ? (
+            (dayEvents as any[]).map((ev: any) => (
+              <div key={ev.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-4 hover:border-primary/40 transition-colors">
+                <div className="space-y-1 min-w-0">
+                  <h4 className="font-display font-semibold text-sm truncate">{ev.title}</h4>
+                  <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                    <Clock size={10} className="text-primary shrink-0" />
+                    {format(new Date(ev.date_start), "d MMM, HH:mm", { locale: ru })}
+                    {ev.hall && <span className="ml-1 rounded-full bg-secondary px-2 py-0.5 text-[10px]">{ev.hall}</span>}
+                  </p>
+                </div>
+                {ev.ticket_url && (
+                  <a href={ev.ticket_url} target="_blank" rel="noopener noreferrer"
+                    className="shrink-0 rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)] transition-all">
+                    <Ticket size={10} className="inline mr-1" />Билет
+                  </a>
+                )}
+              </div>
+            ))
+          ) : (
+            <EmptyState icon={Calendar} title="Нет событий" description={selectedDay ? "Выберите другой день" : "Скоро появится афиша"} />
+          )}
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const Index = () => {
   const { data: releases } = usePublishedReleases();
@@ -17,10 +142,6 @@ const Index = () => {
   const { data: galleryItems } = usePublishedGalleryItems(8);
   const { data: merch } = useMerchProducts();
 
-  const now = new Date();
-  const barStart = now.toISOString();
-  const barEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
-  const { data: barEvents } = useBarEvents(barStart, barEnd);
 
   const [ticketModal, setTicketModal] = useState(false);
 
@@ -228,35 +349,8 @@ const Index = () => {
         )}
       </section>
 
-      {/* BARS */}
-      <section className="container py-16 space-y-8">
-        <div className="flex items-end justify-between">
-          <h2 className="font-display text-3xl md:text-4xl font-bold">Rhythm & Blues <span className="text-gradient-fuchsia">Cafe</span></h2>
-          <Link to="/bars" className="text-sm text-primary hover:underline flex items-center gap-1">Вся афиша <ArrowRight size={14} /></Link>
-        </div>
-        {barEvents && barEvents.length > 0 ? (
-          <div className="space-y-3">
-            {barEvents.slice(0, 5).map((be: any) => (
-              <div key={be.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-4 hover:border-primary/40 transition-colors">
-                <div className="space-y-1">
-                  <h4 className="font-display font-semibold text-sm">{be.title}</h4>
-                  <p className="text-xs text-muted-foreground flex items-center gap-1">
-                    <Calendar size={10} /> {formatDateShort(be.date_start)}
-                    {be.hall && <span className="ml-2 rounded-full bg-secondary px-2 py-0.5 text-[10px]">{be.hall}</span>}
-                  </p>
-                </div>
-                {be.ticket_url && (
-                  <a href={be.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground" onClick={(e) => e.stopPropagation()}>
-                    <Ticket size={10} className="inline mr-1" />Билет
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <EmptyState icon={MapPin} title="Скоро появится афиша" description="Запустите синхронизацию в админке" />
-        )}
-      </section>
+      {/* BARS — mini calendar */}
+      <BarsCalendarWidget />
 
       {/* MERCH TEASER */}
       <section className="container py-16 space-y-8">
