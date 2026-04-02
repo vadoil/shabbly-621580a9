@@ -1,14 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Music, Calendar, ShoppingBag } from "lucide-react";
-import hero1 from "@/assets/hero/hero-1.jpg";
 import hero2 from "@/assets/hero/hero-2.jpg";
 import hero3 from "@/assets/hero/hero-3.jpg";
 import hero4 from "@/assets/hero/hero-4.jpg";
 import hero5 from "@/assets/hero/hero-5.jpg";
 import { useSiteSection } from "@/hooks/use-data";
 
-const images = [hero1, hero2, hero3, hero4, hero5];
+const images = [hero2, hero3, hero4, hero5];
 
 const GlitchHero = () => {
   const [current, setCurrent] = useState(0);
