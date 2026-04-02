@@ -6,8 +6,7 @@ import { getPublicStorageUrl } from "@/lib/storage";
 import { useState } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import EmptyState from "@/components/EmptyState";
-import { Calendar, Music, Newspaper, ExternalLink, ArrowRight, MapPin, ShoppingBag, Image, Ticket } from "lucide-react";
-import { startOfMonth, endOfMonth } from "date-fns";
+import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket } from "lucide-react";
 
 const Index = () => {
   const { data: releases } = usePublishedReleases();
