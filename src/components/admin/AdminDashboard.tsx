@@ -8,7 +8,8 @@ import AdminFriendEvents from "./AdminFriendEvents";
 import AdminSections from "./AdminSections";
 import AdminMembers from "./AdminMembers";
 import AdminPartners from "./AdminPartners";
-import { LogOut, Music, Calendar, Newspaper, Ticket, Users, LayoutDashboard, UserCircle, Award } from "lucide-react";
+import AdminBarSync from "./AdminBarSync";
+import { LogOut, Music, Calendar, Newspaper, Ticket, Users, LayoutDashboard, UserCircle, Award, Wine } from "lucide-react";
 
 const tabs = [
   { id: "releases", label: "Релизы", icon: Music },
@@ -16,6 +17,7 @@ const tabs = [
   { id: "news", label: "Новости", icon: Newspaper },
   { id: "tickets", label: "Заявки", icon: Ticket },
   { id: "friends", label: "Друзья", icon: Users },
+  { id: "bars", label: "Бары", icon: Wine },
   { id: "sections", label: "Секции", icon: LayoutDashboard },
   { id: "members", label: "Участники", icon: UserCircle },
   { id: "partners", label: "Партнёры", icon: Award },
