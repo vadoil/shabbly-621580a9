@@ -4,7 +4,7 @@ import AdminReleases from "./AdminReleases";
 import AdminEvents from "./AdminEvents";
 import AdminNews from "./AdminNews";
 import AdminTickets from "./AdminTickets";
-import AdminFriendEvents from "./AdminFriendEvents";
+
 import AdminSections from "./AdminSections";
 import AdminMembers from "./AdminMembers";
 import AdminPartners from "./AdminPartners";
