@@ -7,6 +7,7 @@ import { useState } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import EmptyState from "@/components/EmptyState";
 import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket } from "lucide-react";
+import GlitchHero from "@/components/GlitchHero";
 
 const Index = () => {
   const { data: releases } = usePublishedReleases();
@@ -28,29 +29,7 @@ const Index = () => {
   return (
     <Layout>
       {/* HERO */}
-      <section className="relative flex items-center justify-center min-h-[85vh] overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(322_80%_55%/0.08)_0%,transparent_70%)]" />
-        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-background to-transparent" />
-        <div className="relative z-10 text-center space-y-8 px-4 max-w-3xl">
-          <h1 className="font-display text-7xl md:text-9xl font-bold tracking-tighter text-gradient-fuchsia">
-            SHABBLY
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
-            {heroTagline?.content || "Музыка, которая звучит в каждом баре города"}
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <Link to="/music" className="group inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground hover:shadow-[0_0_30px_hsl(322_80%_55%/0.4)] transition-all">
-              <Music size={16} /> Слушать
-            </Link>
-            <Link to="/events" className="inline-flex items-center gap-2 rounded-full border border-border px-8 py-3.5 text-sm font-semibold text-foreground hover:border-primary/50 hover:bg-primary/5 transition-all">
-              <Calendar size={16} /> Афиша
-            </Link>
-            <Link to="/merch" className="inline-flex items-center gap-2 rounded-full border border-border px-8 py-3.5 text-sm font-semibold text-foreground hover:border-primary/50 hover:bg-primary/5 transition-all">
-              <ShoppingBag size={16} /> Мерч
-            </Link>
-          </div>
-        </div>
-      </section>
+      <GlitchHero />
 
       {/* FEATURED RELEASE */}
       <section className="container py-20">
