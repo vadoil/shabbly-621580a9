@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { usePublishedReleases, usePublishedEvents, usePublishedNews, useSiteSection, usePublishedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
 import { formatDate, formatDateShort } from "@/lib/format";
 import { getPublicStorageUrl } from "@/lib/storage";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import EmptyState from "@/components/EmptyState";
 import { Calendar, Music, Newspaper, ExternalLink, ArrowRight, MapPin, ShoppingBag, Image, Ticket } from "lucide-react";
