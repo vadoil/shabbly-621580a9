@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import { usePublishedReleases, usePublishedEvents, usePublishedNews, useSiteSection, usePublishedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
 import { formatDate, formatDateShort } from "@/lib/format";
 import { getPublicStorageUrl } from "@/lib/storage";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import EmptyState from "@/components/EmptyState";
-import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket } from "lucide-react";
+import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket, ChevronLeft, ChevronRight, Clock } from "lucide-react";
 import GlitchHero from "@/components/GlitchHero";
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths, getDay } from "date-fns";
+import { ru } from "date-fns/locale";
 
 const Index = () => {
   const { data: releases } = usePublishedReleases();
