@@ -14,16 +14,293 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      events: {
+        Row: {
+          address: string | null
+          city: string
+          date_end: string | null
+          date_start: string
+          id: string
+          published: boolean | null
+          status: string | null
+          ticket_url: string | null
+          title: string
+          venue: string
+        }
+        Insert: {
+          address?: string | null
+          city: string
+          date_end?: string | null
+          date_start: string
+          id?: string
+          published?: boolean | null
+          status?: string | null
+          ticket_url?: string | null
+          title: string
+          venue: string
+        }
+        Update: {
+          address?: string | null
+          city?: string
+          date_end?: string | null
+          date_start?: string
+          id?: string
+          published?: boolean | null
+          status?: string | null
+          ticket_url?: string | null
+          title?: string
+          venue?: string
+        }
+        Relationships: []
+      }
+      friend_events: {
+        Row: {
+          city: string
+          date_start: string
+          id: string
+          last_seen_at: string | null
+          raw_json: Json | null
+          source: string
+          source_id: string
+          title: string
+          url: string
+          venue: string
+        }
+        Insert: {
+          city: string
+          date_start: string
+          id?: string
+          last_seen_at?: string | null
+          raw_json?: Json | null
+          source: string
+          source_id: string
+          title: string
+          url: string
+          venue: string
+        }
+        Update: {
+          city?: string
+          date_start?: string
+          id?: string
+          last_seen_at?: string | null
+          raw_json?: Json | null
+          source?: string
+          source_id?: string
+          title?: string
+          url?: string
+          venue?: string
+        }
+        Relationships: []
+      }
+      news: {
+        Row: {
+          content: string
+          cover_url: string | null
+          id: string
+          published: boolean | null
+          published_at: string | null
+          slug: string
+          title: string
+        }
+        Insert: {
+          content: string
+          cover_url?: string | null
+          id?: string
+          published?: boolean | null
+          published_at?: string | null
+          slug: string
+          title: string
+        }
+        Update: {
+          content?: string
+          cover_url?: string | null
+          id?: string
+          published?: boolean | null
+          published_at?: string | null
+          slug?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      platform_links: {
+        Row: {
+          id: string
+          platform: Database["public"]["Enums"]["platform_type"]
+          release_id: string
+          url: string
+        }
+        Insert: {
+          id?: string
+          platform: Database["public"]["Enums"]["platform_type"]
+          release_id: string
+          url: string
+        }
+        Update: {
+          id?: string
+          platform?: Database["public"]["Enums"]["platform_type"]
+          release_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_links_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      releases: {
+        Row: {
+          cover_url: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          published: boolean | null
+          release_date: string | null
+          slug: string
+          title: string
+          type: Database["public"]["Enums"]["release_type"]
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          published?: boolean | null
+          release_date?: string | null
+          slug: string
+          title: string
+          type?: Database["public"]["Enums"]["release_type"]
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          published?: boolean | null
+          release_date?: string | null
+          slug?: string
+          title?: string
+          type?: Database["public"]["Enums"]["release_type"]
+        }
+        Relationships: []
+      }
+      ticket_requests: {
+        Row: {
+          comment: string | null
+          contact: string
+          created_at: string | null
+          event_id: string | null
+          id: string
+          name: string
+          qty: number | null
+          status: string | null
+        }
+        Insert: {
+          comment?: string | null
+          contact: string
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          name: string
+          qty?: number | null
+          status?: string | null
+        }
+        Update: {
+          comment?: string | null
+          contact?: string
+          created_at?: string | null
+          event_id?: string | null
+          id?: string
+          name?: string
+          qty?: number | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_requests_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tracks: {
+        Row: {
+          audio_url: string | null
+          duration_sec: number | null
+          id: string
+          order_index: number
+          published: boolean | null
+          release_id: string
+          title: string
+        }
+        Insert: {
+          audio_url?: string | null
+          duration_sec?: number | null
+          id?: string
+          order_index?: number
+          published?: boolean | null
+          release_id: string
+          title: string
+        }
+        Update: {
+          audio_url?: string | null
+          duration_sec?: number | null
+          id?: string
+          order_index?: number
+          published?: boolean | null
+          release_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tracks_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      platform_type: "yandex" | "spotify" | "apple" | "youtube"
+      release_type: "album" | "single" | "ep"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +427,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      platform_type: ["yandex", "spotify", "apple", "youtube"],
+      release_type: ["album", "single", "ep"],
+    },
   },
 } as const
