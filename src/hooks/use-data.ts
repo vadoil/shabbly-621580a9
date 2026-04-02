@@ -90,3 +90,61 @@ export const useFriendEvents = () =>
       return data;
     },
   });
+
+export const useSiteSection = (key: string) =>
+  useQuery({
+    queryKey: ["site_section", key],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("site_sections")
+        .select("*")
+        .eq("key", key)
+        .eq("published", true)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+
+export const useSiteSections = (keys: string[]) =>
+  useQuery({
+    queryKey: ["site_sections", keys],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("site_sections")
+        .select("*")
+        .in("key", keys)
+        .eq("published", true);
+      if (error) throw error;
+      return data;
+    },
+    enabled: keys.length > 0,
+  });
+
+export const useBandMembers = () =>
+  useQuery({
+    queryKey: ["band_members"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("band_members")
+        .select("*")
+        .eq("published", true)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+export const usePartners = () =>
+  useQuery({
+    queryKey: ["partners"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("partners")
+        .select("*")
+        .eq("published", true)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });

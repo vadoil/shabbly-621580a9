@@ -5,7 +5,10 @@ import AdminEvents from "./AdminEvents";
 import AdminNews from "./AdminNews";
 import AdminTickets from "./AdminTickets";
 import AdminFriendEvents from "./AdminFriendEvents";
-import { LogOut, Music, Calendar, Newspaper, Ticket, Users } from "lucide-react";
+import AdminSections from "./AdminSections";
+import AdminMembers from "./AdminMembers";
+import AdminPartners from "./AdminPartners";
+import { LogOut, Music, Calendar, Newspaper, Ticket, Users, LayoutDashboard, UserCircle, Award } from "lucide-react";
 
 const tabs = [
   { id: "releases", label: "Релизы", icon: Music },
@@ -13,6 +16,9 @@ const tabs = [
   { id: "news", label: "Новости", icon: Newspaper },
   { id: "tickets", label: "Заявки", icon: Ticket },
   { id: "friends", label: "Друзья", icon: Users },
+  { id: "sections", label: "Секции", icon: LayoutDashboard },
+  { id: "members", label: "Участники", icon: UserCircle },
+  { id: "partners", label: "Партнёры", icon: Award },
 ] as const;
 
 type Tab = typeof tabs[number]["id"];
@@ -46,7 +52,6 @@ const AdminDashboard = ({ onSignOut }: { onSignOut: () => void }) => {
           ))}
         </nav>
         <div className="flex-1 p-6">
-          {/* Mobile tabs */}
           <div className="md:hidden flex gap-1 mb-6 overflow-x-auto pb-2">
             {tabs.map((t) => (
               <button
@@ -65,6 +70,9 @@ const AdminDashboard = ({ onSignOut }: { onSignOut: () => void }) => {
           {tab === "news" && <AdminNews />}
           {tab === "tickets" && <AdminTickets />}
           {tab === "friends" && <AdminFriendEvents />}
+          {tab === "sections" && <AdminSections />}
+          {tab === "members" && <AdminMembers />}
+          {tab === "partners" && <AdminPartners />}
         </div>
       </div>
     </div>

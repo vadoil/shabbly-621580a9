@@ -1,29 +1,32 @@
 import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
-import { usePublishedReleases, usePublishedEvents, usePublishedNews, useFriendEvents } from "@/hooks/use-data";
+import { usePublishedReleases, usePublishedEvents, usePublishedNews, useFriendEvents, useSiteSection } from "@/hooks/use-data";
 import { formatDate, formatDateShort } from "@/lib/format";
 import { useState } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
-import { Calendar, Music, Newspaper, ExternalLink } from "lucide-react";
+import { Calendar, Music, Newspaper, ExternalLink, ArrowRight } from "lucide-react";
 
 const Index = () => {
   const { data: releases } = usePublishedReleases();
   const { data: events } = usePublishedEvents();
   const { data: news } = usePublishedNews();
   const { data: friendEvents } = useFriendEvents();
+  const { data: heroTagline } = useSiteSection("hero_tagline");
+  const { data: therapySection } = useSiteSection("about_therapy");
   const [ticketModal, setTicketModal] = useState(false);
 
   return (
     <Layout>
       {/* Hero */}
       <section className="relative flex items-center justify-center min-h-[80vh] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/90 to-background" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/8 blur-[100px]" />
         <div className="relative z-10 text-center space-y-6 px-4">
-          <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-gradient-gold animate-fade-in">
+          <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-gradient-fuchsia animate-fade-in">
             SHABBLY
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-md mx-auto animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            Музыка, которая звучит в каждом баре города
+            {heroTagline?.content || "Музыка, которая звучит в каждом баре города"}
           </p>
           <div className="flex gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.4s" }}>
             <Link
@@ -41,6 +44,21 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Art as therapy teaser */}
+      {therapySection && (
+        <section className="container py-20">
+          <div className="max-w-3xl mx-auto text-center space-y-6">
+            <h2 className="font-display text-3xl md:text-4xl font-bold">{therapySection.title}</h2>
+            <p className="text-muted-foreground leading-relaxed line-clamp-3 text-lg">
+              {therapySection.content}
+            </p>
+            <Link to="/about" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline">
+              Узнать больше <ArrowRight size={14} />
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* Upcoming events */}
       {events && events.length > 0 && (

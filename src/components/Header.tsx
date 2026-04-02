@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 
 const links = [
   { to: "/", label: "Главная" },
+  { to: "/about", label: "О нас" },
   { to: "/music", label: "Музыка" },
   { to: "/events", label: "Афиша" },
   { to: "/news", label: "Новости" },
