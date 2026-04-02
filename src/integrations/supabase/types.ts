@@ -166,6 +166,189 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_albums: {
+        Row: {
+          cover_url: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          published: boolean | null
+          slug: string
+          sort_order: number | null
+          title: string
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          published?: boolean | null
+          slug: string
+          sort_order?: number | null
+          title: string
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          published?: boolean | null
+          slug?: string
+          sort_order?: number | null
+          title?: string
+        }
+        Relationships: []
+      }
+      gallery_items: {
+        Row: {
+          album_id: string
+          caption: string | null
+          created_at: string | null
+          id: string
+          image_url: string
+          published: boolean | null
+          sort_order: number | null
+        }
+        Insert: {
+          album_id: string
+          caption?: string | null
+          created_at?: string | null
+          id?: string
+          image_url: string
+          published?: boolean | null
+          sort_order?: number | null
+        }
+        Update: {
+          album_id?: string
+          caption?: string | null
+          created_at?: string | null
+          id?: string
+          image_url?: string
+          published?: boolean | null
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gallery_items_album_id_fkey"
+            columns: ["album_id"]
+            isOneToOne: false
+            referencedRelation: "gallery_albums"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      merch_products: {
+        Row: {
+          category: string | null
+          cover_url: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          price_text: string | null
+          published: boolean | null
+          slug: string
+          sort_order: number | null
+          title: string
+        }
+        Insert: {
+          category?: string | null
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          price_text?: string | null
+          published?: boolean | null
+          slug: string
+          sort_order?: number | null
+          title: string
+        }
+        Update: {
+          category?: string | null
+          cover_url?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          price_text?: string | null
+          published?: boolean | null
+          slug?: string
+          sort_order?: number | null
+          title?: string
+        }
+        Relationships: []
+      }
+      merch_requests: {
+        Row: {
+          comment: string | null
+          contact: string
+          created_at: string | null
+          id: string
+          name: string
+          product_id: string | null
+          status: string | null
+        }
+        Insert: {
+          comment?: string | null
+          contact: string
+          created_at?: string | null
+          id?: string
+          name: string
+          product_id?: string | null
+          status?: string | null
+        }
+        Update: {
+          comment?: string | null
+          contact?: string
+          created_at?: string | null
+          id?: string
+          name?: string
+          product_id?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "merch_requests_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "merch_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      merch_variants: {
+        Row: {
+          color: string | null
+          id: string
+          in_stock: boolean | null
+          product_id: string
+          size: string | null
+          sku: string | null
+        }
+        Insert: {
+          color?: string | null
+          id?: string
+          in_stock?: boolean | null
+          product_id: string
+          size?: string | null
+          sku?: string | null
+        }
+        Update: {
+          color?: string | null
+          id?: string
+          in_stock?: boolean | null
+          product_id?: string
+          size?: string | null
+          sku?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "merch_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "merch_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       news: {
         Row: {
           content: string
@@ -312,6 +495,39 @@ export type Database = {
         }
         Relationships: []
       }
+      team_members: {
+        Row: {
+          bio: string | null
+          created_at: string | null
+          id: string
+          name: string
+          order_index: number | null
+          photo_url: string | null
+          published: boolean | null
+          role: string | null
+        }
+        Insert: {
+          bio?: string | null
+          created_at?: string | null
+          id?: string
+          name: string
+          order_index?: number | null
+          photo_url?: string | null
+          published?: boolean | null
+          role?: string | null
+        }
+        Update: {
+          bio?: string | null
+          created_at?: string | null
+          id?: string
+          name?: string
+          order_index?: number | null
+          photo_url?: string | null
+          published?: boolean | null
+          role?: string | null
+        }
+        Relationships: []
+      }
       ticket_requests: {
         Row: {
           comment: string | null
@@ -349,6 +565,35 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_links: {
+        Row: {
+          id: string
+          platform: string
+          track_id: string
+          url: string
+        }
+        Insert: {
+          id?: string
+          platform: string
+          track_id: string
+          url: string
+        }
+        Update: {
+          id?: string
+          platform?: string
+          track_id?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_links_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "tracks"
             referencedColumns: ["id"]
           },
         ]
