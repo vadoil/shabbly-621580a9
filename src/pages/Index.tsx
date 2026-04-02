@@ -1,27 +1,25 @@
 import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
-import { usePublishedReleases, usePublishedEvents, usePublishedNews, useFriendEvents, useSiteSection, usePublishedGalleryItems, useMerchProducts, useBarEventsExternal } from "@/hooks/use-data";
+import { usePublishedReleases, usePublishedEvents, usePublishedNews, useSiteSection, usePublishedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
 import { formatDate, formatDateShort } from "@/lib/format";
 import { getPublicStorageUrl } from "@/lib/storage";
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import EmptyState from "@/components/EmptyState";
-import { Calendar, Music, Newspaper, ExternalLink, ArrowRight, MapPin, ShoppingBag, Image, Ticket } from "lucide-react";
-import { startOfMonth, endOfMonth } from "date-fns";
+import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket } from "lucide-react";
 
 const Index = () => {
   const { data: releases } = usePublishedReleases();
   const { data: events } = usePublishedEvents();
   const { data: news } = usePublishedNews();
-  const { data: friendEvents } = useFriendEvents();
   const { data: heroTagline } = useSiteSection("hero_tagline");
   const { data: galleryItems } = usePublishedGalleryItems(8);
   const { data: merch } = useMerchProducts();
 
   const now = new Date();
-  const barStart = startOfMonth(now).toISOString();
-  const barEnd = endOfMonth(now).toISOString();
-  const { data: barEvents } = useBarEventsExternal(barStart, barEnd);
+  const barStart = now.toISOString();
+  const barEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  const { data: barEvents } = useBarEvents(barStart, barEnd);
 
   const [ticketModal, setTicketModal] = useState(false);
 
@@ -174,29 +172,33 @@ const Index = () => {
         )}
       </section>
 
-      {/* BARS MOSCOW */}
+      {/* BARS */}
       <section className="container py-16 space-y-8">
         <div className="flex items-end justify-between">
-          <h2 className="font-display text-3xl md:text-4xl font-bold">Бары Москвы <span className="text-gradient-fuchsia">с шоу</span></h2>
-          <Link to="/bars-calendar" className="text-sm text-primary hover:underline flex items-center gap-1">Открыть календарь <ArrowRight size={14} /></Link>
+          <h2 className="font-display text-3xl md:text-4xl font-bold">Rhythm & Blues <span className="text-gradient-fuchsia">Cafe</span></h2>
+          <Link to="/bars" className="text-sm text-primary hover:underline flex items-center gap-1">Вся афиша <ArrowRight size={14} /></Link>
         </div>
         {barEvents && barEvents.length > 0 ? (
           <div className="space-y-3">
             {barEvents.slice(0, 5).map((be: any) => (
-              <a key={be.id} href={be.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between rounded-xl border border-border bg-card p-4 hover:border-primary/40 transition-colors">
+              <div key={be.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-4 hover:border-primary/40 transition-colors">
                 <div className="space-y-1">
                   <h4 className="font-display font-semibold text-sm">{be.title}</h4>
-                  <p className="text-xs text-muted-foreground flex items-center gap-1"><MapPin size={10} /> {be.venue?.name || "—"}</p>
+                  <p className="text-xs text-muted-foreground flex items-center gap-1">
+                    <Calendar size={10} /> {formatDateShort(be.date_start)}
+                    {be.hall && <span className="ml-2 rounded-full bg-secondary px-2 py-0.5 text-[10px]">{be.hall}</span>}
+                  </p>
                 </div>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span>{formatDateShort(be.date_start)}</span>
-                  <ExternalLink size={12} />
-                </div>
-              </a>
+                {be.ticket_url && (
+                  <a href={be.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground" onClick={(e) => e.stopPropagation()}>
+                    <Ticket size={10} className="inline mr-1" />Билет
+                  </a>
+                )}
+              </div>
             ))}
           </div>
         ) : (
-          <EmptyState icon={MapPin} title="Скоро синхронизируем афишу баров" description="Запустите синхронизацию в админке" />
+          <EmptyState icon={MapPin} title="Скоро появится афиша" description="Запустите синхронизацию в админке" />
         )}
       </section>
 

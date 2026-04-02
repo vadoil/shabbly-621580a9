@@ -41,6 +41,53 @@ export type Database = {
         }
         Relationships: []
       }
+      bar_events: {
+        Row: {
+          bar_id: string
+          date_start: string
+          description: string | null
+          hall: string | null
+          id: string
+          last_synced_at: string | null
+          published: boolean | null
+          source_url: string | null
+          ticket_url: string | null
+          title: string
+        }
+        Insert: {
+          bar_id: string
+          date_start: string
+          description?: string | null
+          hall?: string | null
+          id?: string
+          last_synced_at?: string | null
+          published?: boolean | null
+          source_url?: string | null
+          ticket_url?: string | null
+          title: string
+        }
+        Update: {
+          bar_id?: string
+          date_start?: string
+          description?: string | null
+          hall?: string | null
+          id?: string
+          last_synced_at?: string | null
+          published?: boolean | null
+          source_url?: string | null
+          ticket_url?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bar_events_bar_id_fkey"
+            columns: ["bar_id"]
+            isOneToOne: false
+            referencedRelation: "bars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bar_events_external: {
         Row: {
           city: string
@@ -87,6 +134,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      bars: {
+        Row: {
+          address: string | null
+          city: string
+          id: string
+          name: string
+          phone: string | null
+          published: boolean | null
+          slug: string
+          website_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string
+          id?: string
+          name: string
+          phone?: string | null
+          published?: boolean | null
+          slug: string
+          website_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          published?: boolean | null
+          slug?: string
+          website_url?: string | null
+        }
+        Relationships: []
       }
       events: {
         Row: {

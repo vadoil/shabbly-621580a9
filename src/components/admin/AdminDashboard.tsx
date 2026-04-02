@@ -4,7 +4,7 @@ import AdminReleases from "./AdminReleases";
 import AdminEvents from "./AdminEvents";
 import AdminNews from "./AdminNews";
 import AdminTickets from "./AdminTickets";
-import AdminFriendEvents from "./AdminFriendEvents";
+
 import AdminSections from "./AdminSections";
 import AdminMembers from "./AdminMembers";
 import AdminPartners from "./AdminPartners";
@@ -12,7 +12,7 @@ import AdminBarSync from "./AdminBarSync";
 import AdminGallery from "./AdminGallery";
 import AdminMerch from "./AdminMerch";
 import AdminTeam from "./AdminTeam";
-import { LogOut, Music, Calendar, Newspaper, Ticket, Users, LayoutDashboard, UserCircle, Award, Wine, Image, ShoppingBag, UsersRound } from "lucide-react";
+import { LogOut, Music, Calendar, Newspaper, Ticket, LayoutDashboard, UserCircle, Award, Wine, Image, ShoppingBag, UsersRound } from "lucide-react";
 
 const tabs = [
   { id: "releases", label: "Релизы", icon: Music },
@@ -22,8 +22,8 @@ const tabs = [
   { id: "gallery", label: "Галерея", icon: Image },
   { id: "merch", label: "Мерч", icon: ShoppingBag },
   { id: "team", label: "Команда", icon: UsersRound },
-  { id: "bars", label: "Бары", icon: Wine },
-  { id: "friends", label: "Друзья", icon: Users },
+  { id: "bars", label: "Бары (R&B)", icon: Wine },
+  
   { id: "sections", label: "Секции", icon: LayoutDashboard },
   { id: "members", label: "Участники", icon: UserCircle },
   { id: "partners", label: "Партнёры", icon: Award },
@@ -81,7 +81,7 @@ const AdminDashboard = ({ onSignOut }: { onSignOut: () => void }) => {
           {tab === "merch" && <AdminMerch />}
           {tab === "team" && <AdminTeam />}
           {tab === "bars" && <AdminBarSync />}
-          {tab === "friends" && <AdminFriendEvents />}
+          
           {tab === "sections" && <AdminSections />}
           {tab === "members" && <AdminMembers />}
           {tab === "partners" && <AdminPartners />}
