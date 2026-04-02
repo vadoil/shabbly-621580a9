@@ -1,10 +1,13 @@
 import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
-import { usePublishedReleases, usePublishedEvents, usePublishedNews, useFriendEvents, useSiteSection } from "@/hooks/use-data";
+import { usePublishedReleases, usePublishedEvents, usePublishedNews, useFriendEvents, useSiteSection, usePublishedGalleryItems, useMerchProducts, useBarEventsExternal } from "@/hooks/use-data";
 import { formatDate, formatDateShort } from "@/lib/format";
-import { useState } from "react";
+import { getPublicStorageUrl } from "@/lib/storage";
+import { useState, useMemo } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
-import { Calendar, Music, Newspaper, ExternalLink, ArrowRight } from "lucide-react";
+import EmptyState from "@/components/EmptyState";
+import { Calendar, Music, Newspaper, ExternalLink, ArrowRight, MapPin, ShoppingBag, Image, Ticket } from "lucide-react";
+import { startOfMonth, endOfMonth } from "date-fns";
 
 const Index = () => {
   const { data: releases } = usePublishedReleases();
@@ -12,159 +15,219 @@ const Index = () => {
   const { data: news } = usePublishedNews();
   const { data: friendEvents } = useFriendEvents();
   const { data: heroTagline } = useSiteSection("hero_tagline");
-  const { data: therapySection } = useSiteSection("about_therapy");
+  const { data: galleryItems } = usePublishedGalleryItems(8);
+  const { data: merch } = useMerchProducts();
+
+  const now = new Date();
+  const barStart = startOfMonth(now).toISOString();
+  const barEnd = endOfMonth(now).toISOString();
+  const { data: barEvents } = useBarEventsExternal(barStart, barEnd);
+
   const [ticketModal, setTicketModal] = useState(false);
+
+  const featured = releases?.[0];
 
   return (
     <Layout>
-      {/* Hero */}
-      <section className="relative flex items-center justify-center min-h-[80vh] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-primary/8 blur-[100px]" />
-        <div className="relative z-10 text-center space-y-6 px-4">
-          <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-gradient-fuchsia animate-fade-in">
+      {/* HERO */}
+      <section className="relative flex items-center justify-center min-h-[85vh] overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(322_80%_55%/0.08)_0%,transparent_70%)]" />
+        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-background to-transparent" />
+        <div className="relative z-10 text-center space-y-8 px-4 max-w-3xl">
+          <h1 className="font-display text-7xl md:text-9xl font-bold tracking-tighter text-gradient-fuchsia">
             SHABBLY
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-md mx-auto animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <p className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
             {heroTagline?.content || "Музыка, которая звучит в каждом баре города"}
           </p>
-          <div className="flex gap-4 justify-center animate-fade-in" style={{ animationDelay: "0.4s" }}>
-            <Link
-              to="/music"
-              className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
-            >
+          <div className="flex gap-4 justify-center flex-wrap">
+            <Link to="/music" className="group inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground hover:shadow-[0_0_30px_hsl(322_80%_55%/0.4)] transition-all">
               <Music size={16} /> Слушать
             </Link>
-            <Link
-              to="/events"
-              className="inline-flex items-center gap-2 rounded-md border border-border px-6 py-3 text-sm font-semibold text-foreground hover:bg-secondary transition-colors"
-            >
+            <Link to="/events" className="inline-flex items-center gap-2 rounded-full border border-border px-8 py-3.5 text-sm font-semibold text-foreground hover:border-primary/50 hover:bg-primary/5 transition-all">
               <Calendar size={16} /> Афиша
+            </Link>
+            <Link to="/merch" className="inline-flex items-center gap-2 rounded-full border border-border px-8 py-3.5 text-sm font-semibold text-foreground hover:border-primary/50 hover:bg-primary/5 transition-all">
+              <ShoppingBag size={16} /> Мерч
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Art as therapy teaser */}
-      {therapySection && (
-        <section className="container py-20">
-          <div className="max-w-3xl mx-auto text-center space-y-6">
-            <h2 className="font-display text-3xl md:text-4xl font-bold">{therapySection.title}</h2>
-            <p className="text-muted-foreground leading-relaxed line-clamp-3 text-lg">
-              {therapySection.content}
-            </p>
-            <Link to="/about" className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline">
-              Узнать больше <ArrowRight size={14} />
+      {/* FEATURED RELEASE */}
+      <section className="container py-20">
+        {featured ? (
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <Link to={`/music/${featured.slug}`} className="group">
+              <div className="aspect-square rounded-2xl overflow-hidden bg-secondary glow-fuchsia">
+                {featured.cover_url ? (
+                  <img src={getPublicStorageUrl(featured.cover_url)} alt={featured.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-muted-foreground"><Music size={80} /></div>
+                )}
+              </div>
             </Link>
+            <div className="space-y-6">
+              <p className="text-xs font-semibold text-primary uppercase tracking-widest">Новый релиз</p>
+              <h2 className="font-display text-4xl md:text-5xl font-bold">{featured.title}</h2>
+              <p className="text-sm text-muted-foreground uppercase tracking-wider">{featured.type}{featured.release_date && ` · ${formatDate(featured.release_date)}`}</p>
+              {featured.description && <p className="text-secondary-foreground leading-relaxed">{featured.description}</p>}
+              {featured.platform_links && featured.platform_links.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {featured.platform_links.map((pl) => (
+                    <a key={pl.id} href={pl.url} target="_blank" rel="noopener noreferrer" className="rounded-full border border-border px-5 py-2 text-xs font-medium text-foreground hover:border-primary hover:text-primary transition-colors">
+                      {pl.platform === "yandex" ? "Яндекс Музыка" : pl.platform === "spotify" ? "Spotify" : pl.platform === "apple" ? "Apple Music" : "YouTube"}
+                    </a>
+                  ))}
+                </div>
+              )}
+              <Link to={`/music/${featured.slug}`} className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:underline">
+                Подробнее <ArrowRight size={14} />
+              </Link>
+            </div>
           </div>
-        </section>
-      )}
+        ) : (
+          <EmptyState icon={Music} title="Скоро будет новый релиз" description="Следите за обновлениями" />
+        )}
+      </section>
 
-      {/* Upcoming events */}
-      {events && events.length > 0 && (
-        <section className="container py-16 space-y-8">
-          <div className="flex items-end justify-between">
-            <h2 className="font-display text-3xl font-bold">Ближайшие концерты</h2>
-            <Link to="/events" className="text-sm text-primary hover:underline">Все →</Link>
-          </div>
-          <div className="grid gap-4 md:grid-cols-3">
-            {events.slice(0, 3).map((e) => (
-              <div key={e.id} className="group rounded-lg border border-border bg-card p-6 hover:border-primary/50 transition-colors space-y-3">
-                <p className="text-xs font-medium text-primary">{formatDate(e.date_start)}</p>
-                <h3 className="font-display text-lg font-semibold">{e.title}</h3>
-                <p className="text-sm text-muted-foreground">{e.city} · {e.venue}</p>
-                <button
-                  onClick={() => setTicketModal(true)}
-                  className="text-sm font-medium text-primary hover:underline"
-                >
-                  Заявка на билет →
-                </button>
+      {/* UPCOMING SHOWS */}
+      <section className="container py-16 space-y-8">
+        <div className="flex items-end justify-between">
+          <h2 className="font-display text-3xl md:text-4xl font-bold">Ближайшие концерты</h2>
+          <Link to="/events" className="text-sm text-primary hover:underline flex items-center gap-1">Все даты <ArrowRight size={14} /></Link>
+        </div>
+        {events && events.length > 0 ? (
+          <div className="space-y-3">
+            {events.slice(0, 5).map((e) => (
+              <div key={e.id} className="group flex flex-col sm:flex-row sm:items-center justify-between rounded-xl border border-border bg-card p-5 hover:border-primary/40 transition-all">
+                <div className="space-y-1">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-bold text-primary bg-primary/10 rounded-md px-2 py-1">{formatDateShort(e.date_start)}</span>
+                    <h3 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">{e.title}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground flex items-center gap-1"><MapPin size={12} /> {e.city} · {e.venue}</p>
+                </div>
+                <div className="flex gap-2 mt-3 sm:mt-0">
+                  {e.ticket_url && (
+                    <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.3)] transition-all">
+                      <Ticket size={12} className="inline mr-1" />Билет
+                    </a>
+                  )}
+                  <button onClick={() => setTicketModal(true)} className="rounded-full border border-border px-5 py-2 text-xs font-semibold text-foreground hover:border-primary/50 transition-colors">
+                    Заявка
+                  </button>
+                </div>
               </div>
             ))}
           </div>
-        </section>
-      )}
+        ) : (
+          <EmptyState icon={Calendar} title="Скоро объявим даты" description="Следите за афишей" ctaLabel="Перейти в афишу" ctaLink="/events" />
+        )}
+      </section>
 
-      {/* Releases */}
-      {releases && releases.length > 0 && (
-        <section className="container py-16 space-y-8">
-          <div className="flex items-end justify-between">
-            <h2 className="font-display text-3xl font-bold">Релизы</h2>
-            <Link to="/music" className="text-sm text-primary hover:underline">Все →</Link>
-          </div>
-          <div className="grid gap-6 grid-cols-2 md:grid-cols-4">
-            {releases.slice(0, 4).map((r) => (
-              <Link key={r.id} to={`/music/${r.slug}`} className="group space-y-3">
-                <div className="aspect-square rounded-lg overflow-hidden bg-secondary">
-                  {r.cover_url ? (
-                    <img src={r.cover_url} alt={r.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                      <Music size={48} />
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <h3 className="font-display font-semibold truncate">{r.title}</h3>
-                  <p className="text-xs text-muted-foreground">{r.type} · {r.release_date && formatDateShort(r.release_date)}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* News */}
-      {news && news.length > 0 && (
-        <section className="container py-16 space-y-8">
-          <div className="flex items-end justify-between">
-            <h2 className="font-display text-3xl font-bold">Новости</h2>
-            <Link to="/news" className="text-sm text-primary hover:underline">Все →</Link>
-          </div>
+      {/* NEWS */}
+      <section className="container py-16 space-y-8">
+        <div className="flex items-end justify-between">
+          <h2 className="font-display text-3xl md:text-4xl font-bold">Новости</h2>
+          <Link to="/news" className="text-sm text-primary hover:underline flex items-center gap-1">Все <ArrowRight size={14} /></Link>
+        </div>
+        {news && news.length > 0 ? (
           <div className="grid gap-6 md:grid-cols-3">
             {news.slice(0, 3).map((n) => (
               <Link key={n.id} to={`/news/${n.slug}`} className="group space-y-3">
-                {n.cover_url && (
-                  <div className="aspect-video rounded-lg overflow-hidden bg-secondary">
-                    <img src={n.cover_url} alt={n.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                  </div>
-                )}
+                <div className="aspect-video rounded-xl overflow-hidden bg-secondary">
+                  {n.cover_url ? (
+                    <img src={getPublicStorageUrl(n.cover_url)} alt={n.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground/30"><Newspaper size={40} /></div>
+                  )}
+                </div>
                 <div>
                   <p className="text-xs text-muted-foreground">{n.published_at && formatDate(n.published_at)}</p>
-                  <h3 className="font-display font-semibold line-clamp-2">{n.title}</h3>
+                  <h3 className="font-display font-semibold line-clamp-2 mt-1 group-hover:text-primary transition-colors">{n.title}</h3>
                 </div>
               </Link>
             ))}
           </div>
-        </section>
-      )}
+        ) : (
+          <EmptyState icon={Newspaper} title="Новости скоро появятся" />
+        )}
+      </section>
 
-      {/* Friend events */}
-      {friendEvents && friendEvents.length > 0 && (
-        <section className="container py-16 space-y-8">
-          <h2 className="font-display text-3xl font-bold">Друзья по барам</h2>
+      {/* GALLERY */}
+      <section className="container py-16 space-y-8">
+        <div className="flex items-end justify-between">
+          <h2 className="font-display text-3xl md:text-4xl font-bold">Галерея</h2>
+          <Link to="/gallery" className="text-sm text-primary hover:underline flex items-center gap-1">Все фото <ArrowRight size={14} /></Link>
+        </div>
+        {galleryItems && galleryItems.length > 0 ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {galleryItems.slice(0, 8).map((item) => (
+              <div key={item.id} className="aspect-square rounded-xl overflow-hidden bg-secondary group cursor-pointer">
+                <img src={getPublicStorageUrl(item.image_url)} alt={item.caption || ""} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState icon={Image} title="Галерея скоро появится" ctaLabel="Смотреть" ctaLink="/gallery" />
+        )}
+      </section>
+
+      {/* BARS MOSCOW */}
+      <section className="container py-16 space-y-8">
+        <div className="flex items-end justify-between">
+          <h2 className="font-display text-3xl md:text-4xl font-bold">Бары Москвы <span className="text-gradient-fuchsia">с шоу</span></h2>
+          <Link to="/bars-calendar" className="text-sm text-primary hover:underline flex items-center gap-1">Открыть календарь <ArrowRight size={14} /></Link>
+        </div>
+        {barEvents && barEvents.length > 0 ? (
           <div className="space-y-3">
-            {friendEvents.map((fe) => (
-              <a
-                key={fe.id}
-                href={fe.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between rounded-lg border border-border bg-card p-4 hover:border-primary/50 transition-colors"
-              >
+            {barEvents.slice(0, 5).map((be: any) => (
+              <a key={be.id} href={be.url} target="_blank" rel="noopener noreferrer" className="flex items-center justify-between rounded-xl border border-border bg-card p-4 hover:border-primary/40 transition-colors">
                 <div className="space-y-1">
-                  <h4 className="font-display font-semibold">{fe.title}</h4>
-                  <p className="text-sm text-muted-foreground">{fe.city} · {fe.venue}</p>
+                  <h4 className="font-display font-semibold text-sm">{be.title}</h4>
+                  <p className="text-xs text-muted-foreground flex items-center gap-1"><MapPin size={10} /> {be.venue?.name || "—"}</p>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                  <span>{formatDateShort(fe.date_start)}</span>
-                  <ExternalLink size={14} />
+                <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                  <span>{formatDateShort(be.date_start)}</span>
+                  <ExternalLink size={12} />
                 </div>
               </a>
             ))}
           </div>
-        </section>
-      )}
+        ) : (
+          <EmptyState icon={MapPin} title="Скоро синхронизируем афишу баров" description="Запустите синхронизацию в админке" />
+        )}
+      </section>
+
+      {/* MERCH TEASER */}
+      <section className="container py-16 space-y-8">
+        <div className="flex items-end justify-between">
+          <h2 className="font-display text-3xl md:text-4xl font-bold">Мерч</h2>
+          <Link to="/merch" className="text-sm text-primary hover:underline flex items-center gap-1">В магазин <ArrowRight size={14} /></Link>
+        </div>
+        {merch && merch.length > 0 ? (
+          <div className="grid gap-6 grid-cols-2 md:grid-cols-4">
+            {merch.slice(0, 4).map((p) => (
+              <Link key={p.id} to={`/merch/${p.slug}`} className="group space-y-3">
+                <div className="aspect-square rounded-xl overflow-hidden bg-secondary border border-border group-hover:border-primary/40 transition-colors">
+                  {p.cover_url ? (
+                    <img src={getPublicStorageUrl(p.cover_url)} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground/30"><ShoppingBag size={40} /></div>
+                  )}
+                </div>
+                <div>
+                  <h3 className="font-display font-semibold text-sm truncate group-hover:text-primary transition-colors">{p.title}</h3>
+                  {p.price_text && <p className="text-xs text-primary font-medium mt-0.5">{p.price_text}</p>}
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <EmptyState icon={ShoppingBag} title="Мерч скоро появится" ctaLabel="В магазин" ctaLink="/merch" />
+        )}
+      </section>
 
       <TicketRequestModal open={ticketModal} onClose={() => setTicketModal(false)} />
     </Layout>

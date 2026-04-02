@@ -10,9 +10,13 @@ import ReleaseDetail from "./pages/ReleaseDetail";
 import EventsPage from "./pages/EventsPage";
 import NewsPage from "./pages/NewsPage";
 import NewsDetail from "./pages/NewsDetail";
+import GalleryPage from "./pages/GalleryPage";
+import GalleryAlbumPage from "./pages/GalleryAlbumPage";
+import MerchPage from "./pages/MerchPage";
+import MerchDetail from "./pages/MerchDetail";
+import BarsCalendarPage from "./pages/BarsCalendarPage";
 import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
-import BarsCalendarPage from "./pages/BarsCalendarPage";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +32,10 @@ const App = () => (
           <Route path="/music" element={<MusicPage />} />
           <Route path="/music/:slug" element={<ReleaseDetail />} />
           <Route path="/events" element={<EventsPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/gallery/:slug" element={<GalleryAlbumPage />} />
+          <Route path="/merch" element={<MerchPage />} />
+          <Route path="/merch/:slug" element={<MerchDetail />} />
           <Route path="/bars-calendar" element={<BarsCalendarPage />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/news/:slug" element={<NewsDetail />} />
