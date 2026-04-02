@@ -9,7 +9,7 @@ const links = [
   { to: "/events", label: "Афиша" },
   { to: "/gallery", label: "Галерея" },
   { to: "/merch", label: "Мерч" },
-  { to: "/bars-calendar", label: "Бары" },
+  { to: "/bars", label: "Бары" },
   { to: "/news", label: "Новости" },
 ];
 

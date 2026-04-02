@@ -239,29 +239,17 @@ export const useMerchProduct = (slug: string) =>
     enabled: !!slug,
   });
 
-export const useBarEventsExternal = (start: string, end: string) =>
+export const useBarEvents = (start: string, end: string) =>
   useQuery({
     queryKey: ["bar_events", start, end],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from("bar_events_external")
-        .select("*, venue:venues_external(*)")
+        .from("bar_events")
+        .select("*")
+        .eq("published", true)
         .gte("date_start", start)
         .lte("date_start", end)
         .order("date_start", { ascending: true });
-      if (error) throw error;
-      return data;
-    },
-  });
-
-export const useVenuesExternal = () =>
-  useQuery({
-    queryKey: ["venues_external"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("venues_external")
-        .select("id, name")
-        .order("name");
       if (error) throw error;
       return data;
     },
