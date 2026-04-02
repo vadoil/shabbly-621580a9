@@ -13,7 +13,6 @@ const Index = () => {
   const { data: releases } = usePublishedReleases();
   const { data: events } = usePublishedEvents();
   const { data: news } = usePublishedNews();
-  const { data: friendEvents } = useFriendEvents();
   const { data: heroTagline } = useSiteSection("hero_tagline");
   const { data: galleryItems } = usePublishedGalleryItems(8);
   const { data: merch } = useMerchProducts();
