@@ -120,35 +120,60 @@ const Index = () => {
         )}
       </section>
 
-      {/* UPCOMING SHOWS */}
+      {/* UPCOMING SHOWS — checkerboard */}
       <section className="container py-16 space-y-8">
         <div className="flex items-end justify-between">
           <h2 className="font-display text-3xl md:text-4xl font-bold">Ближайшие концерты</h2>
           <Link to="/events" className="text-sm text-primary hover:underline flex items-center gap-1">Все даты <ArrowRight size={14} /></Link>
         </div>
         {events && events.length > 0 ? (
-          <div className="space-y-3">
-            {events.slice(0, 5).map((e) => (
-              <div key={e.id} className="group flex flex-col sm:flex-row sm:items-center justify-between rounded-xl border border-border bg-card p-5 hover:border-primary/40 transition-all">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-bold text-primary bg-primary/10 rounded-md px-2 py-1">{formatDateShort(e.date_start)}</span>
-                    <h3 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">{e.title}</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-0">
+            {events.slice(0, 5).map((e, i) => {
+              const isEven = i % 2 === 0;
+              return (
+                <div
+                  key={e.id}
+                  className={`group relative p-5 md:p-6 flex flex-col justify-between min-h-[200px] border border-border/50 transition-all hover:border-primary/50 ${
+                    isEven ? "bg-card" : "bg-secondary/50"
+                  }`}
+                >
+                  {/* Date big */}
+                  <div>
+                    <p className="font-display text-3xl md:text-4xl font-bold text-primary/80 leading-none">
+                      {new Date(e.date_start).getDate()}
+                    </p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider mt-1">
+                      {new Date(e.date_start).toLocaleDateString("ru-RU", { month: "short", weekday: "short" })}
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground flex items-center gap-1"><MapPin size={12} /> {e.city} · {e.venue}</p>
+
+                  <div className="mt-4 space-y-2">
+                    <h3 className="font-display text-sm font-semibold leading-tight group-hover:text-primary transition-colors">
+                      {e.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground flex items-center gap-1">
+                      <MapPin size={10} /> {e.city}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground/70">{e.venue}</p>
+                  </div>
+
+                  <div className="mt-3 flex gap-1.5">
+                    {e.ticket_url ? (
+                      <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-3 py-1 text-[10px] font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.3)] transition-all">
+                        <Ticket size={10} className="inline mr-0.5" />Билет
+                      </a>
+                    ) : (
+                      <button onClick={() => setTicketModal(true)} className="rounded-full border border-border px-3 py-1 text-[10px] font-semibold text-foreground hover:border-primary/50 transition-colors">
+                        Заявка
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Corner accent */}
+                  <div className={`absolute top-0 right-0 w-6 h-6 ${isEven ? "bg-primary/10" : "bg-primary/5"}`} />
                 </div>
-                <div className="flex gap-2 mt-3 sm:mt-0">
-                  {e.ticket_url && (
-                    <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.3)] transition-all">
-                      <Ticket size={12} className="inline mr-1" />Билет
-                    </a>
-                  )}
-                  <button onClick={() => setTicketModal(true)} className="rounded-full border border-border px-5 py-2 text-xs font-semibold text-foreground hover:border-primary/50 transition-colors">
-                    Заявка
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <EmptyState icon={Calendar} title="Скоро объявим даты" description="Следите за афишей" ctaLabel="Перейти в афишу" ctaLink="/events" />
