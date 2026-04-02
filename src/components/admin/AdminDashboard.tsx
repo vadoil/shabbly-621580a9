@@ -9,15 +9,21 @@ import AdminSections from "./AdminSections";
 import AdminMembers from "./AdminMembers";
 import AdminPartners from "./AdminPartners";
 import AdminBarSync from "./AdminBarSync";
-import { LogOut, Music, Calendar, Newspaper, Ticket, Users, LayoutDashboard, UserCircle, Award, Wine } from "lucide-react";
+import AdminGallery from "./AdminGallery";
+import AdminMerch from "./AdminMerch";
+import AdminTeam from "./AdminTeam";
+import { LogOut, Music, Calendar, Newspaper, Ticket, Users, LayoutDashboard, UserCircle, Award, Wine, Image, ShoppingBag, UsersRound } from "lucide-react";
 
 const tabs = [
   { id: "releases", label: "Релизы", icon: Music },
   { id: "events", label: "Концерты", icon: Calendar },
   { id: "news", label: "Новости", icon: Newspaper },
   { id: "tickets", label: "Заявки", icon: Ticket },
-  { id: "friends", label: "Друзья", icon: Users },
+  { id: "gallery", label: "Галерея", icon: Image },
+  { id: "merch", label: "Мерч", icon: ShoppingBag },
+  { id: "team", label: "Команда", icon: UsersRound },
   { id: "bars", label: "Бары", icon: Wine },
+  { id: "friends", label: "Друзья", icon: Users },
   { id: "sections", label: "Секции", icon: LayoutDashboard },
   { id: "members", label: "Участники", icon: UserCircle },
   { id: "partners", label: "Партнёры", icon: Award },
@@ -40,7 +46,7 @@ const AdminDashboard = ({ onSignOut }: { onSignOut: () => void }) => {
         </button>
       </header>
       <div className="flex">
-        <nav className="w-48 border-r border-border bg-card min-h-[calc(100vh-49px)] p-3 space-y-1 hidden md:block">
+        <nav className="w-48 border-r border-border bg-card min-h-[calc(100vh-49px)] p-3 space-y-1 hidden md:block overflow-y-auto">
           {tabs.map((t) => (
             <button
               key={t.id}
@@ -53,7 +59,7 @@ const AdminDashboard = ({ onSignOut }: { onSignOut: () => void }) => {
             </button>
           ))}
         </nav>
-        <div className="flex-1 p-6">
+        <div className="flex-1 p-6 overflow-y-auto">
           <div className="md:hidden flex gap-1 mb-6 overflow-x-auto pb-2">
             {tabs.map((t) => (
               <button
@@ -71,8 +77,11 @@ const AdminDashboard = ({ onSignOut }: { onSignOut: () => void }) => {
           {tab === "events" && <AdminEvents />}
           {tab === "news" && <AdminNews />}
           {tab === "tickets" && <AdminTickets />}
-          {tab === "friends" && <AdminFriendEvents />}
+          {tab === "gallery" && <AdminGallery />}
+          {tab === "merch" && <AdminMerch />}
+          {tab === "team" && <AdminTeam />}
           {tab === "bars" && <AdminBarSync />}
+          {tab === "friends" && <AdminFriendEvents />}
           {tab === "sections" && <AdminSections />}
           {tab === "members" && <AdminMembers />}
           {tab === "partners" && <AdminPartners />}
