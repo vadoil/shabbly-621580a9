@@ -47,8 +47,15 @@ const Index = () => {
             <div className="space-y-6">
               <p className="text-xs font-semibold text-primary uppercase tracking-widest">Новый релиз</p>
               <h2 className="font-display text-4xl md:text-5xl font-bold">{featured.title}</h2>
-              <p className="text-sm text-muted-foreground uppercase tracking-wider">{featured.type}{featured.release_date && ` · ${formatDate(featured.release_date)}`}</p>
-              {featured.description && <p className="text-secondary-foreground leading-relaxed">{featured.description}</p>}
+              <p className="text-sm text-muted-foreground uppercase tracking-wider">
+                {featured.type === "single" ? "Сингл" : featured.type === "album" ? "Альбом" : "EP"}
+                {featured.release_date && ` · ${formatDate(featured.release_date)}`}
+              </p>
+              {featured.description && (
+                <p className="text-secondary-foreground leading-relaxed line-clamp-4">
+                  {featured.description.replace(/\*\*/g, "").replace(/\[.*?\]\(.*?\)/g, "").slice(0, 200)}
+                </p>
+              )}
               {featured.platform_links && featured.platform_links.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {featured.platform_links.map((pl) => (
