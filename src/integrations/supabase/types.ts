@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      band_members: {
+        Row: {
+          id: string
+          name: string
+          photo_url: string | null
+          published: boolean | null
+          role: string
+          sort_order: number
+        }
+        Insert: {
+          id?: string
+          name: string
+          photo_url?: string | null
+          published?: boolean | null
+          role?: string
+          sort_order?: number
+        }
+        Update: {
+          id?: string
+          name?: string
+          photo_url?: string | null
+          published?: boolean | null
+          role?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       events: {
         Row: {
           address: string | null
@@ -122,6 +149,33 @@ export type Database = {
         }
         Relationships: []
       }
+      partners: {
+        Row: {
+          id: string
+          logo_url: string | null
+          name: string
+          published: boolean | null
+          sort_order: number
+          url: string | null
+        }
+        Insert: {
+          id?: string
+          logo_url?: string | null
+          name: string
+          published?: boolean | null
+          sort_order?: number
+          url?: string | null
+        }
+        Update: {
+          id?: string
+          logo_url?: string | null
+          name?: string
+          published?: boolean | null
+          sort_order?: number
+          url?: string | null
+        }
+        Relationships: []
+      }
       platform_links: {
         Row: {
           id: string
@@ -184,6 +238,30 @@ export type Database = {
           slug?: string
           title?: string
           type?: Database["public"]["Enums"]["release_type"]
+        }
+        Relationships: []
+      }
+      site_sections: {
+        Row: {
+          content: string
+          id: string
+          key: string
+          published: boolean | null
+          title: string
+        }
+        Insert: {
+          content?: string
+          id?: string
+          key: string
+          published?: boolean | null
+          title?: string
+        }
+        Update: {
+          content?: string
+          id?: string
+          key?: string
+          published?: boolean | null
+          title?: string
         }
         Relationships: []
       }
