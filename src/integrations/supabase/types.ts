@@ -41,6 +41,53 @@ export type Database = {
         }
         Relationships: []
       }
+      bar_events_external: {
+        Row: {
+          city: string
+          date_start: string
+          date_text_raw: string | null
+          id: string
+          last_seen_at: string | null
+          source: string
+          source_id: string
+          title: string
+          url: string
+          venue_id: string
+        }
+        Insert: {
+          city?: string
+          date_start: string
+          date_text_raw?: string | null
+          id?: string
+          last_seen_at?: string | null
+          source: string
+          source_id: string
+          title: string
+          url: string
+          venue_id: string
+        }
+        Update: {
+          city?: string
+          date_start?: string
+          date_text_raw?: string | null
+          id?: string
+          last_seen_at?: string | null
+          source?: string
+          source_id?: string
+          title?: string
+          url?: string
+          venue_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bar_events_external_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues_external"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       events: {
         Row: {
           address: string | null
@@ -359,6 +406,39 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      venues_external: {
+        Row: {
+          address: string | null
+          id: string
+          last_seen_at: string | null
+          metro: string | null
+          name: string
+          source: string
+          source_id: string
+          url: string
+        }
+        Insert: {
+          address?: string | null
+          id?: string
+          last_seen_at?: string | null
+          metro?: string | null
+          name: string
+          source: string
+          source_id: string
+          url: string
+        }
+        Update: {
+          address?: string | null
+          id?: string
+          last_seen_at?: string | null
+          metro?: string | null
+          name?: string
+          source?: string
+          source_id?: string
+          url?: string
         }
         Relationships: []
       }
