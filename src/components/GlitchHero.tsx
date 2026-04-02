@@ -79,16 +79,13 @@ const GlitchHero = () => {
                 <img
                   src={images[(current + (i % 2 === 0 ? 0 : 1)) % images.length]}
                   alt=""
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute w-full h-full object-cover"
                   style={{
-                    top: `-${i * sliceHeight}%`,
-                    height: `${100 / sliceHeight * sliceHeight}%`,
-                    // Shift the image so the slice shows the correct portion
-                    clipPath: `inset(${i * sliceHeight}% 0 ${100 - (i + 1) * sliceHeight}% 0)`,
                     top: '0',
                     left: '0',
                     width: '100%',
                     height: '100%',
+                    clipPath: `inset(${i * sliceHeight}% 0 ${100 - (i + 1) * sliceHeight}% 0)`,
                   }}
                 />
               </div>
