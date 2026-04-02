@@ -142,10 +142,6 @@ const Index = () => {
   const { data: galleryItems } = usePublishedGalleryItems(8);
   const { data: merch } = useMerchProducts();
 
-  const now = new Date();
-  const barStart = now.toISOString();
-  const barEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
-  const { data: barEvents } = useBarEvents(barStart, barEnd);
 
   const [ticketModal, setTicketModal] = useState(false);
 
