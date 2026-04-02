@@ -230,35 +230,8 @@ const Index = () => {
         )}
       </section>
 
-      {/* BARS */}
-      <section className="container py-16 space-y-8">
-        <div className="flex items-end justify-between">
-          <h2 className="font-display text-3xl md:text-4xl font-bold">Rhythm & Blues <span className="text-gradient-fuchsia">Cafe</span></h2>
-          <Link to="/bars" className="text-sm text-primary hover:underline flex items-center gap-1">Вся афиша <ArrowRight size={14} /></Link>
-        </div>
-        {barEvents && barEvents.length > 0 ? (
-          <div className="space-y-3">
-            {barEvents.slice(0, 5).map((be: any) => (
-              <div key={be.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-4 hover:border-primary/40 transition-colors">
-                <div className="space-y-1">
-                  <h4 className="font-display font-semibold text-sm">{be.title}</h4>
-                  <p className="text-xs text-muted-foreground flex items-center gap-1">
-                    <Calendar size={10} /> {formatDateShort(be.date_start)}
-                    {be.hall && <span className="ml-2 rounded-full bg-secondary px-2 py-0.5 text-[10px]">{be.hall}</span>}
-                  </p>
-                </div>
-                {be.ticket_url && (
-                  <a href={be.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground" onClick={(e) => e.stopPropagation()}>
-                    <Ticket size={10} className="inline mr-1" />Билет
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <EmptyState icon={MapPin} title="Скоро появится афиша" description="Запустите синхронизацию в админке" />
-        )}
-      </section>
+      {/* BARS — mini calendar */}
+      <BarsCalendarWidget />
 
       {/* MERCH TEASER */}
       <section className="container py-16 space-y-8">
