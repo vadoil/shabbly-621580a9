@@ -25,6 +25,7 @@ const tabs = [
   { id: "team", label: "Команда", icon: UsersRound },
   { id: "bars", label: "Бары (R&B)", icon: Wine },
   
+  { id: "telegram", label: "Импорт TG", icon: FileUp },
   { id: "sections", label: "Секции", icon: LayoutDashboard },
   { id: "members", label: "Участники", icon: UserCircle },
   { id: "partners", label: "Партнёры", icon: Award },
