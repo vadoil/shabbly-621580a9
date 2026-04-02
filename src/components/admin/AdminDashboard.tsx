@@ -12,7 +12,8 @@ import AdminBarSync from "./AdminBarSync";
 import AdminGallery from "./AdminGallery";
 import AdminMerch from "./AdminMerch";
 import AdminTeam from "./AdminTeam";
-import { LogOut, Music, Calendar, Newspaper, Ticket, LayoutDashboard, UserCircle, Award, Wine, Image, ShoppingBag, UsersRound } from "lucide-react";
+import AdminTelegramImport from "./AdminTelegramImport";
+import { LogOut, Music, Calendar, Newspaper, Ticket, LayoutDashboard, UserCircle, Award, Wine, Image, ShoppingBag, UsersRound, FileUp } from "lucide-react";
 
 const tabs = [
   { id: "releases", label: "Релизы", icon: Music },
