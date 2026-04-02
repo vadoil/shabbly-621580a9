@@ -72,6 +72,7 @@ const AdminDashboard = ({ onSignOut }: { onSignOut: () => void }) => {
           {tab === "news" && <AdminNews />}
           {tab === "tickets" && <AdminTickets />}
           {tab === "friends" && <AdminFriendEvents />}
+          {tab === "bars" && <AdminBarSync />}
           {tab === "sections" && <AdminSections />}
           {tab === "members" && <AdminMembers />}
           {tab === "partners" && <AdminPartners />}
