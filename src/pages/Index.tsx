@@ -18,9 +18,9 @@ const Index = () => {
   const { data: merch } = useMerchProducts();
 
   const now = new Date();
-  const barStart = startOfMonth(now).toISOString();
-  const barEnd = endOfMonth(now).toISOString();
-  const { data: barEvents } = useBarEventsExternal(barStart, barEnd);
+  const barStart = now.toISOString();
+  const barEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+  const { data: barEvents } = useBarEvents(barStart, barEnd);
 
   const [ticketModal, setTicketModal] = useState(false);
 
