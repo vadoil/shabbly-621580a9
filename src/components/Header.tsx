@@ -7,6 +7,7 @@ const links = [
   { to: "/about", label: "О нас" },
   { to: "/music", label: "Музыка" },
   { to: "/events", label: "Афиша" },
+  { to: "/bars-calendar", label: "Бары" },
   { to: "/news", label: "Новости" },
 ];
 

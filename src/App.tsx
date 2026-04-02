@@ -12,6 +12,7 @@ import NewsPage from "./pages/NewsPage";
 import NewsDetail from "./pages/NewsDetail";
 import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
+import BarsCalendarPage from "./pages/BarsCalendarPage";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
           <Route path="/music" element={<MusicPage />} />
           <Route path="/music/:slug" element={<ReleaseDetail />} />
           <Route path="/events" element={<EventsPage />} />
+          <Route path="/bars-calendar" element={<BarsCalendarPage />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/news/:slug" element={<NewsDetail />} />
           <Route path="/admin" element={<AdminPage />} />
