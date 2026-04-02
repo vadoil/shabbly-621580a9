@@ -37,7 +37,7 @@ const GlitchHero = () => {
   }, []);
 
   return (
-    <section className="relative min-h-[100vh] md:min-h-[85vh] overflow-hidden bg-background flex items-end md:items-end">
+    <section className={`relative min-h-[100vh] md:min-h-[85vh] overflow-hidden bg-background flex items-end md:items-end ${fading ? "hero-img-glitch" : ""}`}>
       {/* === Background images with crossfade === */}
       {images.map((src, i) => (
         <div
@@ -58,6 +58,20 @@ const GlitchHero = () => {
           />
         </div>
       ))}
+
+      {/* RGB split layers during transition */}
+      {fading && (
+        <>
+          <div
+            className="absolute inset-0 z-[1] mix-blend-screen opacity-60 animate-[glitch-shift-1_0.3s_steps(2)_infinite]"
+            style={{ background: `url(${images[(current + 1) % images.length]}) center/cover no-repeat`, filter: "url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22><filter id=%22r%22><feColorMatrix type=%22matrix%22 values=%221 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0%22/></filter></svg>#r')" }}
+          />
+          <div
+            className="absolute inset-0 z-[1] mix-blend-screen opacity-60 animate-[glitch-shift-2_0.25s_steps(2)_infinite]"
+            style={{ background: `url(${images[(current + 1) % images.length]}) center/cover no-repeat`, filter: "url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22><filter id=%22b%22><feColorMatrix type=%22matrix%22 values=%220 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0%22/></filter></svg>#b')" }}
+          />
+        </>
+      )}
 
       {/* === Noise overlay === */}
       <div

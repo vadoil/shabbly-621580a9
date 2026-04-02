@@ -1,17 +1,50 @@
 import Layout from "@/components/Layout";
-import { useGalleryAlbums, usePublishedGalleryItems } from "@/hooks/use-data";
+import { useGalleryAlbums } from "@/hooks/use-data";
 import { getPublicStorageUrl } from "@/lib/storage";
 import { Link } from "react-router-dom";
-import { Image, X } from "lucide-react";
+import { Image, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import EmptyState from "@/components/EmptyState";
 
+const PAGE_SIZE = 30;
+
+const useGalleryPage = (page: number) =>
+  useQuery({
+    queryKey: ["gallery_items_paged", page],
+    queryFn: async () => {
+      // Count total (excluding thumbs)
+      const { count } = await supabase
+        .from("gallery_items")
+        .select("*", { count: "exact", head: true })
+        .eq("published", true)
+        .not("image_url", "ilike", "%thumb%");
+
+      const from = page * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+
+      const { data, error } = await supabase
+        .from("gallery_items")
+        .select("*")
+        .eq("published", true)
+        .not("image_url", "ilike", "%thumb%")
+        .order("created_at", { ascending: false })
+        .range(from, to);
+
+      if (error) throw error;
+      return { items: data, total: count || 0 };
+    },
+  });
+
 const GalleryPage = () => {
   const { data: albums, isLoading: albumsLoading } = useGalleryAlbums();
-  const { data: allItems, isLoading: itemsLoading } = usePublishedGalleryItems();
+  const [page, setPage] = useState(0);
+  const { data, isLoading: itemsLoading } = useGalleryPage(page);
   const [lightbox, setLightbox] = useState<string | null>(null);
 
+  const totalPages = data ? Math.ceil(data.total / PAGE_SIZE) : 0;
   const isLoading = albumsLoading || itemsLoading;
 
   return (
@@ -38,7 +71,6 @@ const GalleryPage = () => {
                   </div>
                   <div>
                     <h3 className="font-display font-semibold group-hover:text-primary transition-colors">{a.title}</h3>
-                    <p className="text-xs text-muted-foreground">{(a as any).gallery_items?.[0]?.count || 0} фото</p>
                   </div>
                 </Link>
               ))}
@@ -46,19 +78,55 @@ const GalleryPage = () => {
           </div>
         )}
 
-        {/* All photos grid */}
+        {/* Photos grid */}
         {isLoading ? (
           <LoadingSkeleton count={12} />
-        ) : allItems && allItems.length > 0 ? (
-          <div>
-            <h2 className="font-display text-xl font-semibold mb-4">Все фото</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-              {allItems.map((item) => (
+        ) : data && data.items.length > 0 ? (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="font-display text-xl font-semibold">Все фото</h2>
+              <span className="text-sm text-muted-foreground">{data.total} фото</span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+              {data.items.map((item) => (
                 <button key={item.id} onClick={() => setLightbox(item.image_url)} className="aspect-square rounded-xl overflow-hidden bg-secondary group cursor-pointer">
-                  <img src={getPublicStorageUrl(item.image_url)} alt={item.caption || ""} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <img src={getPublicStorageUrl(item.image_url)} alt={item.caption || ""} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                 </button>
               ))}
             </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 pt-4">
+                <button
+                  onClick={() => setPage((p) => Math.max(0, p - 1))}
+                  disabled={page === 0}
+                  className="p-2 rounded-lg border border-border bg-card hover:bg-secondary disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                {Array.from({ length: totalPages }).map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setPage(i)}
+                    className={`w-9 h-9 rounded-lg text-sm font-medium transition-colors ${
+                      i === page
+                        ? "bg-primary text-primary-foreground"
+                        : "border border-border bg-card hover:bg-secondary text-foreground"
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                  disabled={page >= totalPages - 1}
+                  className="p-2 rounded-lg border border-border bg-card hover:bg-secondary disabled:opacity-30 disabled:pointer-events-none transition-colors"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
+            )}
           </div>
         ) : (
           <EmptyState icon={Image} title="Фотографии скоро появятся" description="Следите за обновлениями" />
