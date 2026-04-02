@@ -134,6 +134,7 @@ const BarsCalendarWidget = () => {
   );
 };
 
+const Index = () => {
   const { data: releases } = usePublishedReleases();
   const { data: events } = usePublishedEvents();
   const { data: news } = usePublishedNews();
