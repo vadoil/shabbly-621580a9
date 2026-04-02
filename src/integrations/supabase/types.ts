@@ -288,6 +288,8 @@ export type Database = {
           image_url: string
           published: boolean | null
           sort_order: number | null
+          source: string | null
+          source_id: string | null
         }
         Insert: {
           album_id: string
@@ -297,6 +299,8 @@ export type Database = {
           image_url: string
           published?: boolean | null
           sort_order?: number | null
+          source?: string | null
+          source_id?: string | null
         }
         Update: {
           album_id?: string
@@ -306,6 +310,8 @@ export type Database = {
           image_url?: string
           published?: boolean | null
           sort_order?: number | null
+          source?: string | null
+          source_id?: string | null
         }
         Relationships: [
           {
@@ -437,6 +443,8 @@ export type Database = {
           published: boolean | null
           published_at: string | null
           slug: string
+          source: string | null
+          source_id: string | null
           title: string
         }
         Insert: {
@@ -446,6 +454,8 @@ export type Database = {
           published?: boolean | null
           published_at?: string | null
           slug: string
+          source?: string | null
+          source_id?: string | null
           title: string
         }
         Update: {
@@ -455,6 +465,8 @@ export type Database = {
           published?: boolean | null
           published_at?: string | null
           slug?: string
+          source?: string | null
+          source_id?: string | null
           title?: string
         }
         Relationships: []
@@ -524,6 +536,8 @@ export type Database = {
           published: boolean | null
           release_date: string | null
           slug: string
+          source: string | null
+          source_id: string | null
           title: string
           type: Database["public"]["Enums"]["release_type"]
         }
@@ -535,6 +549,8 @@ export type Database = {
           published?: boolean | null
           release_date?: string | null
           slug: string
+          source?: string | null
+          source_id?: string | null
           title: string
           type?: Database["public"]["Enums"]["release_type"]
         }
@@ -546,6 +562,8 @@ export type Database = {
           published?: boolean | null
           release_date?: string | null
           slug?: string
+          source?: string | null
+          source_id?: string | null
           title?: string
           type?: Database["public"]["Enums"]["release_type"]
         }
