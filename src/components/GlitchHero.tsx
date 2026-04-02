@@ -1,227 +1,127 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Music, Calendar, ShoppingBag } from "lucide-react";
+import { Music, Calendar, Camera } from "lucide-react";
 import hero2 from "@/assets/hero/hero-2.jpg";
 import hero4 from "@/assets/hero/hero-4.jpg";
 import hero5 from "@/assets/hero/hero-5.jpg";
-import { useSiteSection } from "@/hooks/use-data";
 
 const images = [hero2, hero4, hero5];
 
 const GlitchHero = () => {
   const [current, setCurrent] = useState(0);
-  const [next, setNext] = useState(1);
-  const [phase, setPhase] = useState<"idle" | "glitch1" | "glitch2" | "glitch3" | "resolve">("idle");
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
-  const { data: heroTagline } = useSiteSection("hero_tagline");
+  const [fading, setFading] = useState(false);
 
-  const triggerGlitch = useCallback(() => {
-    const nextIdx = (current + 1) % images.length;
-    setNext(nextIdx);
-
-    // Phase 1: RGB split + scanline distortion
-    setPhase("glitch1");
-
-    timerRef.current = setTimeout(() => {
-      // Phase 2: horizontal slice tear
-      setPhase("glitch2");
-    }, 100);
-
-    setTimeout(() => {
-      // Phase 3: swap image with brief static
-      setPhase("glitch3");
-      setCurrent(nextIdx);
-    }, 200);
-
-    setTimeout(() => {
-      setPhase("resolve");
-    }, 280);
-
-    setTimeout(() => {
-      setPhase("idle");
-    }, 350);
-  }, [current]);
-
+  // Crossfade slideshow every 7 seconds
   useEffect(() => {
-    const interval = setInterval(triggerGlitch, 4000);
-    return () => {
-      clearInterval(interval);
-      if (timerRef.current) clearTimeout(timerRef.current);
+    const interval = setInterval(() => {
+      setFading(true);
+      setTimeout(() => {
+        setCurrent((p) => (p + 1) % images.length);
+        setFading(false);
+      }, 1200);
+    }, 7000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Glitch trigger every 4-6 seconds
+  const [glitch, setGlitch] = useState(false);
+  useEffect(() => {
+    const fire = () => {
+      setGlitch(true);
+      setTimeout(() => setGlitch(false), 250);
+      const next = 4000 + Math.random() * 2000;
+      setTimeout(fire, next);
     };
-  }, [triggerGlitch]);
-
-  // Micro flicker
-  const [flicker, setFlicker] = useState(false);
-  useEffect(() => {
-    const id = setInterval(() => {
-      if (Math.random() > 0.75 && phase === "idle") {
-        setFlicker(true);
-        setTimeout(() => setFlicker(false), 40 + Math.random() * 60);
-      }
-    }, 1200);
-    return () => clearInterval(id);
-  }, [phase]);
-
-  const isGlitching = phase !== "idle";
-  const showRGB = isGlitching || flicker;
+    const t = setTimeout(fire, 3000);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
-    <section className="relative min-h-[85vh] overflow-hidden bg-background">
-      {/* Base image — object-position: top center so faces are visible */}
-      <div className="absolute inset-0">
-        <img
-          src={images[current]}
-          alt=""
-          className="w-full h-full object-cover object-[center_30%]"
-        />
-      </div>
-
-      {/* Classic RGB channel split */}
-      {showRGB && (
-        <>
-          {/* Red channel */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage: `url(${images[current]})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center 30%",
-              mixBlendMode: "screen",
-              opacity: isGlitching ? 0.6 : 0.25,
-              transform: `translateX(${isGlitching ? 6 : 2}px)`,
-              filter: "saturate(2) hue-rotate(-30deg)",
-            }}
+    <section className="relative min-h-[100vh] md:min-h-[85vh] overflow-hidden bg-background flex items-end md:items-end">
+      {/* === Background images with crossfade === */}
+      {images.map((src, i) => (
+        <div
+          key={i}
+          className="absolute inset-0 transition-opacity duration-[1200ms] ease-in-out"
+          style={{ opacity: i === current && !fading ? 1 : 0 }}
+        >
+          <img
+            src={src}
+            alt=""
+            className="w-full h-full object-cover object-[center_30%] md:block hidden"
           />
-          {/* Cyan channel */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundImage: `url(${images[current]})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center 30%",
-              mixBlendMode: "screen",
-              opacity: isGlitching ? 0.5 : 0.2,
-              transform: `translateX(${isGlitching ? -6 : -2}px)`,
-              filter: "saturate(2) hue-rotate(150deg)",
-            }}
+          {/* Mobile: single centered image */}
+          <img
+            src={src}
+            alt=""
+            className="w-full h-full object-cover object-[center_20%] md:hidden block"
           />
-        </>
-      )}
+        </div>
+      ))}
 
-      {/* Horizontal slice tears during glitch */}
-      {(phase === "glitch2" || phase === "glitch3") && (
-        <>
-          {[15, 30, 52, 68, 82].map((top, i) => (
-            <div
-              key={i}
-              className="absolute left-0 right-0 overflow-hidden pointer-events-none"
-              style={{
-                top: `${top}%`,
-                height: `${3 + Math.random() * 4}%`,
-                transform: `translateX(${(i % 2 === 0 ? 1 : -1) * (15 + Math.random() * 30)}px)`,
-              }}
-            >
-              <img
-                src={images[phase === "glitch3" ? next : current]}
-                alt=""
-                className="w-full h-full object-cover object-[center_30%]"
-                style={{
-                  position: "absolute",
-                  top: `-${top}%`,
-                  left: 0,
-                  width: "100%",
-                  height: `${100 / ((3 + 4) / 100)}%`,
-                }}
-              />
-            </div>
-          ))}
-        </>
-      )}
-
-      {/* Scanlines — always subtle, stronger during glitch */}
+      {/* === Noise overlay === */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none opacity-[0.04] mix-blend-overlay z-[2]"
         style={{
-          opacity: isGlitching ? 0.08 : 0.03,
-          backgroundImage: `repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 2px,
-            rgba(0,0,0,0.4) 2px,
-            rgba(0,0,0,0.4) 4px
-          )`,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
         }}
       />
 
-      {/* Static noise during glitch */}
-      {isGlitching && (
-        <div
-          className="absolute inset-0 pointer-events-none opacity-10 mix-blend-overlay"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          }}
-        />
-      )}
+      {/* === Scanlines === */}
+      <div
+        className="absolute inset-0 pointer-events-none z-[2] opacity-[0.035]"
+        style={{
+          backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.3) 3px, rgba(0,0,0,0.3) 4px)`,
+        }}
+      />
 
-      {/* Horizontal glitch bars */}
-      {isGlitching && (
-        <>
-          <div className="absolute left-0 right-0 h-[2px] bg-primary/70" style={{ top: "23%" }} />
-          <div className="absolute left-0 w-2/5 h-[1px] bg-[hsl(180_80%_55%/0.5)]" style={{ top: "55%" }} />
-          <div className="absolute right-0 w-1/3 h-[3px] bg-primary/30" style={{ top: "74%" }} />
-        </>
-      )}
+      {/* === Darken gradient === */}
+      <div className="absolute inset-0 z-[3] bg-gradient-to-b from-background/60 via-background/30 to-background" />
+      <div className="absolute inset-0 z-[3] bg-gradient-to-r from-background/70 via-transparent to-background/30 hidden md:block" />
 
-      {/* Gradient overlays for readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/20" />
-      <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-transparent to-background/40" />
+      {/* === Content === */}
+      <div className="relative z-10 container pb-16 md:pb-20 pt-32 md:pt-0">
+        <div className="max-w-2xl space-y-5 text-center md:text-left">
+          {/* H1 with glitch */}
+          <h1
+            className={`font-display text-6xl sm:text-7xl md:text-9xl font-bold tracking-tighter select-none ${glitch ? "hero-glitch-active" : ""}`}
+          >
+            <span className="text-gradient-fuchsia hero-glitch-text" data-text="SHABBLY">
+              SHABBLY
+            </span>
+          </h1>
 
-      {/* Content */}
-      <div className="relative z-10 flex items-end min-h-[85vh] pb-16 md:pb-20">
-        <div className="container">
-          <div className="max-w-2xl space-y-6">
-            {/* Title with glitch text shadow */}
-            <h1
-              className="font-display text-7xl md:text-9xl font-bold tracking-tighter select-none"
-              style={{
-                textShadow: isGlitching
-                  ? "4px 0 hsl(322 80% 55%), -4px 0 hsl(180 80% 55%), 0 2px hsl(322 80% 55% / 0.3)"
-                  : flicker
-                  ? "2px 0 hsl(322 80% 55% / 0.4), -2px 0 hsl(180 80% 55% / 0.4)"
-                  : "none",
-                transform: isGlitching ? "translateX(2px)" : "none",
-                transition: "transform 0.05s",
-              }}
+          <p className="text-lg md:text-xl text-primary/80 font-medium tracking-wide uppercase">
+            голос внутренней свободы
+          </p>
+
+          <p className="text-sm md:text-base text-foreground/70 max-w-lg leading-relaxed mx-auto md:mx-0">
+            Песни о чувствах без цензуры: любовь, злость, смех над собой — и&nbsp;шаг дальше.
+            Музыка, которая звучит как честный разговор в&nbsp;темноте.
+          </p>
+
+          {/* CTA */}
+          <div className="flex gap-3 justify-center md:justify-start flex-col sm:flex-row pt-2">
+            <Link
+              to="/music"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground hover:shadow-[0_0_30px_hsl(322_80%_55%/0.4)] transition-all"
             >
-              <span className="text-gradient-fuchsia">SHABBLY</span>
-            </h1>
-
-            <p className="text-lg md:text-xl text-foreground/80 max-w-lg leading-relaxed">
-              {heroTagline?.content || "Люди, влюблённые в музыку — это диагноз. Разрешим себе быть профессионалами в любви к музыке."}
-            </p>
-
-            {/* Navigation buttons */}
-            <div className="flex gap-3 flex-wrap pt-2">
-              <Link
-                to="/music"
-                className="group inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-semibold text-primary-foreground hover:shadow-[0_0_30px_hsl(322_80%_55%/0.4)] transition-all"
-              >
-                <Music size={16} /> Слушать
-              </Link>
-              <Link
-                to="/events"
-                className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-background/30 backdrop-blur-sm px-7 py-3 text-sm font-semibold text-foreground hover:border-primary/60 hover:bg-primary/10 transition-all"
-              >
-                <Calendar size={16} /> Афиша
-              </Link>
-              <Link
-                to="/merch"
-                className="inline-flex items-center gap-2 rounded-full border border-foreground/20 bg-background/30 backdrop-blur-sm px-7 py-3 text-sm font-semibold text-foreground hover:border-primary/60 hover:bg-primary/10 transition-all"
-              >
-                <ShoppingBag size={16} /> Мерч
-              </Link>
-            </div>
+              <Music size={16} /> Слушать релизы
+            </Link>
+            <Link
+              to="/events"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-foreground/20 bg-background/30 backdrop-blur-sm px-8 py-3.5 text-sm font-semibold text-foreground hover:border-primary/60 hover:bg-primary/10 transition-all"
+            >
+              <Calendar size={16} /> Афиша / билеты
+            </Link>
           </div>
+
+          <Link
+            to="/gallery"
+            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors pt-1"
+          >
+            <Camera size={12} /> Смотреть фото
+          </Link>
         </div>
       </div>
     </section>
