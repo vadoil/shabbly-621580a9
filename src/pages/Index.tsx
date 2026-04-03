@@ -135,11 +135,11 @@ const BarsCalendarWidget = () => {
 };
 
 const Index = () => {
-  const { data: releases } = usePublishedReleases();
+  const { data: releases } = useFeaturedReleases();
   const { data: events } = usePublishedEvents();
   const { data: news } = usePublishedNews();
   const { data: heroTagline } = useSiteSection("hero_tagline");
-  const { data: galleryItems } = usePublishedGalleryItems(8);
+  const { data: galleryItems } = useFeaturedGalleryItems();
   const { data: merch } = useMerchProducts();
 
 
