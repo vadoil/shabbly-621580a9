@@ -284,6 +284,7 @@ export type Database = {
           album_id: string
           caption: string | null
           created_at: string | null
+          featured: boolean
           id: string
           image_url: string
           published: boolean | null
@@ -295,6 +296,7 @@ export type Database = {
           album_id: string
           caption?: string | null
           created_at?: string | null
+          featured?: boolean
           id?: string
           image_url: string
           published?: boolean | null
@@ -306,6 +308,7 @@ export type Database = {
           album_id?: string
           caption?: string | null
           created_at?: string | null
+          featured?: boolean
           id?: string
           image_url?: string
           published?: boolean | null
@@ -532,6 +535,7 @@ export type Database = {
           cover_url: string | null
           created_at: string | null
           description: string | null
+          featured: boolean
           id: string
           published: boolean | null
           release_date: string | null
@@ -545,6 +549,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string | null
           description?: string | null
+          featured?: boolean
           id?: string
           published?: boolean | null
           release_date?: string | null
@@ -558,6 +563,7 @@ export type Database = {
           cover_url?: string | null
           created_at?: string | null
           description?: string | null
+          featured?: boolean
           id?: string
           published?: boolean | null
           release_date?: string | null

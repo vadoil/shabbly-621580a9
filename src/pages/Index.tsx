@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
-import { usePublishedReleases, usePublishedEvents, usePublishedNews, useSiteSection, usePublishedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
+import { useFeaturedReleases, usePublishedEvents, usePublishedNews, useSiteSection, useFeaturedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
 import { formatDate, formatDateShort } from "@/lib/format";
 import { getPublicStorageUrl } from "@/lib/storage";
 import { useState, useMemo } from "react";
@@ -135,11 +135,11 @@ const BarsCalendarWidget = () => {
 };
 
 const Index = () => {
-  const { data: releases } = usePublishedReleases();
+  const { data: releases } = useFeaturedReleases();
   const { data: events } = usePublishedEvents();
   const { data: news } = usePublishedNews();
   const { data: heroTagline } = useSiteSection("hero_tagline");
-  const { data: galleryItems } = usePublishedGalleryItems(8);
+  const { data: galleryItems } = useFeaturedGalleryItems();
   const { data: merch } = useMerchProducts();
 
 

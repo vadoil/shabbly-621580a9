@@ -2,7 +2,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Trash2, Edit, ShoppingBag } from "lucide-react";
+import { Trash2, Edit, ShoppingBag, Upload } from "lucide-react";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 
@@ -57,6 +57,16 @@ const AdminMerch = () => {
     qc.invalidateQueries({ queryKey: ["admin_merch"] });
   };
 
+  const handleCoverUpload = async (productId: string, file: File) => {
+    const path = `merch/${productId}/${file.name}`;
+    const { error: uploadErr } = await supabase.storage.from("covers").upload(path, file, { upsert: true });
+    if (uploadErr) return toast.error(uploadErr.message);
+    const { data: { publicUrl } } = supabase.storage.from("covers").getPublicUrl(path);
+    await supabase.from("merch_products").update({ cover_url: publicUrl }).eq("id", productId);
+    qc.invalidateQueries({ queryKey: ["admin_merch"] });
+    toast.success("Обложка загружена");
+  };
+
   return (
     <div className="space-y-6">
       <h2 className="font-display text-2xl font-bold">Мерч</h2>
@@ -68,7 +78,6 @@ const AdminMerch = () => {
           <input placeholder="Slug" value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} className="rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground" />
           <input placeholder="Название" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground" />
           <input placeholder="Цена (текст)" value={form.price_text} onChange={(e) => setForm({ ...form, price_text: e.target.value })} className="rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground" />
-          <input placeholder="Cover URL" value={form.cover_url} onChange={(e) => setForm({ ...form, cover_url: e.target.value })} className="rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground" />
           <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground">
             <option value="clothing">Одежда</option>
             <option value="accessories">Аксессуары</option>
@@ -99,6 +108,10 @@ const AdminMerch = () => {
                 </div>
               </div>
               <div className="flex items-center gap-2">
+                <label className="cursor-pointer" title="Загрузить обложку">
+                  <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleCoverUpload(p.id, e.target.files[0])} />
+                  <Upload size={14} className="text-muted-foreground hover:text-foreground" />
+                </label>
                 <button onClick={() => togglePublished(p.id, p.published)} className={`text-xs px-2 py-1 rounded ${p.published ? "bg-green-900/30 text-green-400" : "bg-secondary text-muted-foreground"}`}>
                   {p.published ? "Опубл." : "Черновик"}
                 </button>

@@ -15,6 +15,38 @@ export const usePublishedReleases = () =>
     },
   });
 
+export const useFeaturedReleases = () =>
+  useQuery({
+    queryKey: ["releases_featured"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("releases")
+        .select("*, tracks(*), platform_links(*)")
+        .eq("published", true)
+        .eq("featured", true)
+        .order("release_date", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+export const useFeaturedGalleryItems = () =>
+  useQuery({
+    queryKey: ["gallery_items_featured"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("gallery_items")
+        .select("*")
+        .eq("published", true)
+        .eq("featured", true)
+        .not("image_url", "ilike", "%thumb%")
+        .order("created_at", { ascending: false })
+        .limit(8);
+      if (error) throw error;
+      return data;
+    },
+  });
+
 export const useReleaseBySlug = (slug: string) =>
   useQuery({
     queryKey: ["release", slug],
