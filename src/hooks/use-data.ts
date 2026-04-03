@@ -19,12 +19,22 @@ export const useFeaturedReleases = () =>
   useQuery({
     queryKey: ["releases_featured"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Try featured first
+      const { data: featured, error: e1 } = await supabase
         .from("releases")
         .select("*, tracks(*), platform_links(*)")
         .eq("published", true)
         .eq("featured", true)
         .order("release_date", { ascending: false });
+      if (e1) throw e1;
+      if (featured && featured.length > 0) return featured;
+      // Fallback: latest published
+      const { data, error } = await supabase
+        .from("releases")
+        .select("*, tracks(*), platform_links(*)")
+        .eq("published", true)
+        .order("release_date", { ascending: false })
+        .limit(8);
       if (error) throw error;
       return data;
     },
@@ -34,11 +44,22 @@ export const useFeaturedGalleryItems = () =>
   useQuery({
     queryKey: ["gallery_items_featured"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Try featured first
+      const { data: featured, error: e1 } = await supabase
         .from("gallery_items")
         .select("*")
         .eq("published", true)
         .eq("featured", true)
+        .not("image_url", "ilike", "%thumb%")
+        .order("created_at", { ascending: false })
+        .limit(8);
+      if (e1) throw e1;
+      if (featured && featured.length > 0) return featured;
+      // Fallback: latest published
+      const { data, error } = await supabase
+        .from("gallery_items")
+        .select("*")
+        .eq("published", true)
         .not("image_url", "ilike", "%thumb%")
         .order("created_at", { ascending: false })
         .limit(8);
