@@ -2,7 +2,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Trash2, Edit, Plus } from "lucide-react";
+import { Trash2, Edit, Plus, Star, Upload } from "lucide-react";
+import { getPublicStorageUrl } from "@/lib/storage";
 
 const AdminGallery = () => {
   const qc = useQueryClient();
@@ -43,26 +44,48 @@ const AdminGallery = () => {
 
   // Item management
   const [itemAlbum, setItemAlbum] = useState<string | null>(null);
-  const [itemUrl, setItemUrl] = useState("");
   const [itemCaption, setItemCaption] = useState("");
 
   const { data: items } = useQuery({
     queryKey: ["admin_gallery_items", itemAlbum],
     queryFn: async () => {
-      const { data, error } = await supabase.from("gallery_items").select("*").eq("album_id", itemAlbum!).order("sort_order");
+      const { data, error } = await supabase
+        .from("gallery_items")
+        .select("*")
+        .eq("album_id", itemAlbum!)
+        .not("image_url", "ilike", "%thumb%")
+        .order("sort_order");
       if (error) throw error;
       return data;
     },
     enabled: !!itemAlbum,
   });
 
-  const addItem = async () => {
-    if (!itemUrl || !itemAlbum) return toast.error("Укажите URL");
-    const { error } = await supabase.from("gallery_items").insert({ album_id: itemAlbum, image_url: itemUrl, caption: itemCaption || null });
+  const handleImageUpload = async (file: File) => {
+    if (!itemAlbum) return;
+    const path = `gallery/${itemAlbum}/${Date.now()}-${file.name}`;
+    const { error: uploadErr } = await supabase.storage.from("covers").upload(path, file, { upsert: true });
+    if (uploadErr) return toast.error(uploadErr.message);
+    const { data: { publicUrl } } = supabase.storage.from("covers").getPublicUrl(path);
+    const { error } = await supabase.from("gallery_items").insert({
+      album_id: itemAlbum,
+      image_url: publicUrl,
+      caption: itemCaption || null,
+    });
     if (error) return toast.error(error.message);
     toast.success("Фото добавлено");
-    setItemUrl("");
     setItemCaption("");
+    qc.invalidateQueries({ queryKey: ["admin_gallery_items", itemAlbum] });
+  };
+
+  const toggleFeatured = async (id: string, current: boolean) => {
+    await supabase.from("gallery_items").update({ featured: !current }).eq("id", id);
+    qc.invalidateQueries({ queryKey: ["admin_gallery_items", itemAlbum] });
+    toast.success(!current ? "На главную" : "Убрано с главной");
+  };
+
+  const togglePublished = async (id: string, current: boolean | null) => {
+    await supabase.from("gallery_items").update({ published: !current }).eq("id", id);
     qc.invalidateQueries({ queryKey: ["admin_gallery_items", itemAlbum] });
   };
 
@@ -112,16 +135,34 @@ const AdminGallery = () => {
               {/* Items panel */}
               {itemAlbum === a.id && (
                 <div className="mt-3 pt-3 border-t border-border space-y-3">
-                  <div className="flex gap-2">
-                    <input placeholder="Image URL" value={itemUrl} onChange={(e) => setItemUrl(e.target.value)} className="flex-1 rounded-md border border-input bg-secondary px-3 py-1.5 text-sm text-foreground" />
-                    <input placeholder="Подпись" value={itemCaption} onChange={(e) => setItemCaption(e.target.value)} className="w-40 rounded-md border border-input bg-secondary px-3 py-1.5 text-sm text-foreground" />
-                    <button onClick={addItem} className="rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground"><Plus size={14} /></button>
+                  <div className="flex gap-2 items-center">
+                    <input placeholder="Подпись (необязательно)" value={itemCaption} onChange={(e) => setItemCaption(e.target.value)} className="flex-1 rounded-md border border-input bg-secondary px-3 py-1.5 text-sm text-foreground" />
+                    <label className="cursor-pointer rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground flex items-center gap-1">
+                      <Upload size={14} /> Загрузить
+                      <input type="file" accept="image/*" className="hidden" onChange={(e) => e.target.files?.[0] && handleImageUpload(e.target.files[0])} />
+                    </label>
                   </div>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-4 md:grid-cols-6 gap-2">
                     {items?.map((item) => (
                       <div key={item.id} className="relative group aspect-square rounded-md overflow-hidden bg-secondary">
-                        <img src={item.image_url} alt="" className="w-full h-full object-cover" />
-                        <button onClick={() => deleteItem(item.id)} className="absolute top-1 right-1 p-1 bg-background/80 rounded text-destructive opacity-0 group-hover:opacity-100 transition-opacity"><Trash2 size={12} /></button>
+                        <img src={getPublicStorageUrl(item.image_url)} alt="" className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-background/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                          <button
+                            onClick={() => toggleFeatured(item.id, !!(item as any).featured)}
+                            className={`p-1 rounded ${(item as any).featured ? "text-yellow-400" : "text-muted-foreground hover:text-yellow-400"}`}
+                            title="На главную"
+                          >
+                            <Star size={14} fill={(item as any).featured ? "currentColor" : "none"} />
+                          </button>
+                          <button
+                            onClick={() => togglePublished(item.id, item.published)}
+                            className={`p-1 rounded text-xs ${item.published ? "text-green-400" : "text-muted-foreground"}`}
+                            title={item.published ? "Скрыть" : "Опубликовать"}
+                          >
+                            {item.published ? "✓" : "○"}
+                          </button>
+                          <button onClick={() => deleteItem(item.id)} className="p-1 text-destructive"><Trash2 size={12} /></button>
+                        </div>
                       </div>
                     ))}
                   </div>
