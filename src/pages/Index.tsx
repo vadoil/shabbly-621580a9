@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
-import { useFeaturedReleases, usePublishedEvents, usePublishedNews, useSiteSection, useFeaturedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
+import { usePublishedEvents, usePublishedNews, useSiteSection, useFeaturedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
 import { useCases } from "@/hooks/use-agency-data";
 import { formatDate, formatDateShort } from "@/lib/format";
 import { getPublicStorageUrl } from "@/lib/storage";
@@ -44,9 +44,11 @@ const BarsCalendarWidget = () => {
   return (
     <section className="container py-16 space-y-8">
       <div className="flex items-end justify-between">
-        <h2 className="font-display text-3xl md:text-4xl font-bold">
-          Rhythm & Blues <span className="text-primary">Cafe</span>
-        </h2>
+        <div>
+          <span className="text-xs uppercase tracking-[0.2em] text-primary font-medium">Афиша</span>
+          <h2 className="font-display text-3xl md:text-4xl font-bold mt-2">Афиша баров</h2>
+          <p className="text-muted-foreground text-sm mt-1">События в барах-партнёрах агентства</p>
+        </div>
         <Link to="/bars" className="text-sm text-primary hover:underline flex items-center gap-1">
           Всё расписание <ArrowRight size={14} />
         </Link>
@@ -114,10 +116,15 @@ const BarsCalendarWidget = () => {
               <div key={ev.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-4 hover:border-primary/40 transition-colors">
                 <div className="space-y-1 min-w-0">
                   <h4 className="font-display font-semibold text-sm truncate">{ev.title}</h4>
-                  <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  <p className="text-xs text-muted-foreground flex items-center gap-1.5 flex-wrap">
                     <Clock size={10} className="text-primary shrink-0" />
                     {format(new Date(ev.date_start), "d MMM, HH:mm", { locale: ru })}
-                    {ev.hall && <span className="ml-1 rounded-full bg-secondary px-2 py-0.5 text-[10px]">{ev.hall}</span>}
+                    {ev.bar?.name && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[10px] text-foreground">
+                        <MapPin size={9} className="text-primary" />{ev.bar.name}
+                      </span>
+                    )}
+                    {ev.hall && <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px]">{ev.hall}</span>}
                   </p>
                 </div>
                 {ev.ticket_url && (
@@ -138,7 +145,6 @@ const BarsCalendarWidget = () => {
 };
 
 const Index = () => {
-  const { data: releases } = useFeaturedReleases();
   const { data: events } = usePublishedEvents();
   const { data: news } = usePublishedNews();
   const { data: heroTagline } = useSiteSection("hero_tagline");
@@ -147,8 +153,6 @@ const Index = () => {
   const { data: cases } = useCases({ limit: 4 });
 
   const [ticketModal, setTicketModal] = useState(false);
-
-  const featured = releases?.[0];
 
   return (
     <Layout>
@@ -216,94 +220,6 @@ const Index = () => {
         </section>
       )}
 
-
-      <section className="container py-20 space-y-10">
-        <div className="flex items-end justify-between">
-          <div>
-            <h2 className="font-display text-3xl md:text-4xl font-bold">Релизы</h2>
-            <p className="text-muted-foreground text-sm mt-1">Синглы и альбомы на всех площадках</p>
-          </div>
-          <Link to="/music" className="text-sm text-primary hover:underline flex items-center gap-1">
-            Вся музыка <ArrowRight size={14} />
-          </Link>
-        </div>
-
-        {releases && releases.length > 0 ? (
-          <div className="grid gap-4 md:gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-            {releases.slice(0, 8).map((r) => (
-              <div key={r.id} className="group space-y-3">
-                <Link to={`/music/${r.slug}`} className="block">
-                  <div className="relative aspect-square rounded-xl overflow-hidden bg-secondary border border-border group-hover:border-primary/40 transition-all">
-                    {r.cover_url ? (
-                      <img
-                        src={getPublicStorageUrl(r.cover_url)}
-                        alt={r.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-secondary to-secondary/50">
-                        <Music size={40} className="text-muted-foreground/30" />
-                      </div>
-                    )}
-                    {/* Play overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-background/40">
-                      <div className="w-14 h-14 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/30">
-                        <svg viewBox="0 0 24 24" className="w-6 h-6 fill-primary-foreground ml-0.5">
-                          <path d="M8 5v14l11-7z" />
-                        </svg>
-                      </div>
-                    </div>
-                    {/* Type badge */}
-                    <span className="absolute top-2 left-2 rounded-md bg-background/80 backdrop-blur-sm px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground">
-                      {r.type === "single" ? "Сингл" : r.type === "album" ? "Альбом" : "EP"}
-                    </span>
-                  </div>
-                </Link>
-                <div>
-                  <Link to={`/music/${r.slug}`}>
-                    <h3 className="font-display font-semibold text-sm truncate group-hover:text-primary transition-colors">
-                      {r.title}
-                    </h3>
-                  </Link>
-                  {r.release_date && (
-                    <p className="text-xs text-muted-foreground mt-0.5">{formatDate(r.release_date)}</p>
-                  )}
-                  {/* Platform icons */}
-                  {r.platform_links && r.platform_links.length > 0 && (
-                    <div className="flex gap-1.5 mt-2">
-                      {r.platform_links.slice(0, 4).map((pl) => (
-                        <a
-                          key={pl.id}
-                          href={pl.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-center w-7 h-7 rounded-full bg-secondary hover:bg-primary/20 hover:text-primary transition-all"
-                          title={pl.platform === "yandex" ? "Яндекс Музыка" : pl.platform === "spotify" ? "Spotify" : pl.platform === "apple" ? "Apple Music" : "YouTube"}
-                        >
-                          {pl.platform === "youtube" && (
-                            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                          )}
-                          {pl.platform === "spotify" && (
-                            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
-                          )}
-                          {pl.platform === "apple" && (
-                            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-                          )}
-                          {pl.platform === "yandex" && (
-                            <span className="text-[10px] font-bold">Я</span>
-                          )}
-                        </a>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <EmptyState icon={Music} title="Релизы скоро появятся" description="Следите за обновлениями" />
-        )}
-      </section>
 
       {/* UPCOMING SHOWS — checkerboard */}
       <section className="container py-16 space-y-8">
