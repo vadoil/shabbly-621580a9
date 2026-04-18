@@ -116,10 +116,15 @@ const BarsCalendarWidget = () => {
               <div key={ev.id} className="flex items-center justify-between rounded-xl border border-border bg-card p-4 hover:border-primary/40 transition-colors">
                 <div className="space-y-1 min-w-0">
                   <h4 className="font-display font-semibold text-sm truncate">{ev.title}</h4>
-                  <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                  <p className="text-xs text-muted-foreground flex items-center gap-1.5 flex-wrap">
                     <Clock size={10} className="text-primary shrink-0" />
                     {format(new Date(ev.date_start), "d MMM, HH:mm", { locale: ru })}
-                    {ev.hall && <span className="ml-1 rounded-full bg-secondary px-2 py-0.5 text-[10px]">{ev.hall}</span>}
+                    {ev.bar?.name && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-secondary px-2 py-0.5 text-[10px] text-foreground">
+                        <MapPin size={9} className="text-primary" />{ev.bar.name}
+                      </span>
+                    )}
+                    {ev.hall && <span className="rounded-full bg-secondary px-2 py-0.5 text-[10px]">{ev.hall}</span>}
                   </p>
                 </div>
                 {ev.ticket_url && (
