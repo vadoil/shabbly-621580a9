@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import { Link } from "react-router-dom";
-import { useFeaturedReleases, usePublishedEvents, usePublishedNews, useSiteSection, useFeaturedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
+import { usePublishedEvents, usePublishedNews, useSiteSection, useFeaturedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
 import { useCases } from "@/hooks/use-agency-data";
 import { formatDate, formatDateShort } from "@/lib/format";
 import { getPublicStorageUrl } from "@/lib/storage";
