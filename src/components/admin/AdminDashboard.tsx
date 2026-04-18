@@ -13,20 +13,27 @@ import AdminGallery from "./AdminGallery";
 import AdminMerch from "./AdminMerch";
 import AdminTeam from "./AdminTeam";
 import AdminTelegramImport from "./AdminTelegramImport";
-import { LogOut, Music, Calendar, Newspaper, Ticket, LayoutDashboard, UserCircle, Award, Wine, Image, ShoppingBag, UsersRound, FileUp } from "lucide-react";
+import AdminArtists from "./AdminArtists";
+import AdminServices from "./AdminServices";
+import AdminCases from "./AdminCases";
+import AdminInquiries from "./AdminInquiries";
+import { LogOut, Music, Calendar, Newspaper, Ticket, LayoutDashboard, UserCircle, Award, Wine, Image, ShoppingBag, UsersRound, FileUp, Mic2, Briefcase, Inbox, Star } from "lucide-react";
 
 const tabs = [
+  { id: "inquiries", label: "Заявки агентства", icon: Inbox },
+  { id: "artists", label: "Артисты", icon: Mic2 },
+  { id: "services", label: "Услуги", icon: Briefcase },
+  { id: "cases", label: "Кейсы", icon: Star },
+  { id: "events", label: "Афиша", icon: Calendar },
   { id: "releases", label: "Релизы", icon: Music },
-  { id: "events", label: "Концерты", icon: Calendar },
   { id: "news", label: "Новости", icon: Newspaper },
-  { id: "tickets", label: "Заявки", icon: Ticket },
+  { id: "tickets", label: "Заявки на билеты", icon: Ticket },
   { id: "gallery", label: "Галерея", icon: Image },
   { id: "merch", label: "Мерч", icon: ShoppingBag },
   { id: "team", label: "Команда", icon: UsersRound },
   { id: "bars", label: "Бары (R&B)", icon: Wine },
-  
   { id: "telegram", label: "Импорт TG", icon: FileUp },
-  { id: "sections", label: "Секции", icon: LayoutDashboard },
+  { id: "sections", label: "Секции сайта", icon: LayoutDashboard },
   { id: "members", label: "Участники", icon: UserCircle },
   { id: "partners", label: "Партнёры", icon: Award },
 ] as const;
@@ -34,7 +41,7 @@ const tabs = [
 type Tab = typeof tabs[number]["id"];
 
 const AdminDashboard = ({ onSignOut }: { onSignOut: () => void }) => {
-  const [tab, setTab] = useState<Tab>("releases");
+  const [tab, setTab] = useState<Tab>("inquiries");
 
   return (
     <div className="min-h-screen bg-background">
@@ -75,6 +82,10 @@ const AdminDashboard = ({ onSignOut }: { onSignOut: () => void }) => {
               </button>
             ))}
           </div>
+          {tab === "inquiries" && <AdminInquiries />}
+          {tab === "artists" && <AdminArtists />}
+          {tab === "services" && <AdminServices />}
+          {tab === "cases" && <AdminCases />}
           {tab === "releases" && <AdminReleases />}
           {tab === "events" && <AdminEvents />}
           {tab === "news" && <AdminNews />}
