@@ -145,7 +145,6 @@ const BarsCalendarWidget = () => {
 };
 
 const Index = () => {
-  const { data: releases } = useFeaturedReleases();
   const { data: events } = usePublishedEvents();
   const { data: news } = usePublishedNews();
   const { data: heroTagline } = useSiteSection("hero_tagline");
@@ -154,8 +153,6 @@ const Index = () => {
   const { data: cases } = useCases({ limit: 4 });
 
   const [ticketModal, setTicketModal] = useState(false);
-
-  const featured = releases?.[0];
 
   return (
     <Layout>
