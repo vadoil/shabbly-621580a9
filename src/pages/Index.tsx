@@ -44,9 +44,11 @@ const BarsCalendarWidget = () => {
   return (
     <section className="container py-16 space-y-8">
       <div className="flex items-end justify-between">
-        <h2 className="font-display text-3xl md:text-4xl font-bold">
-          Rhythm & Blues <span className="text-primary">Cafe</span>
-        </h2>
+        <div>
+          <span className="text-xs uppercase tracking-[0.2em] text-primary font-medium">Афиша</span>
+          <h2 className="font-display text-3xl md:text-4xl font-bold mt-2">Афиша баров</h2>
+          <p className="text-muted-foreground text-sm mt-1">События в барах-партнёрах агентства</p>
+        </div>
         <Link to="/bars" className="text-sm text-primary hover:underline flex items-center gap-1">
           Всё расписание <ArrowRight size={14} />
         </Link>
