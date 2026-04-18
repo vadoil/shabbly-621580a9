@@ -14,6 +14,107 @@ export type Database = {
   }
   public: {
     Tables: {
+      artist_media: {
+        Row: {
+          artist_id: string
+          caption: string | null
+          created_at: string
+          id: string
+          sort_order: number
+          type: string
+          url: string
+        }
+        Insert: {
+          artist_id: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          sort_order?: number
+          type: string
+          url: string
+        }
+        Update: {
+          artist_id?: string
+          caption?: string | null
+          created_at?: string
+          id?: string
+          sort_order?: number
+          type?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artist_media_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      artists: {
+        Row: {
+          bio: string | null
+          cities: string[]
+          created_at: string
+          featured: boolean
+          formats: string[]
+          genres: string[]
+          id: string
+          name: string
+          photo_url: string | null
+          popularity: number
+          price_max: number | null
+          price_min: number | null
+          published: boolean
+          rider: string | null
+          short_description: string | null
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          bio?: string | null
+          cities?: string[]
+          created_at?: string
+          featured?: boolean
+          formats?: string[]
+          genres?: string[]
+          id?: string
+          name: string
+          photo_url?: string | null
+          popularity?: number
+          price_max?: number | null
+          price_min?: number | null
+          published?: boolean
+          rider?: string | null
+          short_description?: string | null
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          bio?: string | null
+          cities?: string[]
+          created_at?: string
+          featured?: boolean
+          formats?: string[]
+          genres?: string[]
+          id?: string
+          name?: string
+          photo_url?: string | null
+          popularity?: number
+          price_max?: number | null
+          price_min?: number | null
+          published?: boolean
+          rider?: string | null
+          short_description?: string | null
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       band_members: {
         Row: {
           id: string
@@ -167,6 +268,143 @@ export type Database = {
           website_url?: string | null
         }
         Relationships: []
+      }
+      case_artists: {
+        Row: {
+          artist_id: string
+          case_id: string
+        }
+        Insert: {
+          artist_id: string
+          case_id: string
+        }
+        Update: {
+          artist_id?: string
+          case_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_artists_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_artists_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cases: {
+        Row: {
+          city: string | null
+          client: string | null
+          cover_url: string | null
+          created_at: string
+          description: string | null
+          event_date: string | null
+          featured: boolean
+          format: string | null
+          gallery: Json
+          id: string
+          published: boolean
+          slug: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          city?: string | null
+          client?: string | null
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          featured?: boolean
+          format?: string | null
+          gallery?: Json
+          id?: string
+          published?: boolean
+          slug: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          city?: string | null
+          client?: string | null
+          cover_url?: string | null
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          featured?: boolean
+          format?: string | null
+          gallery?: Json
+          id?: string
+          published?: boolean
+          slug?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      event_inquiries: {
+        Row: {
+          artist_id: string | null
+          budget: string | null
+          city: string | null
+          comment: string | null
+          company: string | null
+          contact: string
+          created_at: string
+          event_date: string | null
+          format: string | null
+          id: string
+          name: string
+          status: string
+        }
+        Insert: {
+          artist_id?: string | null
+          budget?: string | null
+          city?: string | null
+          comment?: string | null
+          company?: string | null
+          contact: string
+          created_at?: string
+          event_date?: string | null
+          format?: string | null
+          id?: string
+          name: string
+          status?: string
+        }
+        Update: {
+          artist_id?: string | null
+          budget?: string | null
+          city?: string | null
+          comment?: string | null
+          company?: string | null
+          contact?: string
+          created_at?: string
+          event_date?: string | null
+          format?: string | null
+          id?: string
+          name?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_inquiries_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       events: {
         Row: {
@@ -572,6 +810,45 @@ export type Database = {
           source_id?: string | null
           title?: string
           type?: Database["public"]["Enums"]["release_type"]
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          packages: Json
+          published: boolean
+          slug: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          packages?: Json
+          published?: boolean
+          slug: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          packages?: Json
+          published?: boolean
+          slug?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
