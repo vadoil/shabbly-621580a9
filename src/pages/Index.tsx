@@ -161,7 +161,62 @@ const Index = () => {
       {/* ARTIST MATCHER CTA */}
       <AgencyArtistMatcher />
 
-      {/* RELEASES & SINGLES — flagship artist SHABBLY */}
+      {/* LATEST CASES — agency portfolio */}
+      {cases && cases.length > 0 && (
+        <section className="container py-20 space-y-10">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <span className="text-xs uppercase tracking-[0.2em] text-primary font-medium">Портфолио</span>
+              <h2 className="font-display text-3xl md:text-4xl font-bold mt-2">Последние кейсы</h2>
+              <p className="text-muted-foreground text-sm mt-1">Мероприятия, которые мы организовали</p>
+            </div>
+            <Link to="/cases" className="text-sm text-primary hover:underline flex items-center gap-1 shrink-0">
+              Все кейсы <ArrowRight size={14} />
+            </Link>
+          </div>
+
+          <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            {cases.slice(0, 4).map((c) => (
+              <Link
+                key={c.id}
+                to="/cases"
+                className="group block rounded-xl overflow-hidden border border-border bg-card hover:border-primary/40 hover:glow-fuchsia transition-all"
+              >
+                <div className="relative aspect-[4/3] bg-secondary overflow-hidden">
+                  {c.cover_url ? (
+                    <img
+                      src={getPublicStorageUrl(c.cover_url)}
+                      alt={c.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-muted-foreground/30">
+                      <Image size={40} />
+                    </div>
+                  )}
+                  {c.format && (
+                    <span className="absolute top-2 left-2 rounded-full bg-background/80 backdrop-blur px-2.5 py-0.5 text-[10px] uppercase tracking-wider border border-border">
+                      {c.format}
+                    </span>
+                  )}
+                </div>
+                <div className="p-4 space-y-1.5">
+                  <h3 className="font-display font-semibold text-sm leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                    {c.title}
+                  </h3>
+                  <p className="text-xs text-muted-foreground flex items-center gap-2 flex-wrap">
+                    {c.city && (<><MapPin size={10} className="text-primary" />{c.city}</>)}
+                    {c.event_date && <span>· {formatDateShort(c.event_date)}</span>}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+
       <section className="container py-20 space-y-10">
         <div className="flex items-end justify-between">
           <div>
