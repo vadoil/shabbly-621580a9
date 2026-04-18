@@ -7,7 +7,9 @@ import { useState, useMemo } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import EmptyState from "@/components/EmptyState";
 import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket, ChevronLeft, ChevronRight, Clock } from "lucide-react";
-import GlitchHero from "@/components/GlitchHero";
+import AgencyHero from "@/components/AgencyHero";
+import AgencyServicesPreview from "@/components/AgencyServicesPreview";
+import AgencyArtistMatcher from "@/components/AgencyArtistMatcher";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths, getDay } from "date-fns";
 import { ru } from "date-fns/locale";
 
@@ -149,10 +151,16 @@ const Index = () => {
 
   return (
     <Layout>
-      {/* HERO */}
-      <GlitchHero />
+      {/* HERO — AGENCY */}
+      <AgencyHero />
 
-      {/* RELEASES & SINGLES */}
+      {/* SERVICES PREVIEW */}
+      <AgencyServicesPreview />
+
+      {/* ARTIST MATCHER CTA */}
+      <AgencyArtistMatcher />
+
+      {/* RELEASES & SINGLES — flagship artist SHABBLY */}
       <section className="container py-20 space-y-10">
         <div className="flex items-end justify-between">
           <div>
