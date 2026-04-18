@@ -7,9 +7,20 @@ import EmptyState from "@/components/EmptyState";
 const iconMap: Record<string, any> = {
   music: Music2,
   mic: Mic2,
+  Mic2: Mic2,
   briefcase: Briefcase,
   party: PartyPopper,
   sparkles: Sparkles,
+  Sparkles: Sparkles,
+  TrendingUp: Briefcase,
+  Crown: PartyPopper,
+};
+
+const serviceImages: Record<string, string> = {
+  "artist-booking": "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=1200&q=80",
+  "event-production": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80",
+  "artist-management": "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1200&q=80",
+  "private-events": "https://images.unsplash.com/photo-1530023367847-a683933f4172?w=1200&q=80",
 };
 
 const ServicesPage = () => {
