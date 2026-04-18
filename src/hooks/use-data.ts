@@ -298,7 +298,7 @@ export const useBarEvents = (start: string, end: string) =>
     queryFn: async () => {
       const { data, error } = await supabase
         .from("bar_events")
-        .select("*")
+        .select("*, bar:bars(id, name, slug, city)")
         .eq("published", true)
         .gte("date_start", start)
         .lte("date_start", end)
@@ -307,3 +307,4 @@ export const useBarEvents = (start: string, end: string) =>
       return data;
     },
   });
+
