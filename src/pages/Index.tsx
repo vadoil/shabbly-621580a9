@@ -37,9 +37,11 @@ const BarsCalendarWidget = () => {
     return map;
   }, [barEvents]);
 
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const dayEvents = selectedDay
     ? eventsByDay.get(format(selectedDay, "yyyy-MM-dd")) || []
-    : (barEvents || []).slice(0, 5);
+    : (barEvents || []).filter((e: any) => new Date(e.date_start) >= today).slice(0, 5);
 
   return (
     <section className="container py-16 space-y-8">
