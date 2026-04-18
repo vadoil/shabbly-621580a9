@@ -18,16 +18,16 @@ const AgencyServicesPreview = () => {
     <section className="container py-24 space-y-12">
       <div className="flex items-end justify-between flex-wrap gap-4">
         <div className="space-y-3 max-w-2xl">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-medium">Что мы делаем</p>
+          <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-medium">Направления</p>
           <h2 className="font-display text-4xl md:text-5xl font-bold tracking-tighter">
-            Услуги для организаторов
+            Что мы делаем
           </h2>
           <p className="text-muted-foreground">
-            От подбора артиста до полного продакшна мероприятия — закрываем под ключ.
+            Booking артистов, продакшн концертов и live-шоу под ключ — от приватного ужина до фестиваля.
           </p>
         </div>
         <Link to="/services" className="text-sm text-primary hover:underline flex items-center gap-1">
-          Все услуги <ArrowRight size={14} />
+          Все направления <ArrowRight size={14} />
         </Link>
       </div>
 
