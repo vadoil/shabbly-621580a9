@@ -144,7 +144,7 @@ const Index = () => {
   const { data: heroTagline } = useSiteSection("hero_tagline");
   const { data: galleryItems } = useFeaturedGalleryItems();
   const { data: merch } = useMerchProducts();
-
+  const { data: cases } = useCases({ limit: 4 });
 
   const [ticketModal, setTicketModal] = useState(false);
 
