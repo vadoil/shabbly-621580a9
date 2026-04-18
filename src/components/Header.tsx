@@ -4,9 +4,9 @@ import { Menu, X } from "lucide-react";
 
 const links = [
   { to: "/", label: "Главная" },
-  { to: "/about", label: "Об агентстве" },
   { to: "/services", label: "Услуги" },
   { to: "/artists", label: "Артисты" },
+  { to: "/about", label: "Артистам" },
   { to: "/events", label: "Афиша" },
   { to: "/cases", label: "Кейсы" },
   { to: "/contacts", label: "Контакты" },
