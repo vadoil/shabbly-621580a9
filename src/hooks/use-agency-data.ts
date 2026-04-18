@@ -15,6 +15,53 @@ export const useArtists = (opts?: { featured?: boolean; limit?: number }) =>
     },
   });
 
+export const useArtistBySlug = (slug?: string) =>
+  useQuery({
+    queryKey: ["artist_public", slug],
+    enabled: !!slug,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("artists")
+        .select("*")
+        .eq("slug", slug!)
+        .eq("published", true)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+
+export const useArtistMedia = (artistId?: string) =>
+  useQuery({
+    queryKey: ["artist_media_public", artistId],
+    enabled: !!artistId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("artist_media")
+        .select("*")
+        .eq("artist_id", artistId!)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+export const useRelatedArtists = (artist?: { id: string; genres: string[] | null }) =>
+  useQuery({
+    queryKey: ["artists_related", artist?.id],
+    enabled: !!artist?.id,
+    queryFn: async () => {
+      const genres = artist?.genres ?? [];
+      let q = supabase.from("artists").select("*").eq("published", true).neq("id", artist!.id);
+      if (genres.length > 0) q = q.overlaps("genres", genres);
+      const { data, error } = await q
+        .order("popularity", { ascending: false })
+        .limit(4);
+      if (error) throw error;
+      return data;
+    },
+  });
+
 export const useServices = () =>
   useQuery({
     queryKey: ["services_public"],
