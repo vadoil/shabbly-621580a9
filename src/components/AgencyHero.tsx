@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles } from "lucide-react";
+import heroArtist from "@/assets/hero-artist.jpg";
 
 const AgencyHero = () => {
   return (
@@ -73,27 +74,51 @@ const AgencyHero = () => {
 
         {/* Right: visual frame */}
         <div className="lg:col-span-5 relative hidden lg:block">
-          <div className="relative aspect-[4/5] rounded-3xl border border-border bg-card/30 backdrop-blur-sm overflow-hidden glow-fuchsia">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/10" />
+          <div className="relative aspect-[4/5] rounded-3xl border border-border bg-card/30 backdrop-blur-sm overflow-hidden glow-fuchsia group">
+            {/* Photo */}
+            <img
+              src={heroArtist}
+              alt="Артист SHABBLY на сцене во время живого выступления"
+              width={1024}
+              height={1280}
+              className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2000ms] ease-out"
+            />
+            {/* Color grade overlays */}
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-transparent to-accent/20 mix-blend-overlay" />
+            {/* Scanlines */}
             <div
-              className="absolute inset-0 opacity-20"
+              className="absolute inset-0 opacity-[0.12] mix-blend-overlay pointer-events-none"
               style={{
                 backgroundImage:
                   "repeating-linear-gradient(0deg, hsl(var(--primary)) 0 1px, transparent 1px 4px)",
               }}
             />
-            <div className="absolute bottom-0 left-0 right-0 p-8 space-y-3">
-              <p className="text-[10px] uppercase tracking-[0.3em] text-primary">SHABBLY × Live</p>
+            {/* Vignette */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,hsl(var(--background)/0.6)_100%)]" />
+
+            {/* Caption */}
+            <div className="absolute bottom-0 left-0 right-0 p-8 space-y-3 z-10">
+              <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold">
+                SHABBLY × Live
+              </p>
               <p className="font-display text-2xl font-bold leading-tight">
                 Премиальный live-experience для вашего бренда
               </p>
             </div>
-            <div className="absolute top-6 right-6 rounded-full bg-background/80 backdrop-blur px-3 py-1 text-[10px] font-medium uppercase tracking-wider border border-border">
+
+            {/* Top badges */}
+            <div className="absolute top-6 right-6 rounded-full bg-background/80 backdrop-blur px-3 py-1 text-[10px] font-medium uppercase tracking-wider border border-border z-10">
               B2B
+            </div>
+            <div className="absolute top-6 left-6 flex items-center gap-1.5 rounded-full bg-primary/90 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground z-10">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary-foreground animate-pulse" />
+              LIVE
             </div>
           </div>
           {/* Floating accent */}
           <div className="absolute -top-4 -left-4 w-24 h-24 rounded-2xl border border-primary/40 bg-primary/5 backdrop-blur-sm rotate-12" />
+          <div className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full bg-primary/20 blur-3xl" />
         </div>
       </div>
     </section>
