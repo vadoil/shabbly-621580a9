@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Unbounded:wght@400;500;600;700;800&display=swap');
 
 @layer base {
   :root {
@@ -45,8 +45,9 @@
     --sidebar-border: 270 8% 16%;
     --sidebar-ring: 322 80% 55%;
 
-    --font-display: 'Space Grotesk', sans-serif;
+    --font-display: 'Unbounded', 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
+    --font-art: 'Unbounded', 'Space Grotesk', sans-serif;
 
     --gradient-fuchsia: linear-gradient(135deg, hsl(322 80% 55%), hsl(280 70% 50%));
     --gradient-dark: linear-gradient(180deg, hsl(270 10% 4%), hsl(270 10% 8%));

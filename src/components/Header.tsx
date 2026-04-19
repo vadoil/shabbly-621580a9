@@ -52,13 +52,15 @@ const Header = () => {
         </button>
       </div>
       {open && (
-        <nav className="lg:hidden border-t border-border bg-background px-6 py-4 space-y-3">
+        <nav className="lg:hidden border-t border-border bg-background/95 backdrop-blur-xl px-6 py-6 space-y-4 max-h-[calc(100vh-4rem)] overflow-y-auto">
           {links.map((l) => (
             <Link
               key={l.to}
               to={l.to}
               onClick={() => setOpen(false)}
-              className={`block text-sm font-medium ${pathname === l.to ? "text-primary" : "text-muted-foreground"}`}
+              className={`block font-art text-2xl font-semibold tracking-tight transition-colors ${
+                pathname === l.to ? "text-primary" : "text-foreground hover:text-primary"
+              }`}
             >
               {l.label}
             </Link>
@@ -66,7 +68,7 @@ const Header = () => {
           <Link
             to="/contacts"
             onClick={() => setOpen(false)}
-            className="block w-full text-center rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground"
+            className="block w-full text-center rounded-full bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground mt-4"
           >
             Заявка на мероприятие
           </Link>
