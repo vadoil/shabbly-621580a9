@@ -64,9 +64,24 @@ const ReleaseDetail = () => {
           <ArrowLeft size={14} /> Все релизы
         </Link>
         <div className="grid gap-10 md:grid-cols-[minmax(280px,400px)_1fr]">
-          <div className="aspect-square rounded-2xl overflow-hidden bg-secondary glow-fuchsia sticky top-24">
+          <div className="aspect-square rounded-2xl overflow-hidden bg-secondary glow-fuchsia sticky top-24 relative">
             {release.cover_url ? (
-              <img src={getPublicStorageUrl(release.cover_url)} alt={release.title} className="w-full h-full object-cover" />
+              <img
+                src={getPublicStorageUrl(release.cover_url)}
+                alt={release.title}
+                loading="lazy"
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const t = e.currentTarget;
+                  t.style.display = "none";
+                  t.parentElement?.classList.add("flex", "items-center", "justify-center");
+                  const ph = document.createElement("div");
+                  ph.className = "text-muted-foreground";
+                  ph.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
+                  t.parentElement?.appendChild(ph);
+                }}
+              />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-muted-foreground"><Music size={80} /></div>
             )}
