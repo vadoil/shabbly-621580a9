@@ -2,8 +2,9 @@ import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { useServices } from "@/hooks/use-agency-data";
-import { ArrowRight, Music2, Mic2, Briefcase, PartyPopper, Sparkles, Check } from "lucide-react";
+import { ArrowRight, Music2, Mic2, Briefcase, PartyPopper, Sparkles, Check, Crown } from "lucide-react";
 import EmptyState from "@/components/EmptyState";
+import desirePrivateEvent from "@/assets/desire-private-event.jpg";
 
 const iconMap: Record<string, any> = {
   music: Music2,
@@ -137,6 +138,39 @@ const ServicesPage = () => {
         ) : (
           <EmptyState icon={Sparkles} title="Услуги скоро появятся" />
         )}
+      </section>
+
+      {/* Desire split */}
+      <section className="container py-16">
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-3xl border border-border">
+            <img
+              src={desirePrivateEvent}
+              alt="Закрытое торжество в премиум-формате"
+              loading="lazy"
+              width={1600}
+              height={1000}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent" />
+          </div>
+          <div className="space-y-5">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
+              <Crown size={14} className="text-primary" />
+              <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Для тех, кто хочет «вау»</span>
+            </div>
+            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight tracking-tighter">
+              Ваш вечер — <br />
+              <span className="text-gradient-fuchsia">а не очередной банкет</span>
+            </h2>
+            <p className="text-base text-muted-foreground leading-relaxed">
+              Свет, который превращает зал в сцену. Звук, который не давит, а обнимает. Артист, который выходит ровно в тот момент, когда зал готов. Это не «тех. райдер» — это режиссура впечатления.
+            </p>
+            <p className="text-base text-muted-foreground leading-relaxed">
+              Мы берём на себя всё: от первого письма до последнего бокала. Вы — встречаете гостей и наслаждаетесь.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* CTA */}
