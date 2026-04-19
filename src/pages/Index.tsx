@@ -8,7 +8,7 @@ import { getPublicStorageUrl } from "@/lib/storage";
 import { useState, useMemo } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import EmptyState from "@/components/EmptyState";
-import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket, ChevronLeft, ChevronRight, Clock } from "lucide-react";
+import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket, ChevronLeft, ChevronRight, Clock, Play, X } from "lucide-react";
 import AgencyHero from "@/components/AgencyHero";
 import AgencyServicesPreview from "@/components/AgencyServicesPreview";
 import AgencyArtistMatcher from "@/components/AgencyArtistMatcher";
@@ -161,6 +161,7 @@ const Index = () => {
   const { data: cases } = useCases({ limit: 4 });
 
   const [ticketModal, setTicketModal] = useState(false);
+  const [lightbox, setLightbox] = useState<{ url: string; type: string } | null>(null);
 
   return (
     <Layout>
