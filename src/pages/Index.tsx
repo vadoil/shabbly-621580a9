@@ -253,8 +253,9 @@ const Index = () => {
                   key={e.id}
                   className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition-all hover:border-primary/60 hover:shadow-[0_0_40px_hsl(322_80%_55%/0.2)]"
                 >
+                  <Link to={`/events/${e.id}`} className="absolute inset-0 z-0" aria-label={e.title} />
                   {/* Visual block with photo + date overlay */}
-                  <div className="relative aspect-[16/9] sm:aspect-[5/3] overflow-hidden">
+                  <div className="relative aspect-[16/9] sm:aspect-[5/3] overflow-hidden pointer-events-none">
                     <img
                       src={cover}
                       alt=""
@@ -280,7 +281,7 @@ const Index = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 p-5 flex flex-col justify-between gap-4 min-w-0">
+                  <div className="relative flex-1 p-5 flex flex-col justify-between gap-4 min-w-0 pointer-events-none">
                     <div className="space-y-1.5">
                       <h3 className="font-art text-base sm:text-lg font-semibold leading-tight group-hover:text-primary transition-colors line-clamp-2">
                         {e.title}
@@ -288,13 +289,13 @@ const Index = () => {
                       <p className="text-xs text-muted-foreground truncate">{e.venue}</p>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 pointer-events-auto relative z-10">
                       {e.ticket_url ? (
-                        <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.4)] transition-all inline-flex items-center gap-1">
+                        <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" onClick={(ev) => ev.stopPropagation()} className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.4)] transition-all inline-flex items-center gap-1">
                           <Ticket size={12} /> Купить билет
                         </a>
                       ) : (
-                        <button onClick={() => setTicketModal(true)} className="rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground hover:border-primary/60 hover:text-primary transition-colors">
+                        <button onClick={(ev) => { ev.preventDefault(); ev.stopPropagation(); setTicketModal(true); }} className="rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground hover:border-primary/60 hover:text-primary transition-colors">
                           Оставить заявку
                         </button>
                       )}
