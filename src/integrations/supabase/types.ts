@@ -770,10 +770,12 @@ export type Database = {
       }
       releases: {
         Row: {
+          artist_id: string | null
           cover_url: string | null
           created_at: string | null
           description: string | null
           featured: boolean
+          genre: string | null
           id: string
           published: boolean | null
           release_date: string | null
@@ -784,10 +786,12 @@ export type Database = {
           type: Database["public"]["Enums"]["release_type"]
         }
         Insert: {
+          artist_id?: string | null
           cover_url?: string | null
           created_at?: string | null
           description?: string | null
           featured?: boolean
+          genre?: string | null
           id?: string
           published?: boolean | null
           release_date?: string | null
@@ -798,10 +802,12 @@ export type Database = {
           type?: Database["public"]["Enums"]["release_type"]
         }
         Update: {
+          artist_id?: string | null
           cover_url?: string | null
           created_at?: string | null
           description?: string | null
           featured?: boolean
+          genre?: string | null
           id?: string
           published?: boolean | null
           release_date?: string | null
@@ -811,7 +817,15 @@ export type Database = {
           title?: string
           type?: Database["public"]["Enums"]["release_type"]
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "releases_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artists"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       services: {
         Row: {
