@@ -1,7 +1,9 @@
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import ArtistApplicationForm from "@/components/ArtistApplicationForm";
-import { Mic2, Calendar, TrendingUp, Megaphone, ShieldCheck, FileMusic, Headphones, Check, X, Sparkles } from "lucide-react";
+import { Mic2, Calendar, TrendingUp, Megaphone, ShieldCheck, FileMusic, Headphones, Check, X, Sparkles, Flame } from "lucide-react";
+import desireStudio from "@/assets/desire-studio.jpg";
+import desireBackstage from "@/assets/desire-backstage.jpg";
 
 const benefits = [
   { icon: Calendar, title: "Регулярные выступления", text: "Включаем артистов в афишу мероприятий: корпоративы, частные вечера, фестивали, площадки-партнёры." },
@@ -104,6 +106,72 @@ const AboutPage = () => {
               <p className="text-[11px] md:text-xs text-muted-foreground mt-2 uppercase tracking-wider">{s.l}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Desire split: studio */}
+      <section className="container py-16">
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border">
+            <img
+              src={desireStudio}
+              alt="Запись в профессиональной студии"
+              loading="lazy"
+              width={1080}
+              height={1350}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent" />
+          </div>
+          <div className="space-y-5">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
+              <FileMusic size={14} className="text-primary" />
+              <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Песня, ради которой вы пришли в музыку</span>
+            </div>
+            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight tracking-tighter">
+              Студия, в которой <br />
+              <span className="text-gradient-fuchsia">рождается ваш звук</span>
+            </h2>
+            <p className="text-base text-muted-foreground leading-relaxed">
+              Тёплая лампа, дорогие микрофоны, продюсер, который слышит то, что вы ещё не успели сформулировать. Не «запись минуса под голос», а превращение демо в трек, который не стыдно поставить рядом с любимыми артистами.
+            </p>
+            <p className="text-base text-muted-foreground leading-relaxed">
+              Аранжировки, сведение, мастеринг, выпуск на всех площадках — под нашей дистрибуцией.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Desire split: stage */}
+      <section className="container py-16">
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <div className="space-y-5 lg:order-1 order-2">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
+              <Flame size={14} className="text-primary" />
+              <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Большая сцена</span>
+            </div>
+            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight tracking-tighter">
+              Тот самый выход <br />
+              <span className="text-gradient-fuchsia">из-за кулис в свет</span>
+            </h2>
+            <p className="text-base text-muted-foreground leading-relaxed">
+              Когда охрана расступается, гул толпы прорывается сквозь дверь, и через 30 секунд вы — на сцене перед залом, который пришёл именно к вам. Не «выступить на дне города» — а собрать своих людей.
+            </p>
+            <p className="text-base text-muted-foreground leading-relaxed">
+              Мы строим путь от первого клуба до концертных залов и фестивалей. Системно, без иллюзий, с понятными шагами.
+            </p>
+          </div>
+          <div className="relative aspect-[16/10] overflow-hidden rounded-3xl border border-border lg:order-2 order-1">
+            <img
+              src={desireBackstage}
+              alt="Артист выходит из бэкстейджа на сцену"
+              loading="lazy"
+              width={1600}
+              height={1000}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
+          </div>
         </div>
       </section>
 

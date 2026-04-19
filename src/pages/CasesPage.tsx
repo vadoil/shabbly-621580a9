@@ -5,7 +5,8 @@ import SEO from "@/components/SEO";
 import { useCases } from "@/hooks/use-agency-data";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
-import { MapPin, Calendar, Sparkles, X } from "lucide-react";
+import { MapPin, Calendar, Sparkles, X, Crown } from "lucide-react";
+import desirePrivateEvent from "@/assets/desire-private-event.jpg";
 
 const CasesPage = () => {
   const { data: cases, isLoading } = useCases();
@@ -55,6 +56,39 @@ const CasesPage = () => {
           <p className="mt-4 text-base text-muted-foreground max-w-2xl">
             Корпоративы, частные торжества, фестивали и презентации брендов. Каждый проект — формат, артист, площадка и результат.
           </p>
+        </div>
+      </section>
+
+      {/* Desire split */}
+      <section className="container py-14">
+        <div className="grid lg:grid-cols-2 gap-10 items-center">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-3xl border border-border">
+            <img
+              src={desirePrivateEvent}
+              alt="Атмосфера премиального торжества"
+              loading="lazy"
+              width={1600}
+              height={1000}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent" />
+          </div>
+          <div className="space-y-5">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
+              <Crown size={14} className="text-primary" />
+              <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Каждый проект — история</span>
+            </div>
+            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight tracking-tighter">
+              За каждым кейсом — <br />
+              <span className="text-gradient-fuchsia">вечер, который запомнили</span>
+            </h2>
+            <p className="text-base text-muted-foreground leading-relaxed">
+              Корпоратив, на котором CEO впервые за год улыбнулся искренне. Свадьба, где гости танцевали до пяти утра. Презентация бренда, после которой инвесторы сами написали в личку.
+            </p>
+            <p className="text-base text-muted-foreground leading-relaxed">
+              Это не «пункты сметы» — это эмоции, которые вы получаете, доверяя событие нам.
+            </p>
+          </div>
         </div>
       </section>
 
