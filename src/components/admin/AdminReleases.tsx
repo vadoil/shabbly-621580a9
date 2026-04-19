@@ -118,7 +118,7 @@ const AdminReleases = () => {
 
   const startEdit = (r: any) => {
     setEditing(r.id);
-    setForm({ title: r.title, slug: r.slug, type: r.type, release_date: r.release_date || "", description: r.description || "", published: r.published, featured: !!r.featured });
+    setForm({ title: r.title, slug: r.slug, type: r.type, release_date: r.release_date || "", description: r.description || "", published: r.published, featured: !!r.featured, artist_id: r.artist_id || "" });
   };
 
   return (
