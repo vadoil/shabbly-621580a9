@@ -9,20 +9,16 @@ import { MapPin, Calendar as CalendarIcon, Ticket, X, Building2, Sparkles } from
 import { format, isAfter, startOfDay } from "date-fns";
 import { ru } from "date-fns/locale";
 
-// Curated poster pool — used as fallback for events without ticket art
+// Fallback poster pool for events without uploaded cover
 const POSTER_POOL = [
   "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200",
   "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1200",
   "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=1200",
   "https://images.unsplash.com/photo-1501612780327-45045538702b?w=1200",
-  "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=1200",
-  "https://images.unsplash.com/photo-1485579149621-3123dd979885?w=1200",
-  "https://images.unsplash.com/photo-1571266028243-d220bc56b94d?w=1200",
-  "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1200",
 ];
 
-const posterFor = (id: string, idx: number) =>
-  POSTER_POOL[(id.charCodeAt(0) + idx) % POSTER_POOL.length];
+const posterFor = (event: any, idx: number) =>
+  event.cover_url || POSTER_POOL[(event.id.charCodeAt(0) + idx) % POSTER_POOL.length];
 
 const EventsPage = () => {
   const { data: events, isLoading } = usePublishedEvents();
@@ -171,7 +167,7 @@ const PosterEventCard = ({
   onTicket: () => void;
 }) => {
   const date = new Date(event.date_start);
-  const poster = posterFor(event.id, index);
+  const poster = posterFor(event, index);
 
   return (
     <article
