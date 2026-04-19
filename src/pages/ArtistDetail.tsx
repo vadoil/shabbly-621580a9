@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import InquiryForm from "@/components/InquiryForm";
 import ArtistCard from "@/components/ArtistCard";
+import ArtistMusicSection from "@/components/ArtistMusicSection";
 import { useArtistBySlug, useArtistMedia, useRelatedArtists } from "@/hooks/use-agency-data";
 import { ArrowLeft, MapPin, Music2, Wallet, FileText } from "lucide-react";
 
@@ -127,6 +128,8 @@ const ArtistDetail = () => {
           <p className="max-w-3xl text-base leading-relaxed text-muted-foreground whitespace-pre-line">{artist.bio}</p>
         </section>
       )}
+
+      <ArtistMusicSection artistId={artist.id} />
 
       {photos.length > 0 && (
         <section className="container py-10">
