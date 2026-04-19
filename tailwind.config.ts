@@ -14,8 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Space Grotesk", "sans-serif"],
+        display: ["Unbounded", "Space Grotesk", "sans-serif"],
         body: ["Inter", "sans-serif"],
+        art: ["Unbounded", "Space Grotesk", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
