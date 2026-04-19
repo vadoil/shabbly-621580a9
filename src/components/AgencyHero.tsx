@@ -4,7 +4,7 @@ import heroArtist from "@/assets/hero-artist.jpg";
 
 const AgencyHero = () => {
   return (
-    <section className="relative overflow-hidden min-h-[92vh] lg:min-h-[88vh] flex items-center">
+    <section className="relative overflow-hidden flex items-center">
       {/* Background layers */}
       <div className="absolute inset-0 bg-gradient-dark" />
 
