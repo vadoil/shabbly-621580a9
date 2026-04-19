@@ -9,16 +9,25 @@ const AdminReleases = () => {
   const { data: releases, isLoading } = useQuery({
     queryKey: ["admin_releases"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("releases").select("*, tracks(*), platform_links(*)").order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("releases").select("*, tracks(*), platform_links(*), artist:artists(id, name)").order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: artists } = useQuery({
+    queryKey: ["admin_releases_artists"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("artists").select("id, name").order("name");
       if (error) throw error;
       return data;
     },
   });
 
   const [editing, setEditing] = useState<string | null>(null);
-  const [form, setForm] = useState({ title: "", slug: "", type: "single" as "album" | "single" | "ep", release_date: "", description: "", published: false, featured: false });
+  const [form, setForm] = useState({ title: "", slug: "", type: "single" as "album" | "single" | "ep", release_date: "", description: "", published: false, featured: false, artist_id: "" });
 
-  const resetForm = () => { setForm({ title: "", slug: "", type: "single", release_date: "", description: "", published: false, featured: false }); setEditing(null); };
+  const resetForm = () => { setForm({ title: "", slug: "", type: "single", release_date: "", description: "", published: false, featured: false, artist_id: "" }); setEditing(null); };
 
   const handleSave = async () => {
     if (!form.title || !form.slug) return toast.error("Заполните название и slug");
