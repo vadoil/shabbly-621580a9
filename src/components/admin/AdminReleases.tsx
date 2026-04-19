@@ -137,7 +137,11 @@ const AdminReleases = () => {
             <option value="ep">EP</option>
           </select>
         </div>
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-3">
+          <select value={form.artist_id} onChange={(e) => setForm({ ...form, artist_id: e.target.value })} className="rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground">
+            <option value="">— Без исполнителя —</option>
+            {artists?.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
+          </select>
           <input type="date" value={form.release_date} onChange={(e) => setForm({ ...form, release_date: e.target.value })} className="rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground" />
           <textarea placeholder="Описание" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground resize-none" rows={2} />
         </div>
