@@ -1,5 +1,5 @@
 import { Music } from "lucide-react";
-import { useState } from "react";
+import { useState, type ImgHTMLAttributes } from "react";
 
 type SafeImageProps = {
   src?: string | null;
@@ -8,7 +8,7 @@ type SafeImageProps = {
   fallbackClassName?: string;
   iconSize?: number;
   loading?: "eager" | "lazy";
-  referrerPolicy?: React.HTMLAttributeReferrerPolicy;
+  referrerPolicy?: ImgHTMLAttributes<HTMLImageElement>["referrerPolicy"];
 };
 
 const SafeImage = ({
