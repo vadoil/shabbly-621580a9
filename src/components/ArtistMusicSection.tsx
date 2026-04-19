@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useRef } from "react";
 import { Play, Pause, Music2, ExternalLink } from "lucide-react";
 import { Link } from "react-router-dom";
+import SafeImage from "@/components/SafeImage";
 
 const PLATFORM_LABEL: Record<string, { label: string; color: string }> = {
   yandex: { label: "Яндекс Музыка", color: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30" },
@@ -60,7 +61,7 @@ const ArtistMusicSection = ({ artistId }: { artistId: string }) => {
       <div className="flex items-end justify-between gap-4">
         <div>
           <span className="text-xs uppercase tracking-[0.2em] text-primary font-medium">Дискография</span>
-          <h2 className="font-display text-3xl font-bold mt-2 flex items-center gap-2">
+          <h2 className="mt-2 flex items-center gap-2 font-display text-3xl font-bold">
             <Music2 size={24} className="text-primary" /> Музыка
           </h2>
         </div>
@@ -71,20 +72,22 @@ const ArtistMusicSection = ({ artistId }: { artistId: string }) => {
           const tracks = (r.tracks || []).sort((a: any, b: any) => a.order_index - b.order_index);
           const links = r.platform_links || [];
           return (
-            <div key={r.id} className="grid lg:grid-cols-[260px_1fr] gap-6 rounded-2xl border border-border/60 bg-card p-5">
+            <div key={r.id} className="grid gap-6 rounded-2xl border border-border/60 bg-card p-5 lg:grid-cols-[260px_1fr]">
               <div className="space-y-3">
-                <Link to={`/music/${r.slug}`} className="block aspect-square rounded-xl overflow-hidden bg-secondary group">
-                  {r.cover_url ? (
-                    <img src={r.cover_url} alt={r.title} loading="lazy" className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  ) : (
-                    <div className="h-full w-full flex items-center justify-center text-muted-foreground"><Music2 size={48} /></div>
-                  )}
+                <Link to={`/music/${r.slug}`} className="group block aspect-square overflow-hidden rounded-xl bg-secondary">
+                  <SafeImage
+                    src={r.cover_url}
+                    alt={r.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    fallbackClassName="flex h-full w-full items-center justify-center text-muted-foreground"
+                    iconSize={48}
+                  />
                 </Link>
                 <div>
                   <Link to={`/music/${r.slug}`}>
-                    <h3 className="font-display font-bold text-lg hover:text-primary transition-colors">{r.title}</h3>
+                    <h3 className="font-display text-lg font-bold transition-colors hover:text-primary">{r.title}</h3>
                   </Link>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider">
+                  <p className="text-xs uppercase tracking-wider text-muted-foreground">
                     {r.type === "album" ? "Альбом" : r.type === "single" ? "Сингл" : "EP"}
                     {r.release_date && ` · ${new Date(r.release_date).getFullYear()}`}
                   </p>
@@ -96,8 +99,13 @@ const ArtistMusicSection = ({ artistId }: { artistId: string }) => {
                       const meta = PLATFORM_LABEL[l.platform];
                       if (!meta) return null;
                       return (
-                        <a key={l.id} href={l.url} target="_blank" rel="noopener noreferrer"
-                          className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider hover:scale-105 transition-transform ${meta.color}`}>
+                        <a
+                          key={l.id}
+                          href={l.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider transition-transform hover:scale-105 ${meta.color}`}
+                        >
                           {meta.label} <ExternalLink size={9} />
                         </a>
                       );
@@ -108,7 +116,7 @@ const ArtistMusicSection = ({ artistId }: { artistId: string }) => {
 
               <div className="space-y-1">
                 {tracks.length === 0 ? (
-                  <p className="text-sm text-muted-foreground italic">Треки появятся скоро</p>
+                  <p className="text-sm italic text-muted-foreground">Треки появятся скоро</p>
                 ) : (
                   tracks.map((t: any, i: number) => {
                     const isPlaying = playingId === t.id;
@@ -117,13 +125,13 @@ const ArtistMusicSection = ({ artistId }: { artistId: string }) => {
                         <button
                           onClick={() => togglePlay(t.id, t.audio_url)}
                           disabled={!t.audio_url}
-                          className={`shrink-0 flex h-9 w-9 items-center justify-center rounded-full transition-all ${isPlaying ? "bg-primary text-primary-foreground" : "bg-secondary text-foreground group-hover:bg-primary group-hover:text-primary-foreground"} ${!t.audio_url && "opacity-30 cursor-not-allowed"}`}
+                          className={`shrink-0 flex h-9 w-9 items-center justify-center rounded-full transition-all ${isPlaying ? "bg-primary text-primary-foreground" : "bg-secondary text-foreground group-hover:bg-primary group-hover:text-primary-foreground"} ${!t.audio_url && "cursor-not-allowed opacity-30"}`}
                         >
                           {isPlaying ? <Pause size={14} /> : <Play size={14} className="ml-0.5" />}
                         </button>
-                        <span className="w-6 text-xs text-muted-foreground tabular-nums">{(i + 1).toString().padStart(2, "0")}</span>
-                        <span className={`flex-1 text-sm font-medium truncate ${isPlaying ? "text-primary" : ""}`}>{t.title}</span>
-                        <span className="text-xs text-muted-foreground tabular-nums">{fmtDur(t.duration_sec)}</span>
+                        <span className="w-6 tabular-nums text-xs text-muted-foreground">{(i + 1).toString().padStart(2, "0")}</span>
+                        <span className={`flex-1 truncate text-sm font-medium ${isPlaying ? "text-primary" : ""}`}>{t.title}</span>
+                        <span className="tabular-nums text-xs text-muted-foreground">{fmtDur(t.duration_sec)}</span>
                       </div>
                     );
                   })
