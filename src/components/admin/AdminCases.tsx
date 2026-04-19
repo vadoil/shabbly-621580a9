@@ -83,7 +83,7 @@ const AdminCases = () => {
   };
 
   const remove = async (id: string) => {
-    if (!confirm("Удалить кейс?")) return;
+    if (!confirm("Удалить проект?")) return;
     await supabase.from("cases").delete().eq("id", id);
     qc.invalidateQueries({ queryKey: ["admin_cases"] });
   };
@@ -93,9 +93,9 @@ const AdminCases = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-2xl font-bold">Кейсы</h2>
+        <h2 className="font-display text-2xl font-bold">Проекты</h2>
         <button onClick={() => (show ? reset() : setShow(true))} className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground">
-          {show ? <><X size={14} /> Отмена</> : <><Plus size={14} /> Новый кейс</>}
+          {show ? <><X size={14} /> Отмена</> : <><Plus size={14} /> Новый проект</>}
         </button>
       </div>
 
@@ -159,7 +159,7 @@ const AdminCases = () => {
             </tbody>
           </table>
         ) : (
-          <div className="p-6 text-sm text-muted-foreground">Кейсов пока нет</div>
+          <div className="p-6 text-sm text-muted-foreground">Проектов пока нет</div>
         )}
       </div>
     </div>
