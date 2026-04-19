@@ -71,13 +71,13 @@ const AboutPage = () => {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_30%,hsl(322_80%_55%/0.12)_0%,transparent_60%)]" />
-        <div className="container relative z-10 pt-24 pb-20 max-w-4xl">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-medium mb-6 animate-fade-in">Артистам</p>
-          <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tighter leading-[0.95] animate-fade-in">
-            Ищем артистов <br />
+        <div className="container relative z-10 pt-16 pb-12 md:pt-24 md:pb-20 max-w-4xl">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-medium mb-4 md:mb-6 animate-fade-in">Артистам</p>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05] md:leading-[0.95] animate-fade-in">
+            Ищем артистов <br className="hidden sm:block" />
             для <span className="text-gradient-fuchsia">долгосрочного сотрудничества</span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground mt-8 leading-relaxed animate-fade-in">
+          <p className="text-base md:text-xl text-muted-foreground mt-5 md:mt-8 leading-relaxed animate-fade-in">
             SHABBLY Agency — продюсерское агентство полного цикла. Подбираем выступления, сопровождаем карьеру,
             выпускаем песни и продвигаем артистов. Если вы делаете качественную музыку и готовы расти системно — давайте знакомиться.
           </p>
