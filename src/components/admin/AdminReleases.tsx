@@ -31,7 +31,7 @@ const AdminReleases = () => {
 
   const handleSave = async () => {
     if (!form.title || !form.slug) return toast.error("Заполните название и slug");
-    const payload = { title: form.title, slug: form.slug, type: form.type, release_date: form.release_date || null, description: form.description || null, published: form.published, featured: form.featured };
+    const payload = { title: form.title, slug: form.slug, type: form.type, release_date: form.release_date || null, description: form.description || null, published: form.published, featured: form.featured, artist_id: form.artist_id || null };
     if (editing) {
       const { error } = await supabase.from("releases").update(payload).eq("id", editing);
       if (error) return toast.error(error.message);
