@@ -229,58 +229,66 @@ const Index = () => {
       )}
 
 
-      {/* UPCOMING SHOWS — checkerboard */}
+      {/* UPCOMING SHOWS — wide cards with visual */}
       <section className="container py-16 space-y-8">
         <div className="flex items-end justify-between">
           <h2 className="font-display text-3xl md:text-4xl font-bold">Ближайшие концерты</h2>
           <Link to="/events" className="text-sm text-primary hover:underline flex items-center gap-1">Все даты <ArrowRight size={14} /></Link>
         </div>
         {events && events.length > 0 ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-0">
-            {events.slice(0, 5).map((e, i) => {
-              const isEven = i % 2 === 0;
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {events.slice(0, 6).map((e) => {
+              const date = new Date(e.date_start);
+              const day = date.getDate();
+              const monthWeek = date.toLocaleDateString("ru-RU", { month: "short", weekday: "short" }).toUpperCase();
               return (
-                <div
+                <article
                   key={e.id}
-                  className={`group relative p-5 md:p-6 flex flex-col justify-between min-h-[200px] border border-border/50 transition-all hover:border-primary/50 ${
-                    isEven ? "bg-card" : "bg-secondary/50"
-                  }`}
+                  className="group relative flex overflow-hidden rounded-xl border border-border/60 bg-card transition-all hover:border-primary/60 hover:shadow-[0_0_40px_hsl(322_80%_55%/0.15)] min-h-[220px]"
                 >
-                  {/* Date big */}
-                  <div>
-                    <p className="font-display text-3xl md:text-4xl font-bold text-primary/80 leading-none">
-                      {new Date(e.date_start).getDate()}
-                    </p>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wider mt-1">
-                      {new Date(e.date_start).toLocaleDateString("ru-RU", { month: "short", weekday: "short" })}
-                    </p>
+                  {/* Visual block with date */}
+                  <div className="relative w-32 sm:w-40 shrink-0 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-primary/10 to-background" />
+                    <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{
+                      backgroundImage: `radial-gradient(circle at 20% 80%, hsl(322 80% 55% / 0.6), transparent 50%), radial-gradient(circle at 80% 20%, hsl(280 70% 50% / 0.4), transparent 50%)`
+                    }} />
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+                      <p className="font-display text-5xl sm:text-6xl font-bold text-primary leading-none drop-shadow-[0_0_20px_hsl(322_80%_55%/0.5)]">
+                        {day}
+                      </p>
+                      <p className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-foreground/90 mt-2">
+                        {monthWeek}
+                      </p>
+                    </div>
+                    <div className="absolute bottom-2 right-2 w-8 h-8 border-r-2 border-b-2 border-primary/40" />
+                    <div className="absolute top-2 left-2 w-8 h-8 border-l-2 border-t-2 border-primary/40" />
                   </div>
 
-                  <div className="mt-4 space-y-2">
-                    <h3 className="font-display text-sm font-semibold leading-tight group-hover:text-primary transition-colors">
-                      {e.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1">
-                      <MapPin size={10} /> {e.city}
-                    </p>
-                    <p className="text-[10px] text-muted-foreground/70">{e.venue}</p>
-                  </div>
+                  {/* Content */}
+                  <div className="flex-1 p-5 flex flex-col justify-between min-w-0">
+                    <div className="space-y-2">
+                      <h3 className="font-display text-base sm:text-lg font-semibold leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                        {e.title}
+                      </h3>
+                      <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                        <MapPin size={12} className="text-primary/70" /> {e.city}
+                      </p>
+                      <p className="text-xs text-muted-foreground/70 truncate">{e.venue}</p>
+                    </div>
 
-                  <div className="mt-3 flex gap-1.5">
-                    {e.ticket_url ? (
-                      <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-3 py-1 text-[10px] font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.3)] transition-all">
-                        <Ticket size={10} className="inline mr-0.5" />Билет
-                      </a>
-                    ) : (
-                      <button onClick={() => setTicketModal(true)} className="rounded-full border border-border px-3 py-1 text-[10px] font-semibold text-foreground hover:border-primary/50 transition-colors">
-                        Заявка
-                      </button>
-                    )}
+                    <div className="mt-4 flex items-center gap-2">
+                      {e.ticket_url ? (
+                        <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.4)] transition-all inline-flex items-center gap-1">
+                          <Ticket size={12} /> Купить билет
+                        </a>
+                      ) : (
+                        <button onClick={() => setTicketModal(true)} className="rounded-full border border-border px-4 py-1.5 text-xs font-semibold text-foreground hover:border-primary/60 hover:text-primary transition-colors">
+                          Оставить заявку
+                        </button>
+                      )}
+                    </div>
                   </div>
-
-                  {/* Corner accent */}
-                  <div className={`absolute top-0 right-0 w-6 h-6 ${isEven ? "bg-primary/10" : "bg-primary/5"}`} />
-                </div>
+                </article>
               );
             })}
           </div>
