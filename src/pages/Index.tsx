@@ -14,6 +14,11 @@ import AgencyServicesPreview from "@/components/AgencyServicesPreview";
 import AgencyArtistMatcher from "@/components/AgencyArtistMatcher";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, addMonths, subMonths, getDay } from "date-fns";
 import { ru } from "date-fns/locale";
+import hero2 from "@/assets/hero/hero-2.jpg";
+import hero4 from "@/assets/hero/hero-4.jpg";
+import hero5 from "@/assets/hero/hero-5.jpg";
+
+const eventCovers = [hero2, hero4, hero5];
 
 const BarsCalendarWidget = () => {
   const [month, setMonth] = useState(new Date());
@@ -179,8 +184,8 @@ const Index = () => {
           <div className="flex items-end justify-between gap-4">
             <div>
               <span className="text-xs uppercase tracking-[0.2em] text-primary font-medium">Портфолио</span>
-              <h2 className="font-display text-3xl md:text-4xl font-bold mt-2">Последние проекты</h2>
-              <p className="text-muted-foreground text-sm mt-1">Мероприятия, которые мы организовали</p>
+              <h2 className="font-art text-3xl md:text-4xl font-bold mt-2">Наши мероприятия</h2>
+              <p className="text-muted-foreground text-sm mt-1">Концерты, корпоративы и фестивали под ключ</p>
             </div>
             <Link to="/cases" className="text-sm text-primary hover:underline flex items-center gap-1 shrink-0">
               Все проекты <ArrowRight size={14} />
