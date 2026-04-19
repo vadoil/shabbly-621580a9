@@ -42,12 +42,12 @@ const CasesPage = () => {
     <Layout>
       <section className="border-b border-border/40 bg-gradient-to-b from-secondary/30 to-background">
         <div className="container py-12 md:py-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">Кейсы и форматы</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">Проекты и форматы</p>
           <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight">
             Реализованные <br /><span className="text-primary">мероприятия</span>
           </h1>
           <p className="mt-4 text-base text-muted-foreground max-w-2xl">
-            Корпоративы, частные торжества, фестивали и презентации брендов. Каждый кейс — формат, артист, площадка и результат.
+            Корпоративы, частные торжества, фестивали и презентации брендов. Каждый проект — формат, артист, площадка и результат.
           </p>
         </div>
       </section>
@@ -90,7 +90,7 @@ const CasesPage = () => {
             <Sparkles size={32} className="text-muted-foreground" />
             <p className="text-sm text-muted-foreground">
               {(cases?.length ?? 0) === 0
-                ? "Кейсы скоро появятся. Добавьте первый через админку."
+                ? "Проекты скоро появятся. Добавьте первый через админку."
                 : "По выбранным фильтрам ничего не нашлось."}
             </p>
             {(cases?.length ?? 0) === 0 && (
@@ -113,7 +113,7 @@ const CasesPage = () => {
                   )}
                   {c.featured && (
                     <span className="absolute left-3 top-3 rounded-full bg-primary/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground backdrop-blur">
-                      Кейс года
+                      Проект года
                     </span>
                   )}
                   {c.format && (

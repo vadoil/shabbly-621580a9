@@ -8,7 +8,7 @@ const links = [
   { to: "/artists", label: "Артисты" },
   { to: "/about", label: "Артистам" },
   { to: "/events", label: "Афиша" },
-  { to: "/cases", label: "Кейсы" },
+  { to: "/cases", label: "Проекты" },
   { to: "/contacts", label: "Контакты" },
 ];
 

@@ -83,7 +83,7 @@ const AdminCases = () => {
   };
 
   const remove = async (id: string) => {
-    if (!confirm("Удалить кейс?")) return;
+    if (!confirm("Удалить проект?")) return;
     await supabase.from("cases").delete().eq("id", id);
     qc.invalidateQueries({ queryKey: ["admin_cases"] });
   };
@@ -93,9 +93,9 @@ const AdminCases = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-2xl font-bold">Кейсы</h2>
+        <h2 className="font-display text-2xl font-bold">Проекты</h2>
         <button onClick={() => (show ? reset() : setShow(true))} className="inline-flex items-center gap-1 rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground">
-          {show ? <><X size={14} /> Отмена</> : <><Plus size={14} /> Новый кейс</>}
+          {show ? <><X size={14} /> Отмена</> : <><Plus size={14} /> Новый проект</>}
         </button>
       </div>
 
@@ -117,7 +117,7 @@ const AdminCases = () => {
             <textarea value={form.gallery} onChange={(e) => setForm({ ...form, gallery: e.target.value })} rows={5} className={`${input} font-mono text-xs resize-y`} placeholder='["https://...jpg", "https://...jpg"]' />
           </div>
           <div className="flex items-center gap-4 text-sm">
-            <label className="flex items-center gap-2"><input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} /> Featured</label>
+            <label className="flex items-center gap-2"><input type="checkbox" checked={form.featured} onChange={(e) => setForm({ ...form, featured: e.target.checked })} /> На главную</label>
             <label className="flex items-center gap-2"><input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} /> Опубликовано</label>
           </div>
           <div className="flex gap-2">
@@ -137,7 +137,7 @@ const AdminCases = () => {
                 <th className="text-left p-3">Название</th>
                 <th className="text-left p-3">Клиент</th>
                 <th className="text-left p-3">Дата</th>
-                <th className="text-left p-3">Featured</th>
+                <th className="text-left p-3">На главной</th>
                 <th className="text-left p-3">Публ.</th>
                 <th className="p-3"></th>
               </tr>
@@ -159,7 +159,7 @@ const AdminCases = () => {
             </tbody>
           </table>
         ) : (
-          <div className="p-6 text-sm text-muted-foreground">Кейсов пока нет</div>
+          <div className="p-6 text-sm text-muted-foreground">Проектов пока нет</div>
         )}
       </div>
     </div>
