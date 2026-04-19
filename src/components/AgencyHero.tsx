@@ -4,7 +4,7 @@ import heroArtist from "@/assets/hero-artist.jpg";
 
 const AgencyHero = () => {
   return (
-    <section className="relative overflow-hidden flex items-center">
+    <section className="relative overflow-hidden min-h-[calc(100svh-4rem)] flex items-center">
       {/* Background layers */}
       <div className="absolute inset-0 bg-gradient-dark" />
 
@@ -31,16 +31,16 @@ const AgencyHero = () => {
         }}
       />
 
-      <div className="container relative z-10 py-14 md:py-20 lg:py-24 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      <div className="container relative z-10 py-10 md:py-12 lg:py-14 grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
         {/* Left: copy */}
-        <div className="lg:col-span-7 space-y-5 md:space-y-6 lg:space-y-8">
+        <div className="lg:col-span-7 space-y-4 md:space-y-5 lg:space-y-6">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 backdrop-blur px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-primary">
             <Sparkles size={12} />
             <span className="hidden sm:inline">Музыкальное продюсерское агентство</span>
             <span className="sm:hidden">Продюсерское агентство</span>
           </div>
 
-          <h1 className="font-art text-[2rem] sm:text-5xl md:text-7xl lg:text-8xl font-semibold leading-[1.02] sm:leading-[0.95] tracking-tight">
+          <h1 className="font-art text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] xl:text-[5.75rem] font-semibold leading-[1.02] sm:leading-[0.95] tracking-tight">
             Артисты,
             <br />
             которые создают
@@ -48,12 +48,12 @@ const AgencyHero = () => {
             <span className="text-gradient-fuchsia font-bold">атмосферу</span>
           </h1>
 
-          <p className="text-base md:text-xl text-muted-foreground max-w-xl leading-relaxed">
+          <p className="text-base md:text-lg xl:text-xl text-muted-foreground max-w-xl leading-relaxed">
             Подбираем артистов, ставим концертные программы и проводим мероприятия под ключ —
             от приватного ужина до корпоративного фестиваля.
           </p>
 
-          <div className="flex flex-wrap gap-3 pt-2">
+          <div className="flex flex-wrap gap-3 pt-1">
             <Link
               to="/contacts"
               className="group inline-flex items-center gap-2 rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground hover:shadow-[0_0_40px_hsl(var(--primary)/0.5)] transition-all"
@@ -70,7 +70,7 @@ const AgencyHero = () => {
           </div>
 
           {/* Trust strip */}
-          <div className="grid grid-cols-3 gap-4 sm:gap-6 pt-6 lg:pt-8 border-t border-border/50 max-w-xl">
+          <div className="grid grid-cols-3 gap-3 sm:gap-4 pt-4 lg:pt-5 border-t border-border/50 max-w-xl">
             <div>
               <p className="font-art text-2xl sm:text-3xl font-bold text-gradient-fuchsia">120+</p>
               <p className="text-[11px] sm:text-xs text-muted-foreground mt-1">мероприятий в год</p>
