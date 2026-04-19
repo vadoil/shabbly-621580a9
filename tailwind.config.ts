@@ -14,9 +14,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ["Unbounded", "Space Grotesk", "sans-serif"],
+        display: ["Manrope", "system-ui", "sans-serif"],
         body: ["Inter", "sans-serif"],
-        art: ["Unbounded", "Space Grotesk", "sans-serif"],
+        art: ["Manrope", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
