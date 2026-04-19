@@ -1,0 +1,1 @@
+DELETE FROM public.gallery_items WHERE image_url = '/gallery/g4.mp4';
