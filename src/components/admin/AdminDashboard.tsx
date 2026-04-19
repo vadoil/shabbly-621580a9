@@ -23,7 +23,7 @@ const tabs = [
   { id: "inquiries", label: "Заявки агентства", icon: Inbox },
   { id: "artists", label: "Артисты", icon: Mic2 },
   { id: "services", label: "Услуги", icon: Briefcase },
-  { id: "cases", label: "Кейсы", icon: Star },
+  { id: "cases", label: "Проекты", icon: Star },
   { id: "events", label: "Афиша", icon: Calendar },
   { id: "releases", label: "Релизы", icon: Music },
   { id: "news", label: "Новости", icon: Newspaper },

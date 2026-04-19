@@ -21,7 +21,7 @@ const AgencyArtistMatcher = () => {
               <Search size={22} />
             </div>
             <div className="space-y-2">
-              <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-medium">Наш ростер</p>
+              <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-medium">Наш состав</p>
               <h2 className="font-display text-3xl md:text-4xl font-bold tracking-tighter">
                 Артисты агентства
               </h2>

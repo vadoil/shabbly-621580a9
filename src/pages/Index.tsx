@@ -173,11 +173,11 @@ const Index = () => {
           <div className="flex items-end justify-between gap-4">
             <div>
               <span className="text-xs uppercase tracking-[0.2em] text-primary font-medium">Портфолио</span>
-              <h2 className="font-display text-3xl md:text-4xl font-bold mt-2">Последние кейсы</h2>
+              <h2 className="font-display text-3xl md:text-4xl font-bold mt-2">Последние проекты</h2>
               <p className="text-muted-foreground text-sm mt-1">Мероприятия, которые мы организовали</p>
             </div>
             <Link to="/cases" className="text-sm text-primary hover:underline flex items-center gap-1 shrink-0">
-              Все кейсы <ArrowRight size={14} />
+              Все проекты <ArrowRight size={14} />
             </Link>
           </div>
 

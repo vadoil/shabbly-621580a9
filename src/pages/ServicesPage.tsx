@@ -35,10 +35,10 @@ const ServicesPage = () => {
           <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-medium mb-6">Услуги агентства</p>
           <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tighter leading-[0.95]">
             От подбора артиста <br />
-            до <span className="text-gradient-fuchsia">шоу под ключ</span>
+            до <span className="text-gradient-fuchsia">мероприятия под ключ</span>
           </h1>
           <p className="text-lg text-muted-foreground mt-8 max-w-2xl leading-relaxed">
-            Прозрачные пакеты под разные задачи — от точечного букинга до полного продакшна.
+            Прозрачные пакеты под разные задачи — от точечного подбора артиста до полной постановки мероприятия.
           </p>
         </div>
       </section>

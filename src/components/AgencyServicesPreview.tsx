@@ -23,7 +23,7 @@ const AgencyServicesPreview = () => {
             Что мы делаем
           </h2>
           <p className="text-muted-foreground">
-            Booking артистов, продакшн концертов и live-шоу под ключ — от приватного ужина до фестиваля.
+            Подбор артистов, постановка концертов и живых программ под ключ — от приватного ужина до фестиваля.
           </p>
         </div>
         <Link to="/services" className="text-sm text-primary hover:underline flex items-center gap-1">

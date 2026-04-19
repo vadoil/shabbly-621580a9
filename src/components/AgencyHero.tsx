@@ -35,7 +35,7 @@ const AgencyHero = () => {
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
-            Подбираем артистов, продюсируем live-шоу и закрываем мероприятия под ключ —
+            Подбираем артистов, ставим концертные программы и проводим мероприятия под ключ —
             от приватного ужина до корпоративного фестиваля.
           </p>
 
@@ -63,7 +63,7 @@ const AgencyHero = () => {
             </div>
             <div>
               <p className="font-display text-3xl font-bold text-gradient-fuchsia">50+</p>
-              <p className="text-xs text-muted-foreground mt-1">артистов в ростере</p>
+              <p className="text-xs text-muted-foreground mt-1">артистов в составе</p>
             </div>
             <div>
               <p className="font-display text-3xl font-bold text-gradient-fuchsia">8</p>
