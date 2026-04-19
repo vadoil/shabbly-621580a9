@@ -1,21 +1,43 @@
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { ArrowRight, Sparkles } from "lucide-react";
 import heroArtist from "@/assets/hero-artist.jpg";
+import heroArtistMale from "@/assets/hero-artist-male.jpg";
+import heroArtistBand from "@/assets/hero-artist-band.jpg";
+
+const heroSlides = [
+  { src: heroArtist, alt: "Вокалистка SHABBLY на сцене во время живого выступления" },
+  { src: heroArtistMale, alt: "Эмоциональное выступление вокалиста на концерте SHABBLY" },
+  { src: heroArtistBand, alt: "Группа SHABBLY на сцене во время живого выступления" },
+];
 
 const AgencyHero = () => {
+  const [active, setActive] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setActive((p) => (p + 1) % heroSlides.length);
+    }, 2000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <section className="relative overflow-hidden min-h-[calc(100svh-4rem)] flex items-center">
       {/* Background layers */}
       <div className="absolute inset-0 bg-gradient-dark" />
 
-      {/* Mobile: photo as atmospheric background */}
+      {/* Mobile: photo as atmospheric background (cycles too) */}
       <div className="absolute inset-0 lg:hidden">
-        <img
-          src={heroArtist}
-          alt=""
-          aria-hidden
-          className="w-full h-full object-cover object-[center_25%] opacity-40"
-        />
+        {heroSlides.map((s, i) => (
+          <img
+            key={s.src}
+            src={s.src}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 w-full h-full object-cover object-[center_25%] transition-opacity duration-700 ease-in-out"
+            style={{ opacity: i === active ? 0.4 : 0 }}
+          />
+        ))}
         <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/75 to-background" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-background/80" />
       </div>
@@ -40,11 +62,8 @@ const AgencyHero = () => {
             <span className="sm:hidden">Продюсерское агентство</span>
           </div>
 
-          <h1 className="font-art text-[2rem] sm:text-5xl md:text-6xl lg:text-[5rem] xl:text-[5.75rem] font-semibold leading-[1.02] sm:leading-[0.95] tracking-tight">
-            Артисты,
-            <br />
-            которые создают
-            <br />
+          <h1 className="font-art text-[1.875rem] sm:text-4xl md:text-5xl lg:text-[3.75rem] xl:text-[4.5rem] font-semibold leading-[1.05] sm:leading-[1] tracking-tight">
+            Артисты, которые создают{" "}
             <span className="text-gradient-fuchsia font-bold">атмосферу</span>
           </h1>
 
@@ -89,13 +108,17 @@ const AgencyHero = () => {
         {/* Right: visual frame (desktop only) */}
         <div className="lg:col-span-5 relative hidden lg:block">
           <div className="relative aspect-[4/5] rounded-3xl border border-border bg-card/30 backdrop-blur-sm overflow-hidden glow-fuchsia group">
-            <img
-              src={heroArtist}
-              alt="Артист SHABBLY на сцене во время живого выступления"
-              width={1024}
-              height={1280}
-              className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2000ms] ease-out"
-            />
+            {heroSlides.map((s, i) => (
+              <img
+                key={s.src}
+                src={s.src}
+                alt={s.alt}
+                width={1024}
+                height={1280}
+                className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-all duration-[1200ms] ease-in-out"
+                style={{ opacity: i === active ? 1 : 0 }}
+              />
+            ))}
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
             <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-transparent to-accent/20 mix-blend-overlay" />
             <div
@@ -122,6 +145,18 @@ const AgencyHero = () => {
             <div className="absolute top-6 left-6 flex items-center gap-1.5 rounded-full bg-primary/90 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground z-10">
               <span className="w-1.5 h-1.5 rounded-full bg-primary-foreground animate-pulse" />
               LIVE
+            </div>
+
+            {/* Slide indicators */}
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+              {heroSlides.map((_, i) => (
+                <span
+                  key={i}
+                  className={`h-1 rounded-full transition-all duration-500 ${
+                    i === active ? "w-6 bg-primary" : "w-1.5 bg-foreground/30"
+                  }`}
+                />
+              ))}
             </div>
           </div>
           <div className="absolute -top-4 -left-4 w-24 h-24 rounded-2xl border border-primary/40 bg-primary/5 backdrop-blur-sm rotate-12" />
