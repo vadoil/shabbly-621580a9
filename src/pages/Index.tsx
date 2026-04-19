@@ -8,7 +8,7 @@ import { getPublicStorageUrl } from "@/lib/storage";
 import { useState, useMemo } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import EmptyState from "@/components/EmptyState";
-import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket, ChevronLeft, ChevronRight, Clock } from "lucide-react";
+import { Calendar, Music, Newspaper, ArrowRight, MapPin, ShoppingBag, Image, Ticket, ChevronLeft, ChevronRight, Clock, Play, X } from "lucide-react";
 import AgencyHero from "@/components/AgencyHero";
 import AgencyServicesPreview from "@/components/AgencyServicesPreview";
 import AgencyArtistMatcher from "@/components/AgencyArtistMatcher";
@@ -161,6 +161,7 @@ const Index = () => {
   const { data: cases } = useCases({ limit: 4 });
 
   const [ticketModal, setTicketModal] = useState(false);
+  const [lightbox, setLightbox] = useState<{ url: string; type: string } | null>(null);
 
   return (
     <Layout>
@@ -252,8 +253,9 @@ const Index = () => {
                   key={e.id}
                   className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition-all hover:border-primary/60 hover:shadow-[0_0_40px_hsl(322_80%_55%/0.2)]"
                 >
+                  <Link to={`/events/${e.id}`} className="absolute inset-0 z-0" aria-label={e.title} />
                   {/* Visual block with photo + date overlay */}
-                  <div className="relative aspect-[16/9] sm:aspect-[5/3] overflow-hidden">
+                  <div className="relative aspect-[16/9] sm:aspect-[5/3] overflow-hidden pointer-events-none">
                     <img
                       src={cover}
                       alt=""
@@ -279,7 +281,7 @@ const Index = () => {
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 p-5 flex flex-col justify-between gap-4 min-w-0">
+                  <div className="relative flex-1 p-5 flex flex-col justify-between gap-4 min-w-0 pointer-events-none">
                     <div className="space-y-1.5">
                       <h3 className="font-art text-base sm:text-lg font-semibold leading-tight group-hover:text-primary transition-colors line-clamp-2">
                         {e.title}
@@ -287,13 +289,13 @@ const Index = () => {
                       <p className="text-xs text-muted-foreground truncate">{e.venue}</p>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 pointer-events-auto relative z-10">
                       {e.ticket_url ? (
-                        <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.4)] transition-all inline-flex items-center gap-1">
+                        <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" onClick={(ev) => ev.stopPropagation()} className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.4)] transition-all inline-flex items-center gap-1">
                           <Ticket size={12} /> Купить билет
                         </a>
                       ) : (
-                        <button onClick={() => setTicketModal(true)} className="rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground hover:border-primary/60 hover:text-primary transition-colors">
+                        <button onClick={(ev) => { ev.preventDefault(); ev.stopPropagation(); setTicketModal(true); }} className="rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground hover:border-primary/60 hover:text-primary transition-colors">
                           Оставить заявку
                         </button>
                       )}
@@ -345,16 +347,49 @@ const Index = () => {
         </div>
         {galleryItems && galleryItems.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {galleryItems.slice(0, 8).map((item) => (
-              <div key={item.id} className="aspect-square rounded-xl overflow-hidden bg-secondary group cursor-pointer">
-                <img src={getPublicStorageUrl(item.image_url)} alt={item.caption || ""} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-              </div>
-            ))}
+            {galleryItems.slice(0, 8).map((item: any) => {
+              const url = getPublicStorageUrl(item.image_url);
+              const isVideo = item.media_type === "video" || /\.(mp4|webm|mov)$/i.test(item.image_url);
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setLightbox({ url, type: isVideo ? "video" : "image" })}
+                  className="relative aspect-square rounded-xl overflow-hidden bg-secondary group cursor-pointer"
+                >
+                  {isVideo ? (
+                    <>
+                      <video src={url} muted playsInline preload="metadata" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 flex items-center justify-center bg-background/30 group-hover:bg-background/10 transition-colors">
+                        <div className="rounded-full bg-primary/90 p-3 shadow-[0_0_30px_hsl(var(--primary)/0.5)]">
+                          <Play size={20} className="text-primary-foreground fill-primary-foreground" />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <img src={url} alt={item.caption || ""} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  )}
+                </button>
+              );
+            })}
           </div>
         ) : (
           <EmptyState icon={Image} title="Галерея скоро появится" ctaLabel="Смотреть" ctaLink="/gallery" />
         )}
       </section>
+
+      {/* LIGHTBOX */}
+      {lightbox && (
+        <div className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-xl flex items-center justify-center p-4" onClick={() => setLightbox(null)}>
+          <button className="absolute top-6 right-6 text-muted-foreground hover:text-foreground z-10" aria-label="Закрыть">
+            <X size={28} />
+          </button>
+          {lightbox.type === "video" ? (
+            <video src={lightbox.url} controls autoPlay className="max-w-full max-h-[90vh] rounded-lg" onClick={(e) => e.stopPropagation()} />
+          ) : (
+            <img src={lightbox.url} alt="" className="max-w-full max-h-[90vh] object-contain rounded-lg" onClick={(e) => e.stopPropagation()} />
+          )}
+        </div>
+      )}
 
       {/* BARS — mini calendar */}
       <BarsCalendarWidget />

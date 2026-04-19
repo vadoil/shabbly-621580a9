@@ -585,6 +585,7 @@ export type Database = {
           featured: boolean
           id: string
           image_url: string
+          media_type: string
           published: boolean | null
           sort_order: number | null
           source: string | null
@@ -597,6 +598,7 @@ export type Database = {
           featured?: boolean
           id?: string
           image_url: string
+          media_type?: string
           published?: boolean | null
           sort_order?: number | null
           source?: string | null
@@ -609,6 +611,7 @@ export type Database = {
           featured?: boolean
           id?: string
           image_url?: string
+          media_type?: string
           published?: boolean | null
           sort_order?: number | null
           source?: string | null
