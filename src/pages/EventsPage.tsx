@@ -1,11 +1,12 @@
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
+import { Link } from "react-router-dom";
 import { usePublishedEvents } from "@/hooks/use-data";
 import { useState, useMemo } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import EmptyState from "@/components/EmptyState";
-import { MapPin, Calendar as CalendarIcon, Ticket, X, Building2, Sparkles } from "lucide-react";
+import { MapPin, Calendar as CalendarIcon, Ticket, X, Building2, Sparkles, ArrowRight } from "lucide-react";
 import { format, isAfter, startOfDay } from "date-fns";
 import { ru } from "date-fns/locale";
 
@@ -174,7 +175,8 @@ const PosterEventCard = ({
       className="group relative overflow-hidden rounded-2xl border border-border bg-card hover:border-primary/50 transition-all duration-500 hover:shadow-[0_0_50px_-10px_hsl(var(--primary)/0.4)] animate-fade-in"
       style={{ animationDelay: `${index * 80}ms` }}
     >
-      <div className={`grid ${compact ? "md:grid-cols-[180px_1fr]" : "md:grid-cols-[280px_1fr_auto]"} gap-0`}>
+      <Link to={`/events/${event.id}`} className="absolute inset-0 z-0" aria-label={event.title} />
+      <div className={`relative grid ${compact ? "md:grid-cols-[180px_1fr]" : "md:grid-cols-[280px_1fr_auto]"} gap-0 pointer-events-none`}>
         {/* DATE BLOCK */}
         <div className="relative flex flex-col justify-center items-center p-6 md:p-8 bg-gradient-to-br from-secondary/80 to-secondary/30 border-b md:border-b-0 md:border-r border-border/50 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -208,17 +210,21 @@ const PosterEventCard = ({
           {event.address && <p className="text-xs text-muted-foreground">{event.address}</p>}
 
           {!compact && (
-            <div className="flex flex-wrap gap-2 pt-3">
+            <div className="flex flex-wrap gap-2 pt-3 pointer-events-auto relative z-10">
               {event.ticket_url && (
-                <a href={event.ticket_url} target="_blank" rel="noopener noreferrer"
+                <a href={event.ticket_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}
                   className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)] transition-all">
                   <Ticket size={12} /> Купить билет
                 </a>
               )}
-              <button onClick={onTicket}
+              <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); onTicket(); }}
                 className="inline-flex items-center gap-1.5 rounded-full border border-border px-5 py-2 text-xs font-semibold hover:border-primary/50 transition-colors">
                 Оставить заявку
               </button>
+              <Link to={`/events/${event.id}`} onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-1.5 rounded-full px-5 py-2 text-xs font-semibold text-primary hover:underline">
+                Подробнее <ArrowRight size={12} />
+              </Link>
             </div>
           )}
         </div>
