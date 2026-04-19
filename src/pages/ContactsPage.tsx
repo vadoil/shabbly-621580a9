@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import InquiryForm from "@/components/InquiryForm";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Phone, Send, Music, MapPin, Clock } from "lucide-react";
 
 const ContactsPage = () => {
   return (
@@ -33,24 +33,38 @@ const ContactsPage = () => {
             <div className="rounded-3xl border border-border bg-card p-6 space-y-5">
               <h3 className="font-display text-lg font-bold">Свяжитесь напрямую</h3>
               <div className="space-y-4">
-                <a href="mailto:hello@shabbly.ru" className="flex items-start gap-3 group">
-                  <Mail size={18} className="text-primary mt-0.5 shrink-0" />
-                  <div>
-                    <p className="text-xs uppercase tracking-wider text-muted-foreground">Email</p>
-                    <p className="text-sm group-hover:text-primary transition-colors">hello@shabbly.ru</p>
-                  </div>
-                </a>
-                <a href="tel:+74951234567" className="flex items-start gap-3 group">
+                <a href="tel:+79685605922" className="flex items-start gap-3 group">
                   <Phone size={18} className="text-primary mt-0.5 shrink-0" />
                   <div>
                     <p className="text-xs uppercase tracking-wider text-muted-foreground">Телефон</p>
-                    <p className="text-sm group-hover:text-primary transition-colors">+7 (495) 123-45-67</p>
+                    <p className="text-sm group-hover:text-primary transition-colors">+7 (968) 560-59-22</p>
+                  </div>
+                </a>
+                <a href="https://t.me/SV_Yagovkina" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 group">
+                  <Send size={18} className="text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground">Telegram</p>
+                    <p className="text-sm group-hover:text-primary transition-colors">@SV_Yagovkina</p>
+                  </div>
+                </a>
+                <a href="https://t.me/+JZACTfFIaPFiNjVi" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 group">
+                  <Send size={18} className="text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground">TG-канал (музыка)</p>
+                    <p className="text-sm group-hover:text-primary transition-colors">Подписаться</p>
+                  </div>
+                </a>
+                <a href="https://music.yandex.ru/artist/22870910" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 group">
+                  <Music size={18} className="text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground">Яндекс Музыка</p>
+                    <p className="text-sm group-hover:text-primary transition-colors">Слушать SHABBLY</p>
                   </div>
                 </a>
                 <div className="flex items-start gap-3">
                   <MapPin size={18} className="text-primary mt-0.5 shrink-0" />
                   <div>
-                    <p className="text-xs uppercase tracking-wider text-muted-foreground">Офис</p>
+                    <p className="text-xs uppercase tracking-wider text-muted-foreground">Город</p>
                     <p className="text-sm">Москва, по предварительной записи</p>
                   </div>
                 </div>
