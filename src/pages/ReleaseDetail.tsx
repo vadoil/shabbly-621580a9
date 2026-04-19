@@ -79,6 +79,39 @@ const ReleaseDetail = () => {
               {release.description && <p className="text-secondary-foreground mt-4 leading-relaxed">{release.description}</p>}
             </div>
 
+            {/* Artist card */}
+            {(release as any).artist && (() => {
+              const a = (release as any).artist;
+              return (
+                <div className="rounded-2xl border border-border bg-card p-5 flex items-center gap-4 hover:border-primary/50 transition-colors">
+                  <Link to={`/artists/${a.slug}`} className="shrink-0">
+                    <div className="w-20 h-20 rounded-xl overflow-hidden bg-secondary">
+                      {a.photo_url ? (
+                        <img src={getPublicStorageUrl(a.photo_url)} alt={a.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-muted-foreground"><Music size={28} /></div>
+                      )}
+                    </div>
+                  </Link>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Исполнитель</p>
+                    <Link to={`/artists/${a.slug}`} className="font-display text-xl font-bold hover:text-primary transition-colors block truncate">
+                      {a.name}
+                    </Link>
+                    {a.short_description && <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{a.short_description}</p>}
+                  </div>
+                  <div className="flex flex-col gap-2 shrink-0">
+                    <Link to={`/artists/${a.slug}`} className="rounded-full border border-border px-4 py-1.5 text-xs font-semibold text-foreground hover:border-primary/60 hover:text-primary transition-colors text-center">
+                      Профиль
+                    </Link>
+                    <Link to={`/services?artist=${a.id}`} className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.4)] transition-all text-center">
+                      Заказать
+                    </Link>
+                  </div>
+                </div>
+              );
+            })()}
+
             {/* Platform links */}
             {links.length > 0 && (
               <div className="space-y-3">

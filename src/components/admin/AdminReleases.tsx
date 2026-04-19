@@ -9,20 +9,29 @@ const AdminReleases = () => {
   const { data: releases, isLoading } = useQuery({
     queryKey: ["admin_releases"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("releases").select("*, tracks(*), platform_links(*)").order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("releases").select("*, tracks(*), platform_links(*), artist:artists(id, name)").order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  const { data: artists } = useQuery({
+    queryKey: ["admin_releases_artists"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("artists").select("id, name").order("name");
       if (error) throw error;
       return data;
     },
   });
 
   const [editing, setEditing] = useState<string | null>(null);
-  const [form, setForm] = useState({ title: "", slug: "", type: "single" as "album" | "single" | "ep", release_date: "", description: "", published: false, featured: false });
+  const [form, setForm] = useState({ title: "", slug: "", type: "single" as "album" | "single" | "ep", release_date: "", description: "", published: false, featured: false, artist_id: "" });
 
-  const resetForm = () => { setForm({ title: "", slug: "", type: "single", release_date: "", description: "", published: false, featured: false }); setEditing(null); };
+  const resetForm = () => { setForm({ title: "", slug: "", type: "single", release_date: "", description: "", published: false, featured: false, artist_id: "" }); setEditing(null); };
 
   const handleSave = async () => {
     if (!form.title || !form.slug) return toast.error("Заполните название и slug");
-    const payload = { title: form.title, slug: form.slug, type: form.type, release_date: form.release_date || null, description: form.description || null, published: form.published, featured: form.featured };
+    const payload = { title: form.title, slug: form.slug, type: form.type, release_date: form.release_date || null, description: form.description || null, published: form.published, featured: form.featured, artist_id: form.artist_id || null };
     if (editing) {
       const { error } = await supabase.from("releases").update(payload).eq("id", editing);
       if (error) return toast.error(error.message);
@@ -109,7 +118,7 @@ const AdminReleases = () => {
 
   const startEdit = (r: any) => {
     setEditing(r.id);
-    setForm({ title: r.title, slug: r.slug, type: r.type, release_date: r.release_date || "", description: r.description || "", published: r.published, featured: !!r.featured });
+    setForm({ title: r.title, slug: r.slug, type: r.type, release_date: r.release_date || "", description: r.description || "", published: r.published, featured: !!r.featured, artist_id: r.artist_id || "" });
   };
 
   return (
@@ -128,7 +137,11 @@ const AdminReleases = () => {
             <option value="ep">EP</option>
           </select>
         </div>
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-3">
+          <select value={form.artist_id} onChange={(e) => setForm({ ...form, artist_id: e.target.value })} className="rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground">
+            <option value="">— Без исполнителя —</option>
+            {artists?.map((a) => <option key={a.id} value={a.id}>{a.name}</option>)}
+          </select>
           <input type="date" value={form.release_date} onChange={(e) => setForm({ ...form, release_date: e.target.value })} className="rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground" />
           <textarea placeholder="Описание" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="rounded-md border border-input bg-secondary px-3 py-2 text-sm text-foreground resize-none" rows={2} />
         </div>
