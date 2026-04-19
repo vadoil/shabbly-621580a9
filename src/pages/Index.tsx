@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { usePublishedEvents, usePublishedNews, useSiteSection, useFeaturedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
 import { useCases } from "@/hooks/use-agency-data";
@@ -158,6 +159,11 @@ const Index = () => {
 
   return (
     <Layout>
+      <SEO
+        title="SHABBLY Agency — заказать артиста и организовать мероприятие"
+        description="Продюсерское агентство SHABBLY: подбор артистов, постановка концертов и мероприятий под ключ — корпоративы, частные вечера, фестивали по всей России."
+        canonical="/"
+      />
       {/* HERO — AGENCY */}
       <AgencyHero />
 

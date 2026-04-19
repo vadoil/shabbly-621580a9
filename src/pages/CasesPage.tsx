@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useMemo, useState } from "react";
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import { useCases } from "@/hooks/use-agency-data";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
@@ -40,6 +41,11 @@ const CasesPage = () => {
 
   return (
     <Layout>
+      <SEO
+        title="Проекты — реализованные мероприятия SHABBLY Agency"
+        description="Кейсы SHABBLY Agency: корпоративы крупных брендов, частные торжества, фестивали и презентации. Артисты, форматы, площадки и результаты."
+        canonical="/cases"
+      />
       <section className="border-b border-border/40 bg-gradient-to-b from-secondary/30 to-background">
         <div className="container py-12 md:py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">Проекты и форматы</p>

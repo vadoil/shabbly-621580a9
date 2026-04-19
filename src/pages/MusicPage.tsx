@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -64,6 +65,11 @@ const MusicPage = () => {
 
   return (
     <Layout>
+      <SEO
+        title="Музыка — релизы артистов SHABBLY Agency"
+        description="Каталог альбомов, синглов и EP артистов SHABBLY. Слушайте на Яндекс Музыке, Spotify, Apple Music и YouTube. Фильтры по жанру и поиск."
+        canonical="/music"
+      />
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border/40">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-background" />

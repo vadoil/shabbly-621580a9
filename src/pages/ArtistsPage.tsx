@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import ArtistCard from "@/components/ArtistCard";
 import ArtistFilters, { FilterState, initialFilters } from "@/components/ArtistFilters";
 import { useArtists } from "@/hooks/use-agency-data";
@@ -63,6 +64,11 @@ const ArtistsPage = () => {
 
   return (
     <Layout>
+      <SEO
+        title="Артисты — каталог исполнителей агентства SHABBLY"
+        description="Каталог артистов SHABBLY Agency: певцы, группы и проекты разных жанров для корпоративов, свадеб, частных вечеров и фестивалей. Фильтры по жанру, формату и городу."
+        canonical="/artists"
+      />
       <section className="border-b border-border/40 bg-gradient-to-b from-secondary/30 to-background">
         <div className="container py-14 md:py-20">
           <div className="max-w-3xl">

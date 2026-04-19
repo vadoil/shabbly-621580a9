@@ -14,6 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
+      artist_applications: {
+        Row: {
+          about: string | null
+          cities: string[]
+          city: string | null
+          contact: string
+          created_at: string
+          expectations: string | null
+          experience: string | null
+          genres: string[]
+          id: string
+          music_links: Json
+          name: string
+          project_name: string | null
+          social_links: Json
+          status: string
+          updated_at: string
+          video_links: Json
+        }
+        Insert: {
+          about?: string | null
+          cities?: string[]
+          city?: string | null
+          contact: string
+          created_at?: string
+          expectations?: string | null
+          experience?: string | null
+          genres?: string[]
+          id?: string
+          music_links?: Json
+          name: string
+          project_name?: string | null
+          social_links?: Json
+          status?: string
+          updated_at?: string
+          video_links?: Json
+        }
+        Update: {
+          about?: string | null
+          cities?: string[]
+          city?: string | null
+          contact?: string
+          created_at?: string
+          expectations?: string | null
+          experience?: string | null
+          genres?: string[]
+          id?: string
+          music_links?: Json
+          name?: string
+          project_name?: string | null
+          social_links?: Json
+          status?: string
+          updated_at?: string
+          video_links?: Json
+        }
+        Relationships: []
+      }
       artist_media: {
         Row: {
           artist_id: string

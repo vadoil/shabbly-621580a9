@@ -17,10 +17,12 @@ import AdminArtists from "./AdminArtists";
 import AdminServices from "./AdminServices";
 import AdminCases from "./AdminCases";
 import AdminInquiries from "./AdminInquiries";
-import { LogOut, Music, Calendar, Newspaper, Ticket, LayoutDashboard, UserCircle, Award, Wine, Image, ShoppingBag, UsersRound, FileUp, Mic2, Briefcase, Inbox, Star } from "lucide-react";
+import AdminArtistApplications from "./AdminArtistApplications";
+import { LogOut, Music, Calendar, Newspaper, Ticket, LayoutDashboard, UserCircle, Award, Wine, Image, ShoppingBag, UsersRound, FileUp, Mic2, Briefcase, Inbox, Star, UserPlus } from "lucide-react";
 
 const tabs = [
   { id: "inquiries", label: "Заявки агентства", icon: Inbox },
+  { id: "artist_apps", label: "Заявки артистов", icon: UserPlus },
   { id: "artists", label: "Артисты", icon: Mic2 },
   { id: "services", label: "Услуги", icon: Briefcase },
   { id: "cases", label: "Проекты", icon: Star },
@@ -83,6 +85,7 @@ const AdminDashboard = ({ onSignOut }: { onSignOut: () => void }) => {
             ))}
           </div>
           {tab === "inquiries" && <AdminInquiries />}
+          {tab === "artist_apps" && <AdminArtistApplications />}
           {tab === "artists" && <AdminArtists />}
           {tab === "services" && <AdminServices />}
           {tab === "cases" && <AdminCases />}
