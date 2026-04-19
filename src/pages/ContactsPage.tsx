@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import InquiryForm from "@/components/InquiryForm";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Phone, Send, Music, MapPin, Clock } from "lucide-react";
 
 const ContactsPage = () => {
   return (
