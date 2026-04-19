@@ -13,6 +13,7 @@ import CasesPage from "./pages/CasesPage";
 import MusicPage from "./pages/MusicPage";
 import ReleaseDetail from "./pages/ReleaseDetail";
 import EventsPage from "./pages/EventsPage";
+import EventDetailPage from "./pages/EventDetailPage";
 import NewsPage from "./pages/NewsPage";
 import NewsDetail from "./pages/NewsDetail";
 import GalleryPage from "./pages/GalleryPage";
@@ -42,6 +43,7 @@ const App = () => (
           <Route path="/music" element={<MusicPage />} />
           <Route path="/music/:slug" element={<ReleaseDetail />} />
           <Route path="/events" element={<EventsPage />} />
+          <Route path="/events/:id" element={<EventDetailPage />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/gallery/:slug" element={<GalleryAlbumPage />} />
           <Route path="/merch" element={<MerchPage />} />
