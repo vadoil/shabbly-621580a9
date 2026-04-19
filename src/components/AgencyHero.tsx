@@ -31,16 +31,16 @@ const AgencyHero = () => {
         }}
       />
 
-      <div className="container relative z-10 py-20 lg:py-24 grid lg:grid-cols-12 gap-12 items-center">
+      <div className="container relative z-10 py-14 md:py-20 lg:py-24 grid lg:grid-cols-12 gap-10 lg:gap-12 items-center">
         {/* Left: copy */}
-        <div className="lg:col-span-7 space-y-6 lg:space-y-8">
+        <div className="lg:col-span-7 space-y-5 md:space-y-6 lg:space-y-8">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 backdrop-blur px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.2em] text-primary">
             <Sparkles size={12} />
             <span className="hidden sm:inline">Музыкальное продюсерское агентство</span>
             <span className="sm:hidden">Продюсерское агентство</span>
           </div>
 
-          <h1 className="font-art text-[2.75rem] sm:text-6xl md:text-7xl lg:text-8xl font-semibold leading-[0.95] tracking-tight">
+          <h1 className="font-art text-[2rem] sm:text-5xl md:text-7xl lg:text-8xl font-semibold leading-[1.02] sm:leading-[0.95] tracking-tight">
             Артисты,
             <br />
             которые создают
