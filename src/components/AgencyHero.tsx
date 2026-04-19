@@ -13,11 +13,17 @@ const heroSlides = [
 
 const AgencyHero = () => {
   const [active, setActive] = useState(0);
+  const [prev, setPrev] = useState<number | null>(null);
+  const [flashKey, setFlashKey] = useState(0);
 
   useEffect(() => {
     const id = setInterval(() => {
-      setActive((p) => (p + 1) % heroSlides.length);
-    }, 2000);
+      setActive((p) => {
+        setPrev(p);
+        setFlashKey((k) => k + 1);
+        return (p + 1) % heroSlides.length;
+      });
+    }, 3500);
     return () => clearInterval(id);
   }, []);
 
@@ -27,17 +33,25 @@ const AgencyHero = () => {
       <div className="absolute inset-0 bg-gradient-dark" />
 
       {/* Mobile: photo as atmospheric background (cycles too) */}
-      <div className="absolute inset-0 lg:hidden">
-        {heroSlides.map((s, i) => (
-          <img
-            key={s.src}
-            src={s.src}
-            alt=""
-            aria-hidden
-            className="absolute inset-0 w-full h-full object-cover object-[center_25%] transition-opacity duration-700 ease-in-out"
-            style={{ opacity: i === active ? 0.4 : 0 }}
-          />
-        ))}
+      <div className="absolute inset-0 lg:hidden overflow-hidden">
+        {heroSlides.map((s, i) => {
+          const isActive = i === active;
+          const isPrev = i === prev;
+          return (
+            <img
+              key={s.src}
+              src={s.src}
+              alt=""
+              aria-hidden
+              className={`absolute inset-0 w-full h-full object-cover object-[center_25%] opacity-40 ${
+                isActive ? "hero-slide-active" : isPrev ? "hero-slide-prev" : ""
+              }`}
+              style={{
+                opacity: isActive ? 0.4 : isPrev ? 0.4 : 0,
+              }}
+            />
+          );
+        })}
         <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/75 to-background" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/40 to-background/80" />
       </div>
@@ -108,27 +122,53 @@ const AgencyHero = () => {
         {/* Right: visual frame (desktop only) */}
         <div className="lg:col-span-5 relative hidden lg:block">
           <div className="relative aspect-[4/5] rounded-3xl border border-border bg-card/30 backdrop-blur-sm overflow-hidden glow-fuchsia group">
-            {heroSlides.map((s, i) => (
-              <img
-                key={s.src}
-                src={s.src}
-                alt={s.alt}
-                width={1024}
-                height={1280}
-                className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-all duration-[1200ms] ease-in-out"
-                style={{ opacity: i === active ? 1 : 0 }}
-              />
-            ))}
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-transparent to-accent/20 mix-blend-overlay" />
+            {/* Slide stack with diagonal clip-path reveal */}
+            {heroSlides.map((s, i) => {
+              const isActive = i === active;
+              const isPrev = i === prev;
+              return (
+                <img
+                  key={s.src}
+                  src={s.src}
+                  alt={s.alt}
+                  width={1024}
+                  height={1280}
+                  className={`absolute inset-0 w-full h-full object-cover ${
+                    isActive
+                      ? "hero-slide-active"
+                      : isPrev
+                      ? "hero-slide-prev"
+                      : "opacity-0"
+                  }`}
+                  style={{
+                    transform: isActive ? "scale(1.05)" : isPrev ? "scale(1.05)" : "scale(1.05)",
+                  }}
+                />
+              );
+            })}
+
+            {/* Pink flash sweep across the seam */}
             <div
-              className="absolute inset-0 opacity-[0.12] mix-blend-overlay pointer-events-none"
+              key={flashKey}
+              className="hero-flash absolute inset-y-0 left-0 w-1/3 z-[3] pointer-events-none"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent 0%, hsl(var(--primary) / 0.55) 50%, transparent 100%)",
+                mixBlendMode: "screen",
+                filter: "blur(8px)",
+              }}
+            />
+
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent z-[4]" />
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-transparent to-accent/20 mix-blend-overlay z-[4]" />
+            <div
+              className="absolute inset-0 opacity-[0.12] mix-blend-overlay pointer-events-none z-[4]"
               style={{
                 backgroundImage:
                   "repeating-linear-gradient(0deg, hsl(var(--primary)) 0 1px, transparent 1px 4px)",
               }}
             />
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,hsl(var(--background)/0.6)_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,hsl(var(--background)/0.6)_100%)] z-[4]" />
 
             <div className="absolute bottom-0 left-0 right-0 p-8 space-y-3 z-10">
               <p className="text-[10px] uppercase tracking-[0.3em] text-primary font-semibold">
