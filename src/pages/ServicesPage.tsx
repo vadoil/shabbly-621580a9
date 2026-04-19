@@ -29,6 +29,11 @@ const ServicesPage = () => {
 
   return (
     <Layout>
+      <SEO
+        title="Услуги — подбор артистов и организация мероприятий"
+        description="Услуги агентства SHABBLY: подбор артистов на корпоратив и частное мероприятие, постановка концертов под ключ, продвижение и сопровождение артистов. Прозрачные пакеты."
+        canonical="/services"
+      />
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,hsl(322_80%_55%/0.1)_0%,transparent_60%)]" />

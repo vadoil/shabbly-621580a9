@@ -51,6 +51,11 @@ const EventsPage = () => {
 
   return (
     <Layout>
+      <SEO
+        title="Афиша концертов и мероприятий SHABBLY Agency"
+        description="Ближайшие концерты и выступления артистов SHABBLY: даты, площадки, билеты. Афиша по всей России — Москва, Санкт-Петербург, Сочи и другие города."
+        canonical="/events"
+      />
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border/40">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background to-background" />
