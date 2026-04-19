@@ -38,13 +38,13 @@ const ServicesPage = () => {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,hsl(322_80%_55%/0.1)_0%,transparent_60%)]" />
-        <div className="container relative z-10 pt-24 pb-16 max-w-4xl">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-medium mb-6">Услуги агентства</p>
-          <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tighter leading-[0.95]">
-            От подбора артиста <br />
+        <div className="container relative z-10 pt-16 pb-10 md:pt-24 md:pb-16 max-w-4xl">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-medium mb-4 md:mb-6">Услуги агентства</p>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05] md:leading-[0.95]">
+            От подбора артиста <br className="hidden sm:block" />
             до <span className="text-gradient-fuchsia">мероприятия под ключ</span>
           </h1>
-          <p className="text-lg text-muted-foreground mt-8 max-w-2xl leading-relaxed">
+          <p className="text-base md:text-lg text-muted-foreground mt-5 md:mt-8 max-w-2xl leading-relaxed">
             Прозрачные пакеты под разные задачи — от точечного подбора артиста до полной постановки мероприятия.
           </p>
         </div>
