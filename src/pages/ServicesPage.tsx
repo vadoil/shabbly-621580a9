@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { useServices } from "@/hooks/use-agency-data";
 import { ArrowRight, Music2, Mic2, Briefcase, PartyPopper, Sparkles, Check } from "lucide-react";

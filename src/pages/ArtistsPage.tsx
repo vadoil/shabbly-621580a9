@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import ArtistCard from "@/components/ArtistCard";
 import ArtistFilters, { FilterState, initialFilters } from "@/components/ArtistFilters";
 import { useArtists } from "@/hooks/use-agency-data";

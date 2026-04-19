@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useMemo, useState } from "react";
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import { useCases } from "@/hooks/use-agency-data";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";

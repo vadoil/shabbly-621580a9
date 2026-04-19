@@ -1,4 +1,5 @@
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import { usePublishedEvents } from "@/hooks/use-data";
 import { useState, useMemo } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
