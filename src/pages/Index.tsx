@@ -246,7 +246,7 @@ const Index = () => {
               const date = new Date(e.date_start);
               const day = date.getDate();
               const monthWeek = date.toLocaleDateString("ru-RU", { month: "short", weekday: "short" }).toUpperCase();
-              const cover = eventCovers[idx % eventCovers.length];
+              const cover = e.cover_url || eventCovers[idx % eventCovers.length];
               return (
                 <article
                   key={e.id}
