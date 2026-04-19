@@ -40,12 +40,12 @@ const AgencyHero = () => {
             <span className="sm:hidden">Продюсерское агентство</span>
           </div>
 
-          <h1 className="font-art text-[2.75rem] sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight">
+          <h1 className="font-art text-[2.75rem] sm:text-6xl md:text-7xl lg:text-8xl font-semibold leading-[0.95] tracking-tight">
             Артисты,
             <br />
             которые создают
             <br />
-            <span className="text-gradient-fuchsia">атмосферу</span>
+            <span className="text-gradient-fuchsia font-bold">атмосферу</span>
           </h1>
 
           <p className="text-base md:text-xl text-muted-foreground max-w-xl leading-relaxed">
