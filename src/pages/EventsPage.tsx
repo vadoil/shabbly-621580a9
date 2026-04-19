@@ -1,49 +1,43 @@
 import Layout from "@/components/Layout";
 import { usePublishedEvents } from "@/hooks/use-data";
-import { formatDateTime } from "@/lib/format";
 import { useState, useMemo } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import EmptyState from "@/components/EmptyState";
-import { MapPin, Calendar as CalendarIcon, Ticket, ChevronLeft, ChevronRight, X, List, LayoutGrid, Building2 } from "lucide-react";
-import {
-  format,
-  startOfMonth,
-  endOfMonth,
-  eachDayOfInterval,
-  isSameDay,
-  addMonths,
-  subMonths,
-  getDay,
-  isAfter,
-  startOfDay,
-} from "date-fns";
+import { MapPin, Calendar as CalendarIcon, Ticket, X, Building2, Sparkles } from "lucide-react";
+import { format, isAfter, startOfDay } from "date-fns";
 import { ru } from "date-fns/locale";
 
-type ViewMode = "list" | "calendar";
+// Curated poster pool — used as fallback for events without ticket art
+const POSTER_POOL = [
+  "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200",
+  "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1200",
+  "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=1200",
+  "https://images.unsplash.com/photo-1501612780327-45045538702b?w=1200",
+  "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=1200",
+  "https://images.unsplash.com/photo-1485579149621-3123dd979885?w=1200",
+  "https://images.unsplash.com/photo-1571266028243-d220bc56b94d?w=1200",
+  "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=1200",
+];
+
+const posterFor = (id: string, idx: number) =>
+  POSTER_POOL[(id.charCodeAt(0) + idx) % POSTER_POOL.length];
 
 const EventsPage = () => {
   const { data: events, isLoading } = usePublishedEvents();
-  const [view, setView] = useState<ViewMode>("list");
   const [cityFilter, setCityFilter] = useState("");
-  const [venueFilter, setVenueFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
-  const [selectedDay, setSelectedDay] = useState<Date | null>(null);
-  const [currentMonth, setCurrentMonth] = useState(new Date());
   const [ticketEvent, setTicketEvent] = useState<{ id: string; title: string } | null>(null);
 
-  const cities = useMemo(() => [...new Set((events || []).map((e: any) => e.city).filter(Boolean))].sort(), [events]);
-  const venues = useMemo(() => [...new Set((events || []).map((e: any) => e.venue).filter(Boolean))].sort(), [events]);
-  const statuses = useMemo(() => [...new Set((events || []).map((e: any) => e.status).filter(Boolean))].sort(), [events]);
+  const cities = useMemo(
+    () => [...new Set((events || []).map((e: any) => e.city).filter(Boolean))].sort(),
+    [events]
+  );
 
   const filtered = useMemo(() => {
     let list = events || [];
     if (cityFilter) list = list.filter((e: any) => e.city === cityFilter);
-    if (venueFilter) list = list.filter((e: any) => e.venue === venueFilter);
-    if (statusFilter) list = list.filter((e: any) => e.status === statusFilter);
-    if (selectedDay) list = list.filter((e: any) => isSameDay(new Date(e.date_start), selectedDay));
     return list;
-  }, [events, cityFilter, venueFilter, statusFilter, selectedDay]);
+  }, [events, cityFilter]);
 
   const upcoming = useMemo(
     () => filtered.filter((e: any) => isAfter(new Date(e.date_start), startOfDay(new Date()))),
@@ -54,189 +48,101 @@ const EventsPage = () => {
     [filtered]
   );
 
-  const eventsByDay = useMemo(() => {
-    const map = new Map<string, any[]>();
-    (events || []).forEach((e: any) => {
-      const key = format(new Date(e.date_start), "yyyy-MM-dd");
-      const arr = map.get(key) || [];
-      arr.push(e);
-      map.set(key, arr);
-    });
-    return map;
-  }, [events]);
-
-  const monthStart = startOfMonth(currentMonth);
-  const monthEnd = endOfMonth(currentMonth);
-  const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
-  const offset = (getDay(monthStart) + 6) % 7;
-  const weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-
-  const isDirty = cityFilter || venueFilter || statusFilter || selectedDay;
-  const reset = () => {
-    setCityFilter("");
-    setVenueFilter("");
-    setStatusFilter("");
-    setSelectedDay(null);
-  };
-
-  const EventCard = ({ e }: { e: any }) => (
-    <div className="group flex flex-col md:flex-row md:items-center justify-between rounded-xl border border-border bg-card p-5 gap-4 hover:border-primary/40 transition-all">
-      <div className="flex gap-4 md:gap-5 items-start">
-        <div className="shrink-0 flex flex-col items-center justify-center rounded-lg bg-secondary/60 px-3 py-2 min-w-[64px]">
-          <span className="text-xs uppercase tracking-wider text-muted-foreground">{format(new Date(e.date_start), "MMM", { locale: ru })}</span>
-          <span className="font-display text-2xl font-bold leading-none">{format(new Date(e.date_start), "d")}</span>
-          <span className="text-[10px] text-muted-foreground mt-1">{format(new Date(e.date_start), "HH:mm")}</span>
-        </div>
-        <div className="space-y-1.5">
-          <h3 className="font-display text-lg font-semibold group-hover:text-primary transition-colors">{e.title}</h3>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1"><MapPin size={13} /> {e.city}{e.venue ? `, ${e.venue}` : ""}</span>
-            {e.address && <span className="text-xs">{e.address}</span>}
-          </div>
-        </div>
-      </div>
-      <div className="flex gap-2 shrink-0">
-        {e.ticket_url && (
-          <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(var(--primary)/0.3)] transition-all">
-            <Ticket size={12} className="inline mr-1" /> Билет
-          </a>
-        )}
-        <button onClick={() => setTicketEvent({ id: e.id, title: e.title })} className="rounded-full border border-border px-5 py-2 text-xs font-semibold hover:border-primary/50 transition-colors">
-          Заявка
-        </button>
-      </div>
-    </div>
-  );
-
-  const select = "rounded-md border border-input bg-secondary/50 px-3 py-2 text-sm focus:outline-none focus:border-primary/60 transition-colors";
-
   return (
     <Layout>
-      <section className="border-b border-border/40 bg-gradient-to-b from-secondary/30 to-background">
-        <div className="container py-12 md:py-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">Афиша</p>
-          <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight">События агентства</h1>
-          <p className="mt-3 text-base text-muted-foreground max-w-2xl">
-            Концерты, шоу-программы и выступления артистов SHABBLY. Фильтруйте по городу, площадке и дате.
+      {/* HERO */}
+      <section className="relative overflow-hidden border-b border-border/40">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background to-background" />
+        <div className="absolute top-0 right-1/4 h-96 w-96 rounded-full bg-primary/20 blur-3xl animate-pulse" />
+        <div className="container relative py-16 md:py-20">
+          <div className="flex items-center gap-3 mb-4">
+            <Sparkles className="text-primary" size={28} />
+            <span className="text-xs uppercase tracking-[0.3em] text-primary font-bold">Афиша</span>
+          </div>
+          <h1 className="font-display text-5xl md:text-6xl font-bold leading-tight">
+            События агентства
+          </h1>
+          <p className="mt-4 text-base text-muted-foreground max-w-2xl">
+            Концерты, шоу-программы и выступления артистов. Выбирайте дату — мы организуем визит.
           </p>
-        </div>
-      </section>
 
-      <section className="container py-10 space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="inline-flex rounded-full border border-border bg-card p-1">
-            <button onClick={() => setView("list")} className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${view === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}>
-              <List size={12} /> Список
-            </button>
-            <button onClick={() => setView("calendar")} className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-xs font-semibold transition-all ${view === "calendar" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}>
-              <LayoutGrid size={12} /> Календарь
-            </button>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <select value={cityFilter} onChange={(e) => setCityFilter(e.target.value)} className={select}>
-              <option value="">Все города</option>
-              {cities.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
-            <select value={venueFilter} onChange={(e) => setVenueFilter(e.target.value)} className={select}>
-              <option value="">Все площадки</option>
-              {venues.map((v) => <option key={v} value={v}>{v}</option>)}
-            </select>
-            {statuses.length > 1 && (
-              <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className={select}>
-                <option value="">Все статусы</option>
-                {statuses.map((s) => <option key={s} value={s}>{s}</option>)}
-              </select>
-            )}
-            {isDirty && (
-              <button onClick={reset} className="inline-flex items-center gap-1 text-xs text-primary hover:underline px-2">
-                <X size={12} /> Сбросить
+          {cities.length > 0 && (
+            <div className="mt-6 flex flex-wrap gap-2">
+              <button
+                onClick={() => setCityFilter("")}
+                className={`rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all ${
+                  !cityFilter ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Все города
               </button>
-            )}
-          </div>
-        </div>
-
-        {view === "calendar" ? (
-          <div className="grid lg:grid-cols-[380px_1fr] gap-6">
-            <div className="rounded-2xl border border-border bg-card p-5 h-fit">
-              <div className="flex items-center justify-between mb-4">
-                <button onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="p-1.5 rounded-md hover:bg-secondary text-muted-foreground"><ChevronLeft size={16} /></button>
-                <h3 className="font-display font-semibold capitalize">{format(currentMonth, "LLLL yyyy", { locale: ru })}</h3>
-                <button onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="p-1.5 rounded-md hover:bg-secondary text-muted-foreground"><ChevronRight size={16} /></button>
-              </div>
-              <div className="grid grid-cols-7 gap-1 mb-1">
-                {weekDays.map((d) => <div key={d} className="text-center text-xs text-muted-foreground py-1">{d}</div>)}
-              </div>
-              <div className="grid grid-cols-7 gap-1">
-                {Array.from({ length: offset }).map((_, i) => <div key={`b-${i}`} />)}
-                {days.map((day) => {
-                  const key = format(day, "yyyy-MM-dd");
-                  const count = (eventsByDay.get(key) || []).length;
-                  const isSelected = selectedDay && isSameDay(day, selectedDay);
-                  const isToday = isSameDay(day, new Date());
-                  return (
-                    <button key={key} onClick={() => setSelectedDay(isSelected ? null : day)} className={`aspect-square rounded-lg flex flex-col items-center justify-center text-sm transition-all ${isSelected ? "bg-primary text-primary-foreground" : isToday ? "bg-secondary ring-1 ring-primary/30" : count > 0 ? "hover:bg-secondary text-foreground" : "text-muted-foreground/40"}`}>
-                      <span className="font-medium">{format(day, "d")}</span>
-                      {count > 0 && <span className={`text-[9px] font-bold ${isSelected ? "text-primary-foreground/80" : "text-primary"}`}>{count}</span>}
-                    </button>
-                  );
-                })}
-              </div>
-              {selectedDay && (
-                <button onClick={() => setSelectedDay(null)} className="mt-3 w-full text-xs text-muted-foreground hover:text-foreground">
-                  Сбросить день
+              {cities.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setCityFilter(c)}
+                  className={`rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wider transition-all ${
+                    cityFilter === c ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+              {cityFilter && (
+                <button onClick={() => setCityFilter("")} className="ml-2 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground">
+                  <X size={12} /> Сбросить
                 </button>
               )}
             </div>
+          )}
+        </div>
+      </section>
 
-            <div className="space-y-3">
-              {isLoading ? (
-                <LoadingSkeleton variant="list" count={5} />
-              ) : filtered.length > 0 ? (
-                filtered.map((e: any) => <EventCard key={e.id} e={e} />)
-              ) : (
-                <EmptyState icon={CalendarIcon} title="Событий нет" description="Попробуйте другой фильтр или дату" />
-              )}
-            </div>
+      <section className="container py-12 space-y-12">
+        {/* UPCOMING */}
+        <div className="space-y-6">
+          <div className="flex items-end justify-between">
+            <h2 className="font-display text-2xl md:text-3xl font-bold">Ближайшие концерты</h2>
+            <span className="text-sm text-muted-foreground">{upcoming.length}</span>
           </div>
-        ) : (
-          <div className="space-y-10">
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="font-display text-xl font-bold">Ближайшие</h2>
-                <span className="text-xs text-muted-foreground">{upcoming.length}</span>
-              </div>
-              {isLoading ? (
-                <LoadingSkeleton variant="list" count={4} />
-              ) : upcoming.length > 0 ? (
-                <div className="space-y-3">{upcoming.map((e: any) => <EventCard key={e.id} e={e} />)}</div>
-              ) : (
-                <EmptyState icon={CalendarIcon} title="Нет ближайших событий" description="Загляните позже или подпишитесь на обновления" />
-              )}
-            </div>
 
-            {past.length > 0 && (
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-display text-xl font-bold text-muted-foreground">Прошедшие</h2>
-                  <span className="text-xs text-muted-foreground">{past.length}</span>
-                </div>
-                <div className="space-y-3 opacity-70">
-                  {past.slice(0, 8).map((e: any) => <EventCard key={e.id} e={e} />)}
-                </div>
-              </div>
-            )}
+          {isLoading ? (
+            <LoadingSkeleton variant="list" count={3} />
+          ) : upcoming.length > 0 ? (
+            <div className="space-y-6">
+              {upcoming.map((e: any, i: number) => (
+                <PosterEventCard key={e.id} event={e} index={i} onTicket={() => setTicketEvent({ id: e.id, title: e.title })} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState icon={CalendarIcon} title="Нет ближайших событий" description="Загляните позже или подпишитесь на обновления" />
+          )}
+        </div>
+
+        {/* PAST */}
+        {past.length > 0 && (
+          <div className="space-y-6 opacity-70">
+            <div className="flex items-end justify-between">
+              <h2 className="font-display text-xl font-bold text-muted-foreground">Прошедшие</h2>
+              <span className="text-sm text-muted-foreground">{past.length}</span>
+            </div>
+            <div className="space-y-4">
+              {past.slice(0, 5).map((e: any, i: number) => (
+                <PosterEventCard key={e.id} event={e} index={i} compact onTicket={() => setTicketEvent({ id: e.id, title: e.title })} />
+              ))}
+            </div>
           </div>
         )}
 
-        <div className="rounded-2xl border border-border/60 bg-card/50 p-6 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <Building2 size={20} className="text-primary" />
+        {/* CTA */}
+        <div className="rounded-2xl border border-border/60 bg-gradient-to-r from-card via-card to-primary/5 p-6 md:p-8 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <Building2 size={28} className="text-primary shrink-0" />
             <div>
-              <p className="font-semibold">Хотите своё мероприятие?</p>
-              <p className="text-xs text-muted-foreground">Подберём артиста, площадку и техническое оснащение под задачу.</p>
+              <p className="font-display text-lg font-bold">Хотите своё мероприятие?</p>
+              <p className="text-sm text-muted-foreground mt-0.5">Подберём артиста, площадку и техническое оснащение.</p>
             </div>
           </div>
-          <a href="/contacts" className="rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_24px_hsl(var(--primary)/0.4)] transition-all">
+          <a href="/contacts" className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:shadow-[0_0_30px_hsl(var(--primary)/0.5)] transition-all hover:scale-105">
             Оставить заявку
           </a>
         </div>
@@ -244,6 +150,94 @@ const EventsPage = () => {
 
       <TicketRequestModal open={!!ticketEvent} eventId={ticketEvent?.id} eventTitle={ticketEvent?.title} onClose={() => setTicketEvent(null)} />
     </Layout>
+  );
+};
+
+const PosterEventCard = ({
+  event,
+  index,
+  compact,
+  onTicket,
+}: {
+  event: any;
+  index: number;
+  compact?: boolean;
+  onTicket: () => void;
+}) => {
+  const date = new Date(event.date_start);
+  const poster = posterFor(event.id, index);
+
+  return (
+    <article
+      className="group relative overflow-hidden rounded-2xl border border-border bg-card hover:border-primary/50 transition-all duration-500 hover:shadow-[0_0_50px_-10px_hsl(var(--primary)/0.4)] animate-fade-in"
+      style={{ animationDelay: `${index * 80}ms` }}
+    >
+      <div className={`grid ${compact ? "md:grid-cols-[180px_1fr]" : "md:grid-cols-[280px_1fr_auto]"} gap-0`}>
+        {/* DATE BLOCK */}
+        <div className="relative flex flex-col justify-center items-center p-6 md:p-8 bg-gradient-to-br from-secondary/80 to-secondary/30 border-b md:border-b-0 md:border-r border-border/50 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="relative text-center space-y-1">
+            <div className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
+              {format(date, "EEEE", { locale: ru })}
+            </div>
+            <div className={`font-display font-black leading-none text-primary ${compact ? "text-5xl" : "text-7xl md:text-8xl"} group-hover:scale-110 transition-transform duration-500 origin-center`}>
+              {format(date, "d")}
+            </div>
+            <div className={`uppercase tracking-[0.2em] font-bold text-foreground/90 ${compact ? "text-sm" : "text-base"}`}>
+              {format(date, "LLLL", { locale: ru })}
+            </div>
+            <div className="text-xs text-muted-foreground pt-1">
+              {format(date, "yyyy")} · {format(date, "HH:mm")}
+            </div>
+          </div>
+        </div>
+
+        {/* INFO */}
+        <div className="p-6 md:p-8 space-y-3 min-w-0">
+          <h3 className={`font-display font-bold leading-tight group-hover:text-primary transition-colors ${compact ? "text-lg" : "text-2xl md:text-3xl"}`}>
+            {event.title}
+          </h3>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <MapPin size={14} className="text-primary" /> {event.city}
+            </span>
+            {event.venue && <span className="font-medium text-foreground">{event.venue}</span>}
+          </div>
+          {event.address && <p className="text-xs text-muted-foreground">{event.address}</p>}
+
+          {!compact && (
+            <div className="flex flex-wrap gap-2 pt-3">
+              {event.ticket_url && (
+                <a href={event.ticket_url} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-primary px-5 py-2 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)] transition-all">
+                  <Ticket size={12} /> Купить билет
+                </a>
+              )}
+              <button onClick={onTicket}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border px-5 py-2 text-xs font-semibold hover:border-primary/50 transition-colors">
+                Оставить заявку
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* POSTER */}
+        {!compact && (
+          <div className="relative h-64 md:h-auto md:w-[320px] overflow-hidden">
+            <img
+              src={poster}
+              alt={event.title}
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
+            />
+            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-card/30 to-card md:to-card/0" />
+            <div className="absolute top-3 right-3 rounded-full bg-background/80 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-wider border border-border">
+              Афиша
+            </div>
+          </div>
+        )}
+      </div>
+    </article>
   );
 };
 
