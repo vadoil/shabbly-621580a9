@@ -6,9 +6,12 @@ const links = [
   { to: "/", label: "Главная" },
   { to: "/services", label: "Услуги" },
   { to: "/artists", label: "Артисты" },
-  { to: "/about", label: "Артистам" },
+  { to: "/music", label: "Музыка" },
   { to: "/events", label: "Афиша" },
   { to: "/cases", label: "Проекты" },
+  { to: "/gallery", label: "Галерея" },
+  { to: "/news", label: "Новости" },
+  { to: "/about", label: "Артистам" },
   { to: "/contacts", label: "Контакты" },
 ];
 
