@@ -74,7 +74,7 @@ export const useReleaseBySlug = (slug: string) =>
     queryFn: async () => {
       const { data, error } = await supabase
         .from("releases")
-        .select("*, tracks(*), platform_links(*)")
+        .select("*, tracks(*), platform_links(*), artist:artists(id, name, slug, photo_url, short_description, genres, cities)")
         .eq("slug", slug)
         .eq("published", true)
         .single();
