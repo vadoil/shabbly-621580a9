@@ -347,16 +347,49 @@ const Index = () => {
         </div>
         {galleryItems && galleryItems.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {galleryItems.slice(0, 8).map((item) => (
-              <div key={item.id} className="aspect-square rounded-xl overflow-hidden bg-secondary group cursor-pointer">
-                <img src={getPublicStorageUrl(item.image_url)} alt={item.caption || ""} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-              </div>
-            ))}
+            {galleryItems.slice(0, 8).map((item: any) => {
+              const url = getPublicStorageUrl(item.image_url);
+              const isVideo = item.media_type === "video" || /\.(mp4|webm|mov)$/i.test(item.image_url);
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setLightbox({ url, type: isVideo ? "video" : "image" })}
+                  className="relative aspect-square rounded-xl overflow-hidden bg-secondary group cursor-pointer"
+                >
+                  {isVideo ? (
+                    <>
+                      <video src={url} muted playsInline preload="metadata" className="w-full h-full object-cover" />
+                      <div className="absolute inset-0 flex items-center justify-center bg-background/30 group-hover:bg-background/10 transition-colors">
+                        <div className="rounded-full bg-primary/90 p-3 shadow-[0_0_30px_hsl(var(--primary)/0.5)]">
+                          <Play size={20} className="text-primary-foreground fill-primary-foreground" />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <img src={url} alt={item.caption || ""} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  )}
+                </button>
+              );
+            })}
           </div>
         ) : (
           <EmptyState icon={Image} title="Галерея скоро появится" ctaLabel="Смотреть" ctaLink="/gallery" />
         )}
       </section>
+
+      {/* LIGHTBOX */}
+      {lightbox && (
+        <div className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-xl flex items-center justify-center p-4" onClick={() => setLightbox(null)}>
+          <button className="absolute top-6 right-6 text-muted-foreground hover:text-foreground z-10" aria-label="Закрыть">
+            <X size={28} />
+          </button>
+          {lightbox.type === "video" ? (
+            <video src={lightbox.url} controls autoPlay className="max-w-full max-h-[90vh] rounded-lg" onClick={(e) => e.stopPropagation()} />
+          ) : (
+            <img src={lightbox.url} alt="" className="max-w-full max-h-[90vh] object-contain rounded-lg" onClick={(e) => e.stopPropagation()} />
+          )}
+        </div>
+      )}
 
       {/* BARS — mini calendar */}
       <BarsCalendarWidget />
