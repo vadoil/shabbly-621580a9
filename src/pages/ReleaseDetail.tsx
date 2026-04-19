@@ -6,6 +6,7 @@ import { getPublicStorageUrl } from "@/lib/storage";
 import { Music, Play, Pause, ArrowLeft, ExternalLink } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import SafeImage from "@/components/SafeImage";
 
 const ReleaseDetail = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -33,7 +34,11 @@ const ReleaseDetail = () => {
     clearInterval(intervalRef.current);
     const audio = new Audio(url);
     audio.play();
-    audio.onended = () => { setPlaying(null); setProgress(0); clearInterval(intervalRef.current); };
+    audio.onended = () => {
+      setPlaying(null);
+      setProgress(0);
+      clearInterval(intervalRef.current);
+    };
     audioRef.current = audio;
     setPlaying(trackId);
     intervalRef.current = window.setInterval(() => {
@@ -60,66 +65,55 @@ const ReleaseDetail = () => {
   return (
     <Layout>
       <section className="container py-16">
-        <Link to="/music" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors mb-8">
+        <Link to="/music" className="mb-8 inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-primary">
           <ArrowLeft size={14} /> Все релизы
         </Link>
         <div className="grid gap-10 md:grid-cols-[minmax(280px,400px)_1fr]">
-          <div className="aspect-square rounded-2xl overflow-hidden bg-secondary glow-fuchsia sticky top-24 relative">
-            {release.cover_url ? (
-              <img
-                src={getPublicStorageUrl(release.cover_url)}
-                alt={release.title}
-                loading="lazy"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover"
-                onError={(e) => {
-                  const t = e.currentTarget;
-                  t.style.display = "none";
-                  t.parentElement?.classList.add("flex", "items-center", "justify-center");
-                  const ph = document.createElement("div");
-                  ph.className = "text-muted-foreground";
-                  ph.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>';
-                  t.parentElement?.appendChild(ph);
-                }}
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground"><Music size={80} /></div>
-            )}
+          <div className="sticky top-24 aspect-square overflow-hidden rounded-2xl bg-secondary glow-fuchsia">
+            <SafeImage
+              src={getPublicStorageUrl(release.cover_url)}
+              alt={release.title}
+              className="h-full w-full object-cover"
+              fallbackClassName="flex h-full w-full items-center justify-center text-muted-foreground"
+              iconSize={80}
+              referrerPolicy="no-referrer"
+            />
           </div>
           <div className="space-y-8">
             <div>
-              <p className="text-xs font-bold text-primary uppercase tracking-widest">{release.type}</p>
-              <h1 className="font-display text-4xl md:text-5xl font-bold mt-2">{release.title}</h1>
-              {release.release_date && <p className="text-sm text-muted-foreground mt-3">{formatDate(release.release_date)}</p>}
-              {release.description && <p className="text-secondary-foreground mt-4 leading-relaxed">{release.description}</p>}
+              <p className="text-xs font-bold uppercase tracking-widest text-primary">{release.type}</p>
+              <h1 className="mt-2 font-display text-4xl font-bold md:text-5xl">{release.title}</h1>
+              {release.release_date && <p className="mt-3 text-sm text-muted-foreground">{formatDate(release.release_date)}</p>}
+              {release.description && <p className="mt-4 leading-relaxed text-secondary-foreground">{release.description}</p>}
             </div>
 
-            {/* Artist card */}
             {(release as any).artist && (() => {
               const a = (release as any).artist;
               return (
-                <div className="rounded-2xl border border-border bg-card p-5 flex items-center gap-4 hover:border-primary/50 transition-colors">
+                <div className="flex items-center gap-4 rounded-2xl border border-border bg-card p-5 transition-colors hover:border-primary/50">
                   <Link to={`/artists/${a.slug}`} className="shrink-0">
-                    <div className="w-20 h-20 rounded-xl overflow-hidden bg-secondary">
-                      {a.photo_url ? (
-                        <img src={a.photo_url} alt={a.name} className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-muted-foreground"><Music size={28} /></div>
-                      )}
+                    <div className="h-20 w-20 overflow-hidden rounded-xl bg-secondary">
+                      <SafeImage
+                        src={a.photo_url}
+                        alt={a.name}
+                        className="h-full w-full object-cover"
+                        fallbackClassName="flex h-full w-full items-center justify-center text-muted-foreground"
+                        iconSize={28}
+                      />
                     </div>
                   </Link>
-                  <div className="flex-1 min-w-0">
+                  <div className="min-w-0 flex-1">
                     <p className="text-[10px] uppercase tracking-widest text-muted-foreground">Исполнитель</p>
-                    <Link to={`/artists/${a.slug}`} className="font-display text-xl font-bold hover:text-primary transition-colors block truncate">
+                    <Link to={`/artists/${a.slug}`} className="block truncate font-display text-xl font-bold transition-colors hover:text-primary">
                       {a.name}
                     </Link>
-                    {a.short_description && <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{a.short_description}</p>}
+                    {a.short_description && <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{a.short_description}</p>}
                   </div>
-                  <div className="flex flex-col gap-2 shrink-0">
-                    <Link to={`/artists/${a.slug}`} className="rounded-full border border-border px-4 py-1.5 text-xs font-semibold text-foreground hover:border-primary/60 hover:text-primary transition-colors text-center">
+                  <div className="shrink-0 flex flex-col gap-2">
+                    <Link to={`/artists/${a.slug}`} className="rounded-full border border-border px-4 py-1.5 text-center text-xs font-semibold text-foreground transition-colors hover:border-primary/60 hover:text-primary">
                       Профиль
                     </Link>
-                    <Link to={`/services?artist=${a.id}`} className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.4)] transition-all text-center">
+                    <Link to={`/services?artist=${a.id}`} className="rounded-full bg-primary px-4 py-1.5 text-center text-xs font-semibold text-primary-foreground transition-all hover:shadow-[0_0_20px_hsl(322_80%_55%/0.4)]">
                       Заказать
                     </Link>
                   </div>
@@ -127,10 +121,9 @@ const ReleaseDetail = () => {
               );
             })()}
 
-            {/* Platform links */}
             {links.length > 0 && (
               <div className="space-y-3">
-                <h3 className="font-display text-xs font-semibold text-muted-foreground uppercase tracking-widest">Слушать</h3>
+                <h3 className="font-display text-xs font-semibold uppercase tracking-widest text-muted-foreground">Слушать</h3>
                 <div className="flex flex-wrap gap-2">
                   {links.map((pl) => (
                     <a key={pl.id} href={pl.url} target="_blank" rel="noopener noreferrer" className={`inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-xs font-semibold transition-opacity hover:opacity-80 ${platformColors[pl.platform] || "bg-secondary text-foreground"}`}>
@@ -142,15 +135,14 @@ const ReleaseDetail = () => {
               </div>
             )}
 
-            {/* Tracklist */}
             {tracks.length > 0 && (
               <div className="space-y-1">
-                <h3 className="font-display text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-4">Треклист</h3>
+                <h3 className="mb-4 font-display text-xs font-semibold uppercase tracking-widest text-muted-foreground">Треклист</h3>
                 {tracks.map((t, i) => (
-                  <div key={t.id} className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-colors ${playing === t.id ? "bg-primary/10 border border-primary/20" : "hover:bg-secondary"}`}>
-                    <span className="text-xs text-muted-foreground w-5 text-right font-mono">{String(i + 1).padStart(2, "0")}</span>
+                  <div key={t.id} className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-colors ${playing === t.id ? "border border-primary/20 bg-primary/10" : "hover:bg-secondary"}`}>
+                    <span className="w-5 text-right font-mono text-xs text-muted-foreground">{String(i + 1).padStart(2, "0")}</span>
                     {t.audio_url ? (
-                      <button onClick={() => togglePlay(t.id, t.audio_url!)} className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary hover:bg-primary/20 transition-colors">
+                      <button onClick={() => togglePlay(t.id, t.audio_url!)} className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary transition-colors hover:bg-primary/20">
                         {playing === t.id ? <Pause size={14} /> : <Play size={14} className="ml-0.5" />}
                       </button>
                     ) : (
@@ -158,7 +150,7 @@ const ReleaseDetail = () => {
                     )}
                     <span className="flex-1 text-sm font-medium">{t.title}</span>
                     {t.duration_sec && (
-                      <span className="text-xs text-muted-foreground font-mono">
+                      <span className="font-mono text-xs text-muted-foreground">
                         {Math.floor(t.duration_sec / 60)}:{String(t.duration_sec % 60).padStart(2, "0")}
                       </span>
                     )}
@@ -169,7 +161,7 @@ const ReleaseDetail = () => {
 
             {!hasAudio && links.length === 0 && (
               <div className="rounded-xl border border-dashed border-border p-8 text-center">
-                <Music size={32} className="mx-auto text-muted-foreground/30 mb-2" />
+                <Music size={32} className="mx-auto mb-2 text-muted-foreground/30" />
                 <p className="text-sm text-muted-foreground">Скоро будет доступно для прослушивания</p>
               </div>
             )}
@@ -177,15 +169,14 @@ const ReleaseDetail = () => {
         </div>
       </section>
 
-      {/* Sticky mini-player */}
       {playingTrack && (
-        <div className="fixed bottom-0 inset-x-0 z-50 border-t border-border bg-card/95 backdrop-blur-xl">
+        <div className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-card/95 backdrop-blur-xl">
           <div className="h-0.5 bg-secondary">
             <div className="h-full bg-primary transition-all duration-200" style={{ width: `${progress}%` }} />
           </div>
           <div className="container flex items-center justify-between py-3">
             <div className="flex items-center gap-3">
-              <button onClick={() => togglePlay(playingTrack.id, playingTrack.audio_url!)} className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-primary-foreground">
+              <button onClick={() => togglePlay(playingTrack.id, playingTrack.audio_url!)} className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
                 <Pause size={16} />
               </button>
               <div>
