@@ -8,12 +8,12 @@ const ContactsPage = () => {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,hsl(322_80%_55%/0.12)_0%,transparent_60%)]" />
-        <div className="container relative z-10 pt-24 pb-12 max-w-4xl">
-          <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-medium mb-6">Контакты</p>
-          <h1 className="font-display text-5xl md:text-7xl font-bold tracking-tighter leading-[0.95]">
+        <div className="container relative z-10 pt-16 pb-8 md:pt-24 md:pb-12 max-w-4xl">
+          <p className="text-[11px] uppercase tracking-[0.2em] text-primary font-medium mb-4 md:mb-6">Контакты</p>
+          <h1 className="font-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.05] md:leading-[0.95]">
             Заявка на <span className="text-gradient-fuchsia">мероприятие</span>
           </h1>
-          <p className="text-lg text-muted-foreground mt-8 max-w-2xl leading-relaxed">
+          <p className="text-base md:text-lg text-muted-foreground mt-5 md:mt-8 max-w-2xl leading-relaxed">
             Расскажите о вашем событии — пришлём подборку артистов и смету в течение 24 часов.
           </p>
         </div>
