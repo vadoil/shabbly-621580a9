@@ -87,7 +87,7 @@ const ReleaseDetail = () => {
                   <Link to={`/artists/${a.slug}`} className="shrink-0">
                     <div className="w-20 h-20 rounded-xl overflow-hidden bg-secondary">
                       {a.photo_url ? (
-                        <img src={getPublicStorageUrl(a.photo_url)} alt={a.name} className="w-full h-full object-cover" />
+                        <img src={a.photo_url} alt={a.name} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-muted-foreground"><Music size={28} /></div>
                       )}
