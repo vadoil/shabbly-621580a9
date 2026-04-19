@@ -23,6 +23,7 @@ import MerchDetail from "./pages/MerchDetail";
 import BarsCalendarPage from "./pages/BarsCalendarPage";
 import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
