@@ -77,7 +77,6 @@ const ContactsPage = () => {
                 </div>
               </div>
             </div>
-            </div>
 
             <div className="rounded-3xl border border-primary/30 bg-primary/5 p-6 space-y-3">
               <p className="text-xs uppercase tracking-wider text-primary font-semibold">Срочный запрос?</p>
