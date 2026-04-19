@@ -467,6 +467,7 @@ export type Database = {
         Row: {
           address: string | null
           city: string
+          cover_url: string | null
           date_end: string | null
           date_start: string
           id: string
@@ -479,6 +480,7 @@ export type Database = {
         Insert: {
           address?: string | null
           city: string
+          cover_url?: string | null
           date_end?: string | null
           date_start: string
           id?: string
@@ -491,6 +493,7 @@ export type Database = {
         Update: {
           address?: string | null
           city?: string
+          cover_url?: string | null
           date_end?: string | null
           date_start?: string
           id?: string
