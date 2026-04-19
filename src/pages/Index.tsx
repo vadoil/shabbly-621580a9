@@ -237,57 +237,63 @@ const Index = () => {
       {/* UPCOMING SHOWS — wide cards with visual */}
       <section className="container py-16 space-y-8">
         <div className="flex items-end justify-between">
-          <h2 className="font-display text-3xl md:text-4xl font-bold">Ближайшие концерты</h2>
+          <h2 className="font-art text-3xl md:text-4xl font-bold">Ближайшие концерты</h2>
           <Link to="/events" className="text-sm text-primary hover:underline flex items-center gap-1">Все даты <ArrowRight size={14} /></Link>
         </div>
         {events && events.length > 0 ? (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {events.slice(0, 6).map((e) => {
+            {events.slice(0, 6).map((e, idx) => {
               const date = new Date(e.date_start);
               const day = date.getDate();
               const monthWeek = date.toLocaleDateString("ru-RU", { month: "short", weekday: "short" }).toUpperCase();
+              const cover = eventCovers[idx % eventCovers.length];
               return (
                 <article
                   key={e.id}
-                  className="group relative flex overflow-hidden rounded-xl border border-border/60 bg-card transition-all hover:border-primary/60 hover:shadow-[0_0_40px_hsl(322_80%_55%/0.15)] min-h-[220px]"
+                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition-all hover:border-primary/60 hover:shadow-[0_0_40px_hsl(322_80%_55%/0.2)]"
                 >
-                  {/* Visual block with date */}
-                  <div className="relative w-32 sm:w-40 shrink-0 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-primary/10 to-background" />
-                    <div className="absolute inset-0 opacity-30 mix-blend-overlay" style={{
-                      backgroundImage: `radial-gradient(circle at 20% 80%, hsl(322 80% 55% / 0.6), transparent 50%), radial-gradient(circle at 80% 20%, hsl(280 70% 50% / 0.4), transparent 50%)`
-                    }} />
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
-                      <p className="font-display text-5xl sm:text-6xl font-bold text-primary leading-none drop-shadow-[0_0_20px_hsl(322_80%_55%/0.5)]">
-                        {day}
-                      </p>
-                      <p className="text-[10px] sm:text-xs font-semibold tracking-[0.2em] text-foreground/90 mt-2">
-                        {monthWeek}
-                      </p>
+                  {/* Visual block with photo + date overlay */}
+                  <div className="relative aspect-[16/9] sm:aspect-[5/3] overflow-hidden">
+                    <img
+                      src={cover}
+                      alt=""
+                      aria-hidden
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[1500ms] ease-out"
+                    />
+                    {/* Color grade */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/40 via-transparent to-accent/20 mix-blend-overlay" />
+
+                    {/* Date badge */}
+                    <div className="absolute top-3 left-3 flex flex-col items-center justify-center rounded-xl bg-background/85 backdrop-blur-md border border-primary/30 px-3 py-2 min-w-[64px] shadow-[0_0_24px_hsl(322_80%_55%/0.25)]">
+                      <p className="font-art text-3xl font-bold text-primary leading-none">{day}</p>
+                      <p className="text-[9px] font-semibold tracking-[0.18em] text-foreground/80 mt-1">{monthWeek}</p>
                     </div>
-                    <div className="absolute bottom-2 right-2 w-8 h-8 border-r-2 border-b-2 border-primary/40" />
-                    <div className="absolute top-2 left-2 w-8 h-8 border-l-2 border-t-2 border-primary/40" />
+
+                    {/* City pill */}
+                    <div className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-background/85 backdrop-blur-md border border-border px-2.5 py-1 text-[10px] font-medium uppercase tracking-wider">
+                      <MapPin size={10} className="text-primary" />
+                      {e.city}
+                    </div>
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 p-5 flex flex-col justify-between min-w-0">
-                    <div className="space-y-2">
-                      <h3 className="font-display text-base sm:text-lg font-semibold leading-tight group-hover:text-primary transition-colors line-clamp-2">
+                  <div className="flex-1 p-5 flex flex-col justify-between gap-4 min-w-0">
+                    <div className="space-y-1.5">
+                      <h3 className="font-art text-base sm:text-lg font-semibold leading-tight group-hover:text-primary transition-colors line-clamp-2">
                         {e.title}
                       </h3>
-                      <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-                        <MapPin size={12} className="text-primary/70" /> {e.city}
-                      </p>
-                      <p className="text-xs text-muted-foreground/70 truncate">{e.venue}</p>
+                      <p className="text-xs text-muted-foreground truncate">{e.venue}</p>
                     </div>
 
-                    <div className="mt-4 flex items-center gap-2">
+                    <div className="flex items-center gap-2">
                       {e.ticket_url ? (
-                        <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.4)] transition-all inline-flex items-center gap-1">
+                        <a href={e.ticket_url} target="_blank" rel="noopener noreferrer" className="rounded-full bg-primary px-4 py-2 text-xs font-semibold text-primary-foreground hover:shadow-[0_0_20px_hsl(322_80%_55%/0.4)] transition-all inline-flex items-center gap-1">
                           <Ticket size={12} /> Купить билет
                         </a>
                       ) : (
-                        <button onClick={() => setTicketModal(true)} className="rounded-full border border-border px-4 py-1.5 text-xs font-semibold text-foreground hover:border-primary/60 hover:text-primary transition-colors">
+                        <button onClick={() => setTicketModal(true)} className="rounded-full border border-border px-4 py-2 text-xs font-semibold text-foreground hover:border-primary/60 hover:text-primary transition-colors">
                           Оставить заявку
                         </button>
                       )}
