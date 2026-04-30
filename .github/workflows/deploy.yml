@@ -35,6 +35,8 @@ jobs:
       - name: Deploy via rsync
         run: |
           rsync -avz --delete \
+            --chmod=D755,F644 \
+            --no-perms --no-owner --no-group \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
             ./dist/ \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ secrets.VPS_PATH }}/
