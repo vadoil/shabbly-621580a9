@@ -47,22 +47,10 @@ const CasesPage = () => {
         description="Кейсы SHABBLY Agency: корпоративы крупных брендов, частные торжества, фестивали и презентации. Артисты, форматы, площадки и результаты."
         canonical="/cases"
       />
-      <section className="border-b border-border/40 bg-gradient-to-b from-secondary/30 to-background">
-        <div className="container py-12 md:py-16">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">Проекты и форматы</p>
-          <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight">
-            Реализованные <br /><span className="text-primary">мероприятия</span>
-          </h1>
-          <p className="mt-4 text-base text-muted-foreground max-w-2xl">
-            Корпоративы, частные торжества, фестивали и презентации брендов. Каждый проект — формат, артист, площадка и результат.
-          </p>
-        </div>
-      </section>
-
-      {/* Desire split */}
-      <section className="container py-14">
-        <div className="grid lg:grid-cols-2 gap-10 items-center">
-          <div className="relative aspect-[16/10] overflow-hidden rounded-3xl border border-border">
+      {/* Hero + Desire split */}
+      <section className="container py-12 md:py-16 border-b border-border/40">
+        <div className="grid lg:grid-cols-2 gap-10 items-stretch">
+          <div className="relative overflow-hidden rounded-3xl border border-border min-h-[420px] lg:min-h-[560px]">
             <img
               src={desirePrivateEvent}
               alt="Атмосфера премиального торжества"
@@ -73,21 +61,31 @@ const CasesPage = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent" />
           </div>
-          <div className="space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
-              <Crown size={14} className="text-primary" />
-              <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Каждый проект — история</span>
+          <div className="flex flex-col justify-between gap-6 lg:max-h-[560px] overflow-hidden">
+            <div className="space-y-3">
+              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Проекты и форматы</p>
+              <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight">
+                Реализованные <br /><span className="text-primary">мероприятия</span>
+              </h1>
+              <p className="text-base text-muted-foreground">
+                Корпоративы, частные торжества, фестивали и презентации брендов. Каждый проект — формат, артист, площадка и результат.
+              </p>
             </div>
-            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight tracking-tighter">
-              За каждым кейсом — <br />
-              <span className="text-gradient-fuchsia">вечер, который запомнили</span>
-            </h2>
-            <p className="text-base text-muted-foreground leading-relaxed">
-              Корпоратив, на котором CEO впервые за год улыбнулся искренне. Свадьба, где гости танцевали до пяти утра. Презентация бренда, после которой инвесторы сами написали в личку.
-            </p>
-            <p className="text-base text-muted-foreground leading-relaxed">
-              Это не «пункты сметы» — это эмоции, которые вы получаете, доверяя событие нам.
-            </p>
+            <div className="space-y-4 border-t border-border/60 pt-5">
+              <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
+                <Crown size={14} className="text-primary" />
+                <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Каждый проект — история</span>
+              </div>
+              <h2 className="font-display text-2xl md:text-3xl font-bold leading-tight tracking-tighter">
+                За каждым кейсом — <span className="text-gradient-fuchsia">вечер, который запомнили</span>
+              </h2>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Корпоратив, на котором CEO впервые за год улыбнулся искренне. Свадьба, где гости танцевали до пяти утра. Презентация бренда, после которой инвесторы сами написали в личку.
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Это не «пункты сметы» — это эмоции, которые вы получаете, доверяя событие нам.
+              </p>
+            </div>
           </div>
         </div>
       </section>
