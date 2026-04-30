@@ -70,53 +70,30 @@ const ArtistsPage = () => {
         description="Каталог артистов SHABBLY Agency: певцы, группы и проекты разных жанров для корпоративов, свадеб, частных вечеров и фестивалей. Фильтры по жанру, формату и городу."
         canonical="/artists"
       />
-      <section className="border-b border-border/40 bg-gradient-to-b from-secondary/30 to-background">
-        <div className="container py-14 md:py-20">
-          <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary mb-3">Каталог артистов</p>
-            <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight">
+      <section className="relative overflow-hidden border-b border-border/40 bg-gradient-to-b from-secondary/30 to-background">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(var(--primary)/0.15),transparent_60%)]" />
+        <div className="container relative py-16 md:py-24">
+          <div className="max-w-3xl space-y-5">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
+              <Sparkles size={14} className="text-primary" />
+              <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Каталог артистов · Вечер вашей мечты</span>
+            </div>
+            <h1 className="font-display text-4xl md:text-6xl font-bold leading-[1.05] tracking-tighter">
               Подберите артиста <br />
-              <span className="text-primary">для вашего события</span>
+              <span className="text-gradient-fuchsia">для момента, который запомнят</span>
             </h1>
-            <p className="mt-4 text-base text-muted-foreground max-w-2xl">
-              {(artists?.length ?? 0)}+ проверенных исполнителей: вокалисты, бэнды, DJ, классические форматы. Фильтруйте по жанру, городу и бюджету — или напишите нам, и мы подберём идеальный вариант.
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed">
+              {(artists?.length ?? 0)}+ проверенных исполнителей: вокалисты, бэнды, DJ, классические форматы. Закрытая площадка, артист, который попадает в настроение с первой ноты, — и гости, которые забудут про телефоны.
+            </p>
+            <p className="text-sm md:text-base text-muted-foreground/80 max-w-2xl leading-relaxed">
+              Мы подбираем не «звёзд из топа» — мы подбираем правильного артиста под вашу сцену, формат и людей в зале.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Desire splits */}
-      <section className="container py-16 space-y-20">
-        <div className="grid lg:grid-cols-2 gap-10 items-center">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border">
-            <img
-              src={desireLuxuryRide}
-              alt="Поездка в премиальном автомобиле на закрытое мероприятие"
-              loading="lazy"
-              width={1080}
-              height={1350}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
-          </div>
-          <div className="space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
-              <Sparkles size={14} className="text-primary" />
-              <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Вечер вашей мечты</span>
-            </div>
-            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight tracking-tighter">
-              Ваше событие — <br />
-              <span className="text-gradient-fuchsia">момент, который запомнят</span>
-            </h2>
-            <p className="text-base text-muted-foreground leading-relaxed">
-              Закрытая площадка. Бокал шампанского по дороге. Артист, который попадает в настроение с первой ноты. Гости, которые забудут про телефоны и будут жить здесь и сейчас.
-            </p>
-            <p className="text-base text-muted-foreground leading-relaxed">
-              Мы подбираем не «звёзд из топа» — мы подбираем правильного артиста под вашу сцену, формат и людей в зале.
-            </p>
-          </div>
-        </div>
-
+      {/* Desire split */}
+      <section className="container py-16">
         <div className="grid lg:grid-cols-2 gap-10 items-center">
           <div className="space-y-5 lg:order-1 order-2">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
