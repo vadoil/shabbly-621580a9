@@ -94,30 +94,32 @@ const ArtistsPage = () => {
 
       {/* Desire split */}
       <section className="container py-16">
-        <div className="grid lg:grid-cols-2 gap-10 items-center">
-          <div className="space-y-5 lg:order-1 order-2">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
+        <div className="grid lg:grid-cols-2 gap-10 lg:items-stretch">
+          <div className="lg:order-1 order-2 flex flex-col justify-center gap-6 lg:py-4">
+            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
               <Heart size={14} className="text-primary" />
               <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Эмоция, которую вы покупаете</span>
             </div>
-            <h2 className="font-display text-3xl md:text-5xl font-bold leading-tight tracking-tighter">
+            <h2 className="font-display text-3xl md:text-5xl font-bold leading-[1.05] tracking-tighter">
               Не выступление.<br />
               <span className="text-gradient-fuchsia">Раскрытие желаний</span>
             </h2>
-            <p className="text-base text-muted-foreground leading-relaxed">
-              Когда первый аккорд бьёт в грудь, и вы вдруг ловите себя на том, что подняли руки вверх, не думая ни о чём. Когда зал поёт вместе с артистом ваш любимый припев. Это не «развлекательная программа» — это то, ради чего люди возвращаются.
-            </p>
-            <p className="text-base text-muted-foreground leading-relaxed">
-              Мы делаем мероприятия, после которых гости пишут вам спасибо ещё неделю.
-            </p>
+            <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
+              <p>
+                Когда первый аккорд бьёт в грудь, и вы вдруг ловите себя на том, что подняли руки вверх, не думая ни о чём. Когда зал поёт вместе с артистом ваш любимый припев — это не «развлекательная программа», это то, ради чего люди возвращаются.
+              </p>
+              <p className="text-muted-foreground/80">
+                Мы делаем мероприятия, после которых гости пишут вам спасибо ещё неделю.
+              </p>
+            </div>
           </div>
-          <div className="relative aspect-[16/10] overflow-hidden rounded-3xl border border-border lg:order-2 order-1">
+          <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full overflow-hidden rounded-3xl border border-border lg:order-2 order-1">
             <img
               src={desireStageRelease}
               alt="Эмоциональный момент на концерте — толпа с поднятыми руками"
               loading="lazy"
               width={1600}
-              height={1000}
+              height={1200}
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
