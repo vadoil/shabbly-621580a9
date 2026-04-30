@@ -5,7 +5,6 @@ import ArtistCard from "@/components/ArtistCard";
 import ArtistFilters, { FilterState, initialFilters } from "@/components/ArtistFilters";
 import { useArtists } from "@/hooks/use-agency-data";
 import { Music2, Sparkles, Heart } from "lucide-react";
-import desireLuxuryRide from "@/assets/desire-luxury-ride.jpg";
 import desireStageRelease from "@/assets/desire-stage-release.jpg";
 
 const ArtistsPage = () => {
