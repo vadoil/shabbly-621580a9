@@ -71,58 +71,55 @@ const ArtistsPage = () => {
         canonical="/artists"
       />
       <section className="relative overflow-hidden border-b border-border/40 bg-gradient-to-b from-secondary/30 to-background">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(var(--primary)/0.15),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,hsl(var(--primary)/0.18),transparent_60%)]" />
         <div className="container relative py-16 md:py-24">
-          <div className="max-w-3xl space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
-              <Sparkles size={14} className="text-primary" />
-              <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Каталог артистов · Вечер вашей мечты</span>
-            </div>
-            <h1 className="font-display text-4xl md:text-6xl font-bold leading-[1.05] tracking-tighter">
-              Подберите артиста <br />
-              <span className="text-gradient-fuchsia">для момента, который запомнят</span>
-            </h1>
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed">
-              {(artists?.length ?? 0)}+ проверенных исполнителей: вокалисты, бэнды, DJ, классические форматы. Закрытая площадка, артист, который попадает в настроение с первой ноты, — и гости, которые забудут про телефоны.
-            </p>
-            <p className="text-sm md:text-base text-muted-foreground/80 max-w-2xl leading-relaxed">
-              Мы подбираем не «звёзд из топа» — мы подбираем правильного артиста под вашу сцену, формат и людей в зале.
-            </p>
-          </div>
-        </div>
-      </section>
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 lg:items-stretch">
+            <div className="lg:order-1 order-2 flex flex-col justify-center gap-6">
+              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
+                <Sparkles size={14} className="text-primary" />
+                <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Каталог артистов · Вечер вашей мечты</span>
+              </div>
+              <h1 className="font-display text-4xl md:text-6xl font-bold leading-[1.05] tracking-tighter">
+                Подберите артиста <br />
+                <span className="text-gradient-fuchsia">для момента, который запомнят</span>
+              </h1>
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                {(artists?.length ?? 0)}+ проверенных исполнителей: вокалисты, бэнды, DJ, классические форматы. Закрытая площадка, артист, который попадает в настроение с первой ноты, — и гости, которые забудут про телефоны.
+              </p>
+              <p className="text-sm md:text-base text-muted-foreground/80 leading-relaxed">
+                Мы подбираем не «звёзд из топа» — мы подбираем правильного артиста под вашу сцену, формат и людей в зале.
+              </p>
 
-      {/* Desire split */}
-      <section className="container py-16">
-        <div className="grid lg:grid-cols-2 gap-10 lg:items-stretch">
-          <div className="lg:order-1 order-2 flex flex-col justify-center gap-6 lg:py-4">
-            <div className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
-              <Heart size={14} className="text-primary" />
-              <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Эмоция, которую вы покупаете</span>
+              <div className="my-2 h-px w-16 bg-gradient-to-r from-primary/60 to-transparent" />
+
+              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5">
+                <Heart size={14} className="text-primary" />
+                <span className="text-[11px] uppercase tracking-[0.2em] text-primary font-semibold">Эмоция, которую вы покупаете</span>
+              </div>
+              <h2 className="font-display text-2xl md:text-4xl font-bold leading-[1.1] tracking-tighter">
+                Не выступление.{" "}
+                <span className="text-gradient-fuchsia">Раскрытие желаний</span>
+              </h2>
+              <div className="space-y-3 text-sm md:text-base text-muted-foreground leading-relaxed">
+                <p>
+                  Когда первый аккорд бьёт в грудь, и вы вдруг ловите себя на том, что подняли руки вверх, не думая ни о чём. Когда зал поёт ваш любимый припев — это то, ради чего люди возвращаются.
+                </p>
+                <p className="text-muted-foreground/80">
+                  Мы делаем мероприятия, после которых гости пишут вам спасибо ещё неделю.
+                </p>
+              </div>
             </div>
-            <h2 className="font-display text-3xl md:text-5xl font-bold leading-[1.05] tracking-tighter">
-              Не выступление.<br />
-              <span className="text-gradient-fuchsia">Раскрытие желаний</span>
-            </h2>
-            <div className="space-y-4 text-base md:text-lg text-muted-foreground leading-relaxed">
-              <p>
-                Когда первый аккорд бьёт в грудь, и вы вдруг ловите себя на том, что подняли руки вверх, не думая ни о чём. Когда зал поёт вместе с артистом ваш любимый припев — это не «развлекательная программа», это то, ради чего люди возвращаются.
-              </p>
-              <p className="text-muted-foreground/80">
-                Мы делаем мероприятия, после которых гости пишут вам спасибо ещё неделю.
-              </p>
+            <div className="relative aspect-[4/5] lg:aspect-auto lg:h-full min-h-[420px] overflow-hidden rounded-3xl border border-border lg:order-2 order-1">
+              <img
+                src={desireStageRelease}
+                alt="Эмоциональный момент на концерте — толпа с поднятыми руками"
+                loading="lazy"
+                width={1600}
+                height={2000}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-transparent to-transparent" />
             </div>
-          </div>
-          <div className="relative aspect-[4/3] lg:aspect-auto lg:h-full overflow-hidden rounded-3xl border border-border lg:order-2 order-1">
-            <img
-              src={desireStageRelease}
-              alt="Эмоциональный момент на концерте — толпа с поднятыми руками"
-              loading="lazy"
-              width={1600}
-              height={1200}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-transparent to-transparent" />
           </div>
         </div>
       </section>
