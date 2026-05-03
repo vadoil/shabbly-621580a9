@@ -148,11 +148,21 @@ const ArtistDetail = () => {
         <section className="container py-10">
           <h2 className="font-display text-2xl font-bold mb-5">Видео</h2>
           <div className="grid gap-4 md:grid-cols-2">
-            {videos.map((m: any) => (
-              <div key={m.id} className="aspect-video overflow-hidden rounded-xl bg-secondary">
-                <iframe src={m.url} title={m.caption || artist.name} className="h-full w-full" allowFullScreen />
-              </div>
-            ))}
+            {videos.map((m: any) => {
+              const isFile = /\.(mp4|webm|mov|m4v)(\?|$)/i.test(m.url);
+              return (
+                <div key={m.id} className="space-y-2">
+                  <div className="aspect-video overflow-hidden rounded-xl bg-secondary">
+                    {isFile ? (
+                      <video src={m.url} controls preload="metadata" className="h-full w-full object-cover" />
+                    ) : (
+                      <iframe src={m.url} title={m.caption || artist.name} className="h-full w-full" allowFullScreen />
+                    )}
+                  </div>
+                  {m.caption && <div className="text-xs text-muted-foreground">{m.caption}</div>}
+                </div>
+              );
+            })}
           </div>
         </section>
       )}
