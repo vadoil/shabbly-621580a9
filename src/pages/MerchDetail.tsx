@@ -80,7 +80,7 @@ const MerchDetail = () => {
             )}
 
             <button onClick={() => setShowForm(true)} className="rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground hover:shadow-[0_0_30px_hsl(322_80%_55%/0.4)] transition-all">
-              Оставить заявку
+              Заказать
             </button>
           </div>
         </div>
