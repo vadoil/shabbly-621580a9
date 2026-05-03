@@ -30,8 +30,17 @@ const NewsDetail = () => {
         )}
         <p className="text-xs text-muted-foreground">{article.published_at && formatDate(article.published_at)}</p>
         <h1 className="font-display text-3xl md:text-4xl font-bold">{article.title}</h1>
-        <div className="prose prose-invert prose-sm max-w-none text-secondary-foreground leading-relaxed whitespace-pre-line">
-          {article.content}
+        <div className="prose prose-invert prose-sm max-w-none text-secondary-foreground leading-relaxed space-y-4">
+          {article.content.split(/\n/).map((line, i) => {
+            const trimmed = line.trim();
+            if (/^https?:\/\/\S+\.(mp4|webm|mov|m4v)(\?|$)/i.test(trimmed)) {
+              return <video key={i} src={trimmed} controls playsInline preload="metadata" className="w-full rounded-lg bg-black max-h-[70vh]" />;
+            }
+            if (/^https?:\/\/\S+\.(jpe?g|png|webp|gif)(\?|$)/i.test(trimmed)) {
+              return <img key={i} src={trimmed} alt="" className="w-full rounded-lg" />;
+            }
+            return <p key={i} className="whitespace-pre-line">{line}</p>;
+          })}
         </div>
       </article>
     </Layout>
