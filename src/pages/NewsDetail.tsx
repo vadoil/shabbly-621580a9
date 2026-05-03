@@ -18,8 +18,14 @@ const NewsDetail = () => {
           <ArrowLeft size={14} /> Все новости
         </Link>
         {article.cover_url && (
-          <div className="aspect-video rounded-lg overflow-hidden bg-secondary">
-            <img src={article.cover_url} alt={article.title} className="w-full h-full object-cover" />
+          <div className="rounded-lg overflow-hidden bg-secondary">
+            {/\.(mp4|webm|mov|m4v)(\?|$)/i.test(article.cover_url) ? (
+              <video src={article.cover_url} controls playsInline preload="metadata" className="w-full h-auto max-h-[80vh] bg-black" />
+            ) : (
+              <div className="aspect-video">
+                <img src={article.cover_url} alt={article.title} className="w-full h-full object-cover" />
+              </div>
+            )}
           </div>
         )}
         <p className="text-xs text-muted-foreground">{article.published_at && formatDate(article.published_at)}</p>
