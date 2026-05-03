@@ -92,7 +92,7 @@ export const usePublishedEvents = () =>
         .from("events")
         .select("*")
         .eq("published", true)
-        .gte("date_start", new Date().toISOString())
+        .gte("date_start", new Date(new Date().setHours(0, 0, 0, 0)).toISOString())
         .order("date_start", { ascending: true });
       if (error) throw error;
       return data;
