@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Plus, Trash2, Edit, Upload, Award } from "lucide-react";
 
+import { proxify } from "@/lib/storage";
 const AdminPartners = () => {
   const qc = useQueryClient();
   const { data: partners, isLoading } = useQuery({
@@ -84,7 +85,7 @@ const AdminPartners = () => {
           {partners?.map((p) => (
             <div key={p.id} className="flex items-center gap-4 rounded-lg border border-border bg-card p-4">
               <div className="w-12 h-12 rounded bg-secondary overflow-hidden shrink-0 flex items-center justify-center">
-                {p.logo_url ? <img src={p.logo_url} alt="" className="max-h-8 max-w-full object-contain" /> : (
+                {p.logo_url ? <img src={proxify(p.logo_url)} alt="" className="max-h-8 max-w-full object-contain" /> : (
                   <Award size={16} className="text-muted-foreground" />
                 )}
               </div>

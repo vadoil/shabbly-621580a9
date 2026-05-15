@@ -6,6 +6,7 @@ import ArtistMusicSection from "@/components/ArtistMusicSection";
 import { useArtistBySlug, useArtistMedia, useRelatedArtists } from "@/hooks/use-agency-data";
 import { ArrowLeft, MapPin, Music2, Wallet, FileText } from "lucide-react";
 
+import { proxify } from "@/lib/storage";
 const formatPrice = (min: number | null, max: number | null) => {
   if (!min && !max) return "По запросу";
   const fmt = (n: number) => n.toLocaleString("ru-RU");
@@ -54,7 +55,7 @@ const ArtistDetail = () => {
           <div className="mt-6 grid gap-10 lg:grid-cols-[1.1fr_1fr] items-start">
             <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-secondary">
               {artist.photo_url ? (
-                <img src={artist.photo_url} alt={artist.name} className="h-full w-full object-cover" />
+                <img src={proxify(artist.photo_url)} alt={artist.name} className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-muted-foreground">
                   <Music2 size={64} />
@@ -137,7 +138,7 @@ const ArtistDetail = () => {
           <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3">
             {photos.map((m: any) => (
               <div key={m.id} className="aspect-square overflow-hidden rounded-xl bg-secondary">
-                <img src={m.url} alt={m.caption || artist.name} loading="lazy" className="h-full w-full object-cover" />
+                <img src={proxify(m.url)} alt={m.caption || artist.name} loading="lazy" className="h-full w-full object-cover" />
               </div>
             ))}
           </div>

@@ -3,7 +3,7 @@ import SEO from "@/components/SEO";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { getPublicStorageUrl } from "@/lib/storage";
+import { getPublicStorageUrl , proxify} from "@/lib/storage";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import { ArrowLeft, Calendar, MapPin, Ticket, Building2 } from "lucide-react";
@@ -72,7 +72,7 @@ const EventDetailPage = () => {
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border/40">
         <div className="absolute inset-0">
-          <img src={cover} alt="" className="w-full h-full object-cover opacity-30" />
+          <img src={proxify(cover)} alt="" className="w-full h-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/80 to-background" />
         </div>
         <div className="container relative py-20 md:py-28">
@@ -99,7 +99,7 @@ const EventDetailPage = () => {
       <section className="container py-12 grid gap-10 lg:grid-cols-[1fr_360px]">
         <div className="space-y-8">
           <div className="rounded-2xl overflow-hidden border border-border/60 bg-card">
-            <img src={cover} alt={event.title} className="w-full max-h-[560px] object-cover" />
+            <img src={proxify(cover)} alt={event.title} className="w-full max-h-[560px] object-cover" />
           </div>
 
           <div className="space-y-4">

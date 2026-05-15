@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout";
-import { getPublicStorageUrl } from "@/lib/storage";
+import { getPublicStorageUrl , proxify} from "@/lib/storage";
 import { Image, X, Play } from "lucide-react";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -57,7 +57,7 @@ const GalleryPage = () => {
                       </div>
                     </>
                   ) : (
-                    <img src={url} alt={item.caption || ""} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <img src={proxify(url)} alt={item.caption || ""} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   )}
                 </button>
               );
@@ -74,7 +74,7 @@ const GalleryPage = () => {
           {lightbox.type === "video" ? (
             <video src={lightbox.url} controls autoPlay className="max-w-full max-h-[90vh] rounded-lg" onClick={(e) => e.stopPropagation()} />
           ) : (
-            <img src={lightbox.url} alt="" className="max-w-full max-h-[90vh] object-contain rounded-lg" onClick={(e) => e.stopPropagation()} />
+            <img src={proxify(lightbox.url)} alt="" className="max-w-full max-h-[90vh] object-contain rounded-lg" onClick={(e) => e.stopPropagation()} />
           )}
         </div>
       )}
