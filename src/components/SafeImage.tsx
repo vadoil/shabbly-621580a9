@@ -1,5 +1,6 @@
 import { Music } from "lucide-react";
 import { useState, type ImgHTMLAttributes } from "react";
+import { proxify } from "@/lib/storage";
 
 type SafeImageProps = {
   src?: string | null;
@@ -32,7 +33,7 @@ const SafeImage = ({
 
   return (
     <img
-      src={src}
+      src={proxify(src)}
       alt={alt}
       loading={loading}
       referrerPolicy={referrerPolicy}
