@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { usePublishedEvents, usePublishedNews, useSiteSection, useFeaturedGalleryItems, useMerchProducts, useBarEvents } from "@/hooks/use-data";
 import { useCases } from "@/hooks/use-agency-data";
 import { formatDate, formatDateShort } from "@/lib/format";
-import { getPublicStorageUrl } from "@/lib/storage";
+import { getPublicStorageUrl , proxify} from "@/lib/storage";
 import { useState, useMemo } from "react";
 import TicketRequestModal from "@/components/TicketRequestModal";
 import EmptyState from "@/components/EmptyState";
@@ -366,7 +366,7 @@ const Index = () => {
                       </div>
                     </>
                   ) : (
-                    <img src={url} alt={item.caption || ""} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <img src={proxify(url)} alt={item.caption || ""} loading="lazy" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   )}
                 </button>
               );
@@ -386,7 +386,7 @@ const Index = () => {
           {lightbox.type === "video" ? (
             <video src={lightbox.url} controls autoPlay className="max-w-full max-h-[90vh] rounded-lg" onClick={(e) => e.stopPropagation()} />
           ) : (
-            <img src={lightbox.url} alt="" className="max-w-full max-h-[90vh] object-contain rounded-lg" onClick={(e) => e.stopPropagation()} />
+            <img src={proxify(lightbox.url)} alt="" className="max-w-full max-h-[90vh] object-contain rounded-lg" onClick={(e) => e.stopPropagation()} />
           )}
         </div>
       )}

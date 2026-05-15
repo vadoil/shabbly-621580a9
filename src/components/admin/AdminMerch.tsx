@@ -6,6 +6,7 @@ import { Trash2, Edit, ShoppingBag, Upload } from "lucide-react";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 
+import { proxify } from "@/lib/storage";
 const AdminMerch = () => {
   const qc = useQueryClient();
   const { data: products, isLoading } = useQuery({
@@ -98,7 +99,7 @@ const AdminMerch = () => {
             <div key={p.id} className="flex items-center justify-between rounded-lg border border-border bg-card p-4">
               <div className="flex items-center gap-3">
                 {p.cover_url ? (
-                  <img src={p.cover_url} alt="" className="w-12 h-12 rounded-md object-cover" />
+                  <img src={proxify(p.cover_url)} alt="" className="w-12 h-12 rounded-md object-cover" />
                 ) : (
                   <div className="w-12 h-12 rounded-md bg-secondary flex items-center justify-center"><ShoppingBag size={16} className="text-muted-foreground" /></div>
                 )}

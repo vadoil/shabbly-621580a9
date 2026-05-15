@@ -3,6 +3,7 @@ import { usePublishedNews } from "@/hooks/use-data";
 import { Link } from "react-router-dom";
 import { formatDate } from "@/lib/format";
 
+import { proxify } from "@/lib/storage";
 const NewsPage = () => {
   const { data: news, isLoading } = usePublishedNews();
 
@@ -25,7 +26,7 @@ const NewsPage = () => {
               <Link key={n.id} to={`/news/${n.slug}`} className="group space-y-3">
                 {n.cover_url && (
                   <div className="aspect-video rounded-lg overflow-hidden bg-secondary">
-                    <img src={n.cover_url} alt={n.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                    <img src={proxify(n.cover_url)} alt={n.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                   </div>
                 )}
                 <div>

@@ -4,6 +4,7 @@ import { useParams, Link } from "react-router-dom";
 import { formatDate } from "@/lib/format";
 import { ArrowLeft } from "lucide-react";
 
+import { proxify } from "@/lib/storage";
 const NewsDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const { data: article, isLoading } = useNewsBySlug(slug || "");
@@ -23,7 +24,7 @@ const NewsDetail = () => {
               <video src={article.cover_url} controls playsInline preload="metadata" className="w-full h-auto max-h-[80vh] bg-black" />
             ) : (
               <div className="aspect-video">
-                <img src={article.cover_url} alt={article.title} className="w-full h-full object-cover" />
+                <img src={proxify(article.cover_url)} alt={article.title} className="w-full h-full object-cover" />
               </div>
             )}
           </div>
@@ -37,7 +38,7 @@ const NewsDetail = () => {
               return <video key={i} src={trimmed} controls playsInline preload="metadata" className="w-full rounded-lg bg-black max-h-[70vh]" />;
             }
             if (/^https?:\/\/\S+\.(jpe?g|png|webp|gif)(\?|$)/i.test(trimmed)) {
-              return <img key={i} src={trimmed} alt="" className="w-full rounded-lg" />;
+              return <img key={i} src={proxify(trimmed)} alt="" className="w-full rounded-lg" />;
             }
             return <p key={i} className="whitespace-pre-line">{line}</p>;
           })}

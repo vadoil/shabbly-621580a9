@@ -8,6 +8,7 @@ import { ru } from "date-fns/locale";
 import { MapPin, Calendar, Sparkles, X, Crown } from "lucide-react";
 import desirePrivateEvent from "@/assets/desire-private-event.jpg";
 
+import { proxify } from "@/lib/storage";
 const CasesPage = () => {
   const { data: cases, isLoading } = useCases();
   const [formatFilter, setFormatFilter] = useState("");
@@ -143,7 +144,7 @@ const CasesPage = () => {
               <article key={c.id} className="group overflow-hidden rounded-2xl border border-border/60 bg-card transition-all hover:border-primary/40 hover:shadow-[0_0_40px_-10px_hsl(var(--primary)/0.3)]">
                 <div className="relative aspect-[4/3] overflow-hidden bg-secondary">
                   {c.cover_url ? (
-                    <img src={c.cover_url} alt={c.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <img src={proxify(c.cover_url)} alt={c.title} loading="lazy" className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center text-muted-foreground">
                       <Sparkles size={36} />

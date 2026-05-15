@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { Plus, Trash2, Edit, Upload, Star, Music, Play, Pause } from "lucide-react";
 
+import { proxify } from "@/lib/storage";
 const AdminReleases = () => {
   const qc = useQueryClient();
   const { data: releases, isLoading } = useQuery({
@@ -168,7 +169,7 @@ const AdminReleases = () => {
             <div key={r.id} className="rounded-lg border border-border bg-card p-4 space-y-3">
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 rounded bg-secondary overflow-hidden shrink-0">
-                  {r.cover_url && <img src={r.cover_url} alt="" className="w-full h-full object-cover" />}
+                  {r.cover_url && <img src={proxify(r.cover_url)} alt="" className="w-full h-full object-cover" />}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold truncate">

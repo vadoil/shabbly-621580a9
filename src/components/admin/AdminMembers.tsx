@@ -4,6 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { Plus, Trash2, Edit, Upload, Music } from "lucide-react";
 
+import { proxify } from "@/lib/storage";
 const AdminMembers = () => {
   const qc = useQueryClient();
   const { data: members, isLoading } = useQuery({
@@ -84,7 +85,7 @@ const AdminMembers = () => {
           {members?.map((m) => (
             <div key={m.id} className="flex items-center gap-4 rounded-lg border border-border bg-card p-4">
               <div className="w-12 h-12 rounded-full bg-secondary overflow-hidden shrink-0">
-                {m.photo_url ? <img src={m.photo_url} alt="" className="w-full h-full object-cover" /> : (
+                {m.photo_url ? <img src={proxify(m.photo_url)} alt="" className="w-full h-full object-cover" /> : (
                   <div className="w-full h-full flex items-center justify-center text-muted-foreground"><Music size={16} /></div>
                 )}
               </div>
