@@ -14,7 +14,7 @@ export function proxify(url?: string | null): string {
 
   const directStorageUrl = `${PUBLIC_STORAGE_BASE}/`;
   if (url.startsWith(directStorageUrl)) {
-    return `${STORAGE_PUBLIC_PREFIX}/${url.slice(directStorageUrl.length)}`;
+    return `${STORAGE_PUBLIC_PREFIX}/${url.slice(directStorageUrl.length).replace(/%2F/gi, "/")}`;
   }
 
   return url;
