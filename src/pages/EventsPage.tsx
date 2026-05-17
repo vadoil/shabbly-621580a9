@@ -9,6 +9,7 @@ import EmptyState from "@/components/EmptyState";
 import { MapPin, Calendar as CalendarIcon, Ticket, X, Building2, Sparkles, ArrowRight } from "lucide-react";
 import { format, isAfter, startOfDay } from "date-fns";
 import { ru } from "date-fns/locale";
+import { getPublicStorageUrl } from "@/lib/storage";
 
 // Fallback poster pool for events without uploaded cover
 const POSTER_POOL = [
@@ -19,7 +20,7 @@ const POSTER_POOL = [
 ];
 
 const posterFor = (event: any, idx: number) =>
-  event.cover_url || POSTER_POOL[(event.id.charCodeAt(0) + idx) % POSTER_POOL.length];
+  event.cover_url ? getPublicStorageUrl(event.cover_url) : POSTER_POOL[(event.id.charCodeAt(0) + idx) % POSTER_POOL.length];
 
 const EventsPage = () => {
   const { data: events, isLoading } = usePublishedEvents();

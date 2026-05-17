@@ -9,6 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
+    "sync:storage": "node scripts/sync-storage.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

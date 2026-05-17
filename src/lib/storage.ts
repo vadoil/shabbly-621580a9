@@ -1,22 +1,23 @@
 // Original Supabase host (used everywhere in the DB / storage URLs).
 const SUPABASE_HOST = "udidrfcqeyaohjykddgs.supabase.co";
 
-// In production we route Supabase traffic through our own nginx proxy
-// (api.shabbly.ru) to bypass Supabase being blocked in Russia.
-// In dev / Lovable preview we keep the original host.
-const PROXY_HOST =
-  import.meta.env.PROD ? "api.shabbly.ru" : SUPABASE_HOST;
-
 const PUBLIC_STORAGE_BASE = `https://${SUPABASE_HOST}/storage/v1/object/public`;
+const STORAGE_PUBLIC_PREFIX = "/storage/v1/object/public";
 
 /**
- * Rewrites any direct Supabase URL to go through our proxy in production.
+ * Rewrites public storage URLs to local VPS-served files in production.
  * Safe to call on any string (including non-supabase URLs, empty values).
  */
 export function proxify(url?: string | null): string {
   if (!url) return url || "";
-  if (PROXY_HOST === SUPABASE_HOST) return url;
-  return url.replace(SUPABASE_HOST, PROXY_HOST);
+  if (!import.meta.env.PROD) return url;
+
+  const directStorageUrl = `${PUBLIC_STORAGE_BASE}/`;
+  if (url.startsWith(directStorageUrl)) {
+    return `${STORAGE_PUBLIC_PREFIX}/${url.slice(directStorageUrl.length).replace(/%2F/gi, "/")}`;
+  }
+
+  return url;
 }
 
 export function getPublicStorageUrl(path: string): string {

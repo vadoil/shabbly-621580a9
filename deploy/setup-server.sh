@@ -9,6 +9,7 @@ set -euo pipefail
 
 DOMAIN="shabbly.ru"
 SITE_DIR="/var/www/shabbly"
+STORAGE_DIR="/var/www/shabbly-storage"
 DEPLOY_USER="${DEPLOY_USER:-deploy}"
 NGINX_CONF_SRC="$(dirname "$(readlink -f "$0")")/nginx-shabbly.conf"
 NGINX_CONF_DST="/etc/nginx/sites-available/shabbly.conf"
@@ -20,9 +21,9 @@ if ! id -u "$DEPLOY_USER" >/dev/null 2>&1; then
 fi
 
 echo "==> 2) Создаём папку сайта $SITE_DIR"
-mkdir -p "$SITE_DIR"
-chown -R "$DEPLOY_USER":www-data "$SITE_DIR"
-chmod -R 755 "$SITE_DIR"
+mkdir -p "$SITE_DIR" "$STORAGE_DIR"
+chown -R "$DEPLOY_USER":www-data "$SITE_DIR" "$STORAGE_DIR"
+chmod -R 755 "$SITE_DIR" "$STORAGE_DIR"
 
 echo "==> 3) Готовим папку для Let's Encrypt webroot"
 mkdir -p /var/www/certbot

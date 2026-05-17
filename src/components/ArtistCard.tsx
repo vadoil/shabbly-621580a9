@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { MapPin, Music2 } from "lucide-react";
+import { proxify } from "@/lib/storage";
 
 type Artist = {
   id: string;
@@ -29,7 +30,7 @@ const ArtistCard = ({ artist }: { artist: Artist }) => {
       <Link to={`/artists/${artist.slug}`} className="relative block aspect-[4/5] overflow-hidden bg-secondary">
         {artist.photo_url ? (
           <img
-            src={artist.photo_url}
+            src={proxify(artist.photo_url)}
             alt={artist.name}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
