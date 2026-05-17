@@ -13,10 +13,10 @@ import { getPublicStorageUrl } from "@/lib/storage";
 
 // Fallback poster pool for events without uploaded cover
 const POSTER_POOL = [
-  "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200",
-  "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1200",
-  "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=1200",
-  "https://images.unsplash.com/photo-1501612780327-45045538702b?w=1200",
+  "/services/ev1.jpg",
+  "/services/ev2.jpg",
+  "/services/ev3.jpg",
+  "/services/ev4.jpg",
 ];
 
 const posterFor = (event: any, idx: number) =>
