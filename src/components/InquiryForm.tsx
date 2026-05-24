@@ -64,6 +64,7 @@ const InquiryForm = ({ artistId }: { artistId?: string }) => {
       toast.error("Не удалось отправить заявку");
       return;
     }
+    notifyTelegram("event_inquiry", payload);
     toast.success("Заявка отправлена! Свяжемся с вами в течение 24 часов.");
     setForm(initial);
   };

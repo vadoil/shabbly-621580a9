@@ -113,6 +113,20 @@ const ArtistApplicationForm = () => {
       toast({ title: "Ошибка отправки", description: error.message, variant: "destructive" });
       return;
     }
+    notifyTelegram("artist_application", {
+      name: cleaned.name,
+      project_name: cleaned.project_name,
+      contact: cleaned.contact,
+      city: cleaned.city,
+      cities: cleaned.cities,
+      genres: cleaned.genres,
+      experience: cleaned.experience,
+      about: cleaned.about,
+      expectations: cleaned.expectations,
+      music_links: cleaned.music_links,
+      video_links: cleaned.video_links,
+      social_links: cleaned.social_links,
+    });
     setDone(true);
   };
 

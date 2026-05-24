@@ -34,6 +34,14 @@ const TicketRequestModal = ({ eventId, eventTitle, open, onClose }: Props) => {
     if (error) {
       toast.error("Ошибка при отправке заявки");
     } else {
+      notifyTelegram("ticket_request", {
+        event_id: eventId,
+        event_title: eventTitle,
+        name: name.trim(),
+        contact: contact.trim(),
+        qty,
+        comment: comment.trim(),
+      });
       toast.success("Заявка отправлена!");
       setName(""); setContact(""); setQty(1); setComment("");
       onClose();

@@ -26,6 +26,13 @@ const MerchDetail = () => {
     });
     setSubmitting(false);
     if (error) return toast.error(error.message);
+    notifyTelegram("merch_request", {
+      product_id: product?.id,
+      product_title: product?.title,
+      name: form.name,
+      contact: form.contact,
+      comment: form.comment,
+    });
     toast.success("Заявка отправлена!");
     setShowForm(false);
     setForm({ name: "", contact: "", comment: "" });
