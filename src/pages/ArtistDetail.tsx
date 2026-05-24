@@ -145,28 +145,64 @@ const ArtistDetail = () => {
         </section>
       )}
 
-      {videos.length > 0 && (
-        <section className="container py-10">
-          <h2 className="font-display text-2xl font-bold mb-5">Видео</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            {videos.map((m: any) => {
-              const isFile = /\.(mp4|webm|mov|m4v)(\?|$)/i.test(m.url);
-              return (
-                <div key={m.id} className="space-y-2">
-                  <div className="aspect-video overflow-hidden rounded-xl bg-secondary">
-                    {isFile ? (
-                      <video src={m.url} controls preload="metadata" className="h-full w-full object-cover" />
-                    ) : (
-                      <iframe src={m.url} title={m.caption || artist.name} className="h-full w-full" allowFullScreen />
-                    )}
+      {videos.length > 0 && (() => {
+        const isVertical = (m: any) => /reel|vertical|shorts|story|story?ies/i.test(`${m.url} ${m.caption || ""}`);
+        const verticals = videos.filter(isVertical);
+        const horizontals = videos.filter((m: any) => !isVertical(m));
+        const renderPlayer = (m: any, vertical: boolean) => {
+          const isFile = /\.(mp4|webm|mov|m4v)(\?|$)/i.test(m.url);
+          return (
+            <div className={`${vertical ? "aspect-[9/16]" : "aspect-video"} overflow-hidden rounded-xl bg-secondary`}>
+              {isFile ? (
+                <video src={m.url} controls preload="metadata" playsInline className="h-full w-full object-cover" />
+              ) : (
+                <iframe src={m.url} title={m.caption || artist.name} className="h-full w-full" allowFullScreen />
+              )}
+            </div>
+          );
+        };
+        return (
+          <section className="container py-10 space-y-10">
+            <h2 className="font-display text-2xl font-bold">Видео</h2>
+
+            {verticals.length > 0 && (
+              <div>
+                {/* Mobile: horizontal swipe carousel */}
+                <div className="md:hidden -mx-4 overflow-x-auto snap-x snap-mandatory scrollbar-hide">
+                  <div className="flex gap-3 px-4">
+                    {verticals.map((m: any) => (
+                      <div key={m.id} className="w-[70%] flex-shrink-0 snap-start space-y-2">
+                        {renderPlayer(m, true)}
+                        {m.caption && <div className="text-xs text-muted-foreground">{m.caption}</div>}
+                      </div>
+                    ))}
                   </div>
-                  {m.caption && <div className="text-xs text-muted-foreground">{m.caption}</div>}
                 </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
+                {/* Desktop: 3-per-row grid */}
+                <div className="hidden md:grid gap-4 md:grid-cols-3">
+                  {verticals.map((m: any) => (
+                    <div key={m.id} className="space-y-2">
+                      {renderPlayer(m, true)}
+                      {m.caption && <div className="text-xs text-muted-foreground">{m.caption}</div>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {horizontals.length > 0 && (
+              <div className="grid gap-4 md:grid-cols-2">
+                {horizontals.map((m: any) => (
+                  <div key={m.id} className="space-y-2">
+                    {renderPlayer(m, false)}
+                    {m.caption && <div className="text-xs text-muted-foreground">{m.caption}</div>}
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        );
+      })()}
 
       {artist.rider && (
         <section className="container py-10">
