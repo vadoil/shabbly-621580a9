@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import { useMerchProduct } from "@/hooks/use-data";
 import { supabase } from "@/integrations/supabase/client";
+import { notifyTelegram } from "@/lib/notify";
 import { getPublicStorageUrl } from "@/lib/storage";
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, ShoppingBag, X } from "lucide-react";

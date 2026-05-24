@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { notifyTelegram } from "@/lib/notify";
 import { useToast } from "@/hooks/use-toast";
 import { ArrowRight, ArrowLeft, Plus, X, Check, Loader2 } from "lucide-react";
 
