@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { notifyTelegram } from "@/lib/notify";
 import { toast } from "sonner";
 import { Send } from "lucide-react";
 
@@ -64,6 +65,7 @@ const InquiryForm = ({ artistId }: { artistId?: string }) => {
       toast.error("Не удалось отправить заявку");
       return;
     }
+    notifyTelegram("event_inquiry", payload);
     toast.success("Заявка отправлена! Свяжемся с вами в течение 24 часов.");
     setForm(initial);
   };
