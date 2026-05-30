@@ -255,13 +255,13 @@ const Index = () => {
                 >
                   <Link to={`/events/${e.id}`} className="absolute inset-0 z-0" aria-label={e.title} />
                   {/* Visual block with photo + date overlay */}
-                  <div className="relative aspect-[16/9] sm:aspect-[5/3] overflow-hidden pointer-events-none">
+                  <div className="relative aspect-[3/4] overflow-hidden pointer-events-none bg-secondary">
                     <img
                       src={cover}
                       alt=""
                       aria-hidden
                       loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[1500ms] ease-out"
+                      className="absolute inset-0 w-full h-full object-contain group-hover:scale-[1.03] transition-transform duration-[1500ms] ease-out"
                     />
                     {/* Color grade */}
                     <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />

@@ -98,8 +98,8 @@ const EventDetailPage = () => {
       {/* CONTENT */}
       <section className="container py-12 grid gap-10 lg:grid-cols-[1fr_360px]">
         <div className="space-y-8">
-          <div className="rounded-2xl overflow-hidden border border-border/60 bg-card">
-            <img src={proxify(cover)} alt={event.title} className="w-full max-h-[560px] object-cover" />
+          <div className="rounded-2xl overflow-hidden border border-border/60 bg-secondary flex items-center justify-center">
+            <img src={proxify(cover)} alt={event.title} className="w-full aspect-[3/4] object-contain" />
           </div>
 
           <div className="space-y-4">
