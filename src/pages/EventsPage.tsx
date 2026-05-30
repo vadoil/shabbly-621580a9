@@ -232,14 +232,14 @@ const PosterEventCard = ({
 
         {/* POSTER */}
         {!compact && (
-          <div className="relative h-64 md:h-auto md:w-[320px] overflow-hidden">
+          <div className="relative md:w-[320px] md:aspect-[3/4] aspect-[3/4] overflow-hidden bg-secondary">
             <img
               src={poster}
               alt={event.title}
               loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover group-hover:scale-110 transition-transform duration-700"
+              className="absolute inset-0 h-full w-full object-contain group-hover:scale-[1.03] transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-card/30 to-card md:to-card/0" />
+            <div className="absolute inset-0 bg-gradient-to-l from-transparent via-transparent to-card/0 md:to-card/0" />
             <div className="absolute top-3 right-3 rounded-full bg-background/80 backdrop-blur px-3 py-1 text-[10px] font-bold uppercase tracking-wider border border-border">
               Афиша
             </div>
