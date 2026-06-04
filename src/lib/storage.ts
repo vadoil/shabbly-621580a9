@@ -10,6 +10,11 @@ const STORAGE_PUBLIC_PREFIX = "/storage/v1/object/public";
  */
 export function proxify(url?: string | null): string {
   if (!url) return url || "";
+
+  if (!url.startsWith("http") && !url.startsWith("/")) {
+    return proxify(`${PUBLIC_STORAGE_BASE}/${url}`);
+  }
+
   if (!import.meta.env.PROD) return url;
 
   const directStorageUrl = `${PUBLIC_STORAGE_BASE}/`;
